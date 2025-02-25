@@ -1,3 +1,5 @@
 export const ENDPOINTS = {
-  login: "/login",
+  user: "/user",
+  login: "/auth/login",
+  verfiyOTP: "/auth/verify_otp",
 };

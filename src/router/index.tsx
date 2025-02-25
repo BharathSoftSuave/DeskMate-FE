@@ -1,18 +1,15 @@
 import React from "react";
-import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import Landingpage from "../pages/landingPage";
 import Login from "../pages/login";
-
+import SignUp from "../pages/signup";
 const RouterComponent: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        {/* <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<RecentActivity />} />
-          <Route path="project/:id" element={<Project />} />
-        </Route> */}
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="/" element={<Landingpage />} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
