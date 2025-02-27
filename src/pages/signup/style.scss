@@ -1,0 +1,25 @@
+.date-picker {
+  .MuiInputBase-colorPrimary.MuiInputBase-formControl {
+    flex-direction: row-reverse !important;
+    background-color: var(--input);
+    padding: 0 !important;
+    .MuiInputBase-input {
+      padding: 12px !important;
+      font-size: 14px !important;
+      margin: 0px auto !important;
+    }
+    .MuiIconButton-sizeMedium {
+      padding-left: 4px !important;
+    }
+    svg {
+      color: white;
+      padding: 0 !important;
+    }
+    &:focus {
+      border: 1px solid #f85e00 !important;
+    }
+    &:hover {
+      border: none !important;
+    }
+  }
+}

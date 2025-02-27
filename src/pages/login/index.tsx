@@ -3,6 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { doLogin } from "../../service/loginService";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import {
   TextField,
   Button,
@@ -16,6 +18,7 @@ import {
 } from "@mui/material";
 import { Mail, Lock } from "@mui/icons-material";
 import "./styles.scss";
+import Navbar from "../NavBar";
 
 interface LoginFormInputs {
   email: string;
@@ -59,141 +62,97 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen white">
-      <Container maxWidth="xs">
-        <Box
-          sx={{
-            mb: 18,
-            p: 3,
-            boxShadow: 15,
-            borderRadius: 4,
-            bgcolor: "var(--primary)",
-          }}
-        >
-          <Typography
-            variant="h5"
-            className="relative text-center after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-2 after:w-44 after:h-1 after:bg-[#F85E00]"
-            gutterBottom
-            sx={{ color: "#FFFFFF", textAlign: "center", fontWeight: "bold" }}
-          >
-            <b>Welcome back!</b>
-            <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-44 h-1 bg-[#F85E00]"></div>
-          </Typography>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div style={{ position: "relative", width: "100%" }}>
-              <Mail
-                style={{
-                  position: "absolute",
-                  left: "10px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "var(--white)",
-                }}
-              />
-              <input
-                type="email"
-                placeholder="Email address"
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email format",
-                  },
-                })}
-                style={{
-                  backgroundColor: "var(--primary)",
-                  width: "100%",
-                  padding: "8px",
-                  paddingLeft: "35px",
-                  marginTop: "5px",
-                  borderRadius: "4px",
-                  color: "var(--white)",
-                }}
-              />
-            </div>
-            
-
-
-            <TextField
-              fullWidth
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              variant="outlined"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Minimum 6 characters required",
-                },
-              })}
-              sx={{
-                input: { color: "var(--white)" },
-              }}
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock sx={{ color: "var(--white)" }} />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <div className="flex justify-between items-center">
-              <FormControlLabel
-                control={<Checkbox {...register("rememberMe")} />}
-                sx={{
-                  color:"var(--white)",
-                  "&.Mui-checked": {
-                    color: "red", // Checked color
-                  },
-                }}
-                label="Remember Me"
-                className="text-sm"
-              />
+    <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
+      <Navbar />
+      <div className="flex items-center justify-center lg:px-16 px-10 h-screen">
+        <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597]">
+          <div className="py-14 px-8 shadow-lg rounded-lg w-full">
+            <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
+              Create Account
+            </h4>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pt-8 w-full">
+              <div className="relative w-ful">
+                <MailOutlinedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email format",
+                    },
+                  })}
+                  className="w-full text-white rounded-md py-3 pl-12 px-5 focus:outline-none focus:ring-1 focus:ring-[#F85E00]"
+                />
+              </div>
+              <div className="relative w-ful">
+                <LockOutlinedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Minimum 6 characters required",
+                    },
+                  })}
+                  className="w-full text-white rounded-md py-3 pl-12 pr-10 focus:outline-none focus:ring-1 focus:ring-[#F85E00]"
+                />
+                <div className="absolute right-5 top-1/2 transform -translate-y-1/2">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? (
+                      <Visibility className="text-gray-200" fontSize="small" />
+                    ) : (
+                      <VisibilityOff className="text-white" fontSize="small" />
+                    )}
+                  </IconButton>
+                </div>
+              </div>
+              <div className="flex justify-between items-center px-2">
+                <FormControlLabel
+                  control={<Checkbox {...register("rememberMe")} size="small" sx={{
+                    color: "var(--white)",
+                    "&.Mui-checked": {
+                      color: "var(--weight)",
+                    },
+                  }} />}
+                  label="Remember Me"
+                />
+                <button
+                  type="button"
+                  className="text-blue-500 hover:underline text-sm"
+                  style={{ color: "#F16A23" }}
+                  onClick={() => navigate("/forgot-password")}
+                >
+                  Forgot Password?
+                </button>
+              </div>
               <button
-                type="button"
-                className="text-blue-500 hover:underline text-sm"
-                style={{ color: "#F16A23" }}
-                onClick={() => navigate("/forgot-password")}
+                type="submit"
+                className="w-full bg-[var(--weight)] p-2 rounded-lg font-medium text-lg"
               >
-                Forgot Password?
+                Login
               </button>
-            </div>
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              className="bg-red-500"
-              sx={{ backgroundColor: "#F16A23" }}
-            >
-              Login
-            </Button>
-            <div className="flex items-center justify-center space-x-2 mt-2">
-              <Typography variant="body2">Don't have an account?</Typography>
-              <Button
-                variant="text"
-                color="primary"
-                sx={{ color: "var(--weight)" }}
-                onClick={() => navigate("/signup")}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </form>
-        </Box>
-      </Container>
+              <div className="flex items-center justify-center space-x-2 mt-2">
+                <Typography variant="body2">Don't have an account?</Typography>
+                <Button
+                  variant="text"
+                  color="primary"
+                  sx={{ color: "var(--weight)" }}
+                  onClick={() => navigate("/signup")}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
