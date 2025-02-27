@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex relative flex-col">
       <nav className='lg:w-full w-svw h-16 bg-[#1D1D41] flex py-3 sticky z-20 top-0 justify-between lg:px-20 px-4 self-center'>
-        <div className="self-center" onClick={handleHomeClick}>
+        <div className="self-center cursor-pointer" onClick={handleHomeClick}>
           <h4 className='text-[#ffff] font-bold lg:text-2xl text-xl'>
             Desk<span className='text-[#F16A23]'>Mate</span>
           </h4>

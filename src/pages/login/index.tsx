@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { Mail, Lock } from "@mui/icons-material";
 import "./styles.scss";
-import Navbar from "../NavBar";
+import Navbar from "../../components/NavBar";
 
 interface LoginFormInputs {
   email: string;

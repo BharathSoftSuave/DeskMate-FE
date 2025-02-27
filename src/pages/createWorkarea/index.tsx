@@ -5,7 +5,7 @@ import DeskOutlinedIcon from '@mui/icons-material/DeskOutlined';
 import WebAssetOutlinedIcon from '@mui/icons-material/WebAssetOutlined';
 import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
 import "./styles.scss";
-import Navbar from "../NavBar";
+import Navbar from "../../components/NavBar";
 
 interface LoginFormInputs {
   text: string;

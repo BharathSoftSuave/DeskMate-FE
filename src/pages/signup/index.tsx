@@ -15,7 +15,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import "./style.scss";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Navbar from "../NavBar";
+import Navbar from "../../components/NavBar";
 import SensorOccupiedOutlinedIcon from "@mui/icons-material/SensorOccupiedOutlined";
 import TransgenderIcon from '@mui/icons-material/Transgender';
 

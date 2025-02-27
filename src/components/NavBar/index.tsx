@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className='lg:w-full w-svw h-16 bg-[#1D1D41] flex justify-between lg:px-20 px-2 static top-0 self-center'>
-      <div className="self-center" onClick={handleHomeClick}>
+      <div className="self-center cursor-pointer" onClick={handleHomeClick}>
         <h4 className='text-[#ffff] font-bold lg:text-2xl text-xl'>
           Desk<span className='text-[#F16A23]'>Mate</span>
         </h4>
