@@ -28,7 +28,7 @@ const WorkArea: React.FC = (
           <div className="flex flex-col gap-3">
             {[...Array(2)].map((_, rowIndex) => (
               <div key={rowIndex} className="border border-[#30306D] flex p-2 justify-evenly rounded-lg w-full">
-                {Array.from({ length: 11 }).map((_, index) => (
+                {Array.from({ length: 5 }).map((_, index) => (
                   <DeskCard key={index} />
                 ))}
               </div>
@@ -41,7 +41,7 @@ const WorkArea: React.FC = (
           <div className="flex flex-col gap-3">
             {[...Array(2)].map((_, rowIndex) => (
               <div key={rowIndex} className="border border-[#30306D] flex p-2 justify-evenly rounded-lg w-full">
-                {Array.from({ length: 11 }).map((_, index) => (
+                {Array.from({ length: 5 }).map((_, index) => (
                   <DeskCard key={index} />
                 ))}
               </div>

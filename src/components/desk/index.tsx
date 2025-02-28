@@ -2,7 +2,9 @@ import React from "react";
 import "./styles.scss";
 import profile from "../../assets/Images/profile.png"
 import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';
-
+import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 const DeskCard: React.FC = (
   //   {
   //   label,
@@ -25,7 +27,7 @@ const DeskCard: React.FC = (
     //   />
     // </div>
     <div className="relative group">
-      <div className="flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border border-[#49439B] rounded-lg w-fit shadow-md">
+      <div className="Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border border-[#49439B] rounded-lg w-fit shadow-md">
         <p className="cursor-move text-sm text-gray-400">⋮⋮</p>
         <div className="relative">
           <img
@@ -43,22 +45,26 @@ const DeskCard: React.FC = (
           </svg>
         </div>
       </div>
-
-      <div className="absolute top-0 left-o -rotate-45 transform -translate-x-1/2 mt-2 bg-transparent shadow-lg p-4 group-hover:opacity-100 group-hover:block hidden transition-opacity z-20">
-        <NavigationRoundedIcon className="text-[#b1b0b0]" />
-        <div className="w-full h-full bg-[var(--white)] flex flex-col rotate-45">
-          <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border-1 border-[var(--secondary)] rounded-full"></span>
-          <div className="flex flex-col w-full">
-            <div className="flex ">
-              <img
-                src={profile}
-                alt="User"
-                className="w-full h-16 rounded-full"
-              />
-            </div>
-
+      <div className="info-desk absolute h-full w-full -bottom-2 -right-2 p-1 shadow-lg group-hover:opacity-100 group-hover:block hidden transition-opacity z-40 translate-x-full translate-y-full">
+        <NavigationRoundedIcon className="text-[#b1b0b0] absolute -left-4 -top-4 -rotate-45" />
+        <div className="flex bg-white relative py-4 flex-col gap-2 rounded-r-xl border-b-[3px] border-solid border-t-0 border-x-0 rounded-b-xl border border-green-500 h-fit p-2 justify-center items-center w-[240px] z-10">
+          <span className="h-3 left-1 top-1 w-3 absolute bg-green-500 rounded-full"></span>
+          <div className="flex flex-col justify-center items-center w-full h-full">
+            <img src={profile} alt="User" className="w-16 h-16 rounded-full justify-center" />          {/* Name */}
+            <p className="text-base text-black font-semibold mt-2">Paandurangan</p>
+            <p className="text-xs text-gray-900 font-medium mb-2">UI/UX Designer</p>
           </div>
-
+          <div className="flex h-full w-full justify-evenly">
+            <div className="p-2 bg-[var(--weight)] w-26 rounded-full h-26 flex justify-center items-center">
+              <ChatRoundedIcon sx={{ fontSize: "24px" }} />
+            </div>
+            <div className="p-2 bg-[var(--weight)] w-26 rounded-full h-26 flex justify-center items-center">
+              <EditRoundedIcon sx={{ fontSize: "24px" }} />
+            </div>
+            <div className="p-2 bg-[var(--weight)] w-26 rounded-full h-26 flex justify-center items-center">
+              <DeleteRoundedIcon sx={{ fontSize: "24px" }} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
