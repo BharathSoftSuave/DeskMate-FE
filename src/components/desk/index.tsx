@@ -5,29 +5,10 @@ import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-const DeskCard: React.FC = (
-  //   {
-  //   label,
-  //   type,
-  //   value,
-  //   onChange,
-  //   id,
-  //   placeholder,
-  // }
-) => {
+const DeskCard: React.FC = () => {
   return (
-    // <div className="input-group">
-    //   <label htmlFor={id}>{label}</label>
-    //   <input
-    //     type={type}
-    //     id={id}
-    //     placeholder={placeholder}
-    //     value={value}
-    //     onChange={onChange}
-    //   />
-    // </div>
-    <div className="relative group">
-      <div className="Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border border-[#49439B] rounded-lg w-fit shadow-md">
+    <div className="relative group select-none">
+      <div className="Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border border-[#49439B] rounded-lg w-[146px] shadow-md">
         <p className="cursor-move text-sm text-gray-400">⋮⋮</p>
         <div className="relative">
           <img
@@ -50,8 +31,8 @@ const DeskCard: React.FC = (
         <div className="flex bg-white relative py-4 flex-col gap-2 rounded-r-xl border-b-[3px] border-solid border-t-0 border-x-0 rounded-b-xl border border-green-500 h-fit p-2 justify-center items-center w-[240px] z-10">
           <span className="h-3 left-1 top-1 w-3 absolute bg-green-500 rounded-full"></span>
           <div className="flex flex-col justify-center items-center w-full h-full">
-            <img src={profile} alt="User" className="w-16 h-16 rounded-full justify-center" />          {/* Name */}
-            <p className="text-base text-black font-semibold mt-2">Paandurangan</p>
+            <img src={profile} alt="User" className="w-16 h-16 rounded-full justify-center" />
+            <p className="text-base text-black font-semibold mt-2">Paandurangan Sermaraj</p>
             <p className="text-xs text-gray-900 font-medium mb-2">UI/UX Designer</p>
           </div>
           <div className="flex h-full w-full justify-evenly">

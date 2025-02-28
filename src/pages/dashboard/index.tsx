@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles.scss";
 import { useNavigate } from "react-router-dom";
 import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
@@ -7,16 +7,27 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import profile from "../../assets/Images/profile.png"
 import WorkArea from "../../components/workArea";
+import EmployeeList from "../../components/popups/employeeListPopup";
 
 const Dashboard: React.FC = () => {
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   const navigate = useNavigate();
   const handleHomeClick = () => {
-    navigate("/"); // Change to your target route
+    navigate("/");
   };
 
   return (
-    <div className="h-screen bg-[#1E1B3A] text-white flex relative flex-col">
+    <div className="h-screen bg-[#1E1B3A] text-white flex relative flex-col select-none">
       <nav className='lg:w-full w-svw h-16 bg-[#1D1D41] flex py-3 sticky z-20 top-0 justify-between lg:px-20 px-4 self-center'>
         <div className="self-center" onClick={handleHomeClick}>
           <h4 className='text-[#ffff] font-bold lg:text-2xl text-xl'>
@@ -96,8 +107,9 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-        <WorkArea />
+        <WorkArea openPopup={openPopup} />
       </div>
+      {isPopupOpen && <EmployeeList closePopup={closePopup} />}
     </div>
   );
 };
