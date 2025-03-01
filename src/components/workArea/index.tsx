@@ -7,17 +7,32 @@ import meeting from "../../assets/Images/meeting.svg"
 import cabin from "../../assets/Images/cabin.svg"
 import conference from "../../assets/Images/conference.svg"
 import UnassignedDeskCard from "../unassigned";
+import rawDeskData from "../../employees.json";
 interface WorkAreaProps {
   openPopup: () => void;
 }
+interface DeskData {
+  desk_id: number;
+  full_name: string;
+  last_name: string;
+  status: string;
+  call_active: string;
+}
 const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
-
+  const deskData: DeskData[] = rawDeskData.map(desk => ({
+    ...desk,
+    status: desk.status as "active" | "break",
+    call_active: desk.call_active as "available" | "busy"
+  }));
   return (
     <>
       <div className="flex flex-col gap-7 select-none w-full h-full overflow-y-auto scrollbar-hide scrollbar-none">
         <div className="border border-[#30306D] flex p-2 justify-evenly rounded-lg w-full">
-          {Array.from({ length: 11 }).map((_, index) => (
-            <DeskCard key={index} />
+          {/* {Array.from({ length: 11 }).map((_, index) => (
+            <DeskCard key={index} deskData={deskData[index]} />
+          ))} */}
+          {deskData.slice(0, 11).map((desk) => (
+            <DeskCard key={desk.desk_id} deskData={desk} />
           ))}
         </div>
 
@@ -25,11 +40,11 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
         <div className="flex w-full">
           {/* Left Side */}
           <div className="flex flex-col gap-7 w-full">
-            <div className="flex flex-col gap-3 w-full">
+            {/* <div className="flex flex-col gap-3 w-full">
               {[...Array(2)].map((_, rowIndex) => (
                 <div key={rowIndex} className="border border-[#30306D] flex py-2 justify-evenly rounded-lg w-full">
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <DeskCard key={index} />
+                    <DeskCard key={index} deskData={deskData[index]} />
                   ))}
                 </div>
               ))}
@@ -82,6 +97,26 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
                   ))}
                 </div>
               ))}
+            </div> */}
+            <div className="flex flex-col gap-7 w-full">
+              {[...Array(6)].map((_, rowIndex) => (
+                <div key={rowIndex} className="flex flex-col gap-3 w-full">
+                  {[...Array(2)].map((_, subRowIndex) => {
+                    const startIdx = 11 + (rowIndex * 10) + (subRowIndex * 5);
+                    return (
+                      <div key={subRowIndex} className="border border-[#30306D] flex py-2 justify-evenly rounded-lg w-full">
+                        {deskData.slice(startIdx, startIdx + 5).map((desk: DeskData, index) => (
+                          index === 2 ? (
+                            <UnassignedDeskCard key={desk.desk_id} onClick={openPopup} />
+                          ) : (
+                            <DeskCard key={desk.desk_id} deskData={desk} />
+                          )
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
             </div>
             <div className="flex flex-col gap-1 w-full pt-16">
               <div className="w-full justify-center items-center  border-[var(--main)] border-2">
@@ -121,7 +156,25 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
           {/* Right Side */}
           <div className="flex flex-col gap-7 h-full justify-between w-full">
             <div className="flex flex-col gap-7 w-full">
-              <div className="flex flex-col gap-3">
+              {[...Array(8)].map((_, rowIndex) => (
+                <div key={rowIndex} className="flex flex-col gap-3 w-full">
+                  {[...Array(2)].map((_, subRowIndex) => {
+                    const startIdx = 70 + (rowIndex * 10) + (subRowIndex * 5);
+                    return (
+                      <div key={subRowIndex} className="border border-[#30306D] flex py-2 justify-evenly rounded-lg w-full">
+                        {deskData.slice(startIdx, startIdx + 5).map((desk: DeskData, index) => (
+                          index === 2 ? (
+                            <UnassignedDeskCard key={desk.desk_id} onClick={openPopup} />
+                          ) : (
+                            <DeskCard key={desk.desk_id} deskData={desk} />
+                          )
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+              {/* <div className="flex flex-col gap-3">
                 {[...Array(2)].map((_, rowIndex) => (
                   <div key={rowIndex} className="border border-[#30306D] flex p-2 justify-evenly rounded-lg w-full">
                     {Array.from({ length: 5 }).map((_, index) => (
@@ -192,7 +245,7 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
                     ))}
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
             <div className="w-full justify-center items-center  border-[#9547d4] border-2 py-2">
               <div className="flex flex-col gap-2 w-full justify-center items-center py-20">
