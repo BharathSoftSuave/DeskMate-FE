@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Divider,
@@ -10,11 +10,30 @@ import {
 } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import EmployeeConfirmation from "../confirmationPopup";
 
 interface Props {
   state: (value: boolean) => void;
 }
 const EmployeeList: React.FC<Props> = ({ state }) => {
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const openConfirmPopup = () => {
+    setIsConfirmPopupOpen(true);
+  };
+
+  const closeConfirmPopup = () => {
+    setIsConfirmPopupOpen(false);
+  };
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if ((event.target as HTMLElement).id === "popup-background") {
+        state(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [state]);
   return (
     <div className="h-screen w-full flex items-center absolute left-0 top-0 before:content-[''] before:absolute before:w-full before:h-full before:blur-lg bg-blend-color-burn before:bg-[rgb(29,29,65,80%)] z-10">
       <div className="h-fit text-white shadow-lg rounded-2xl w-[500px] bg-[var(--primary)] border border-[#30306D] m-auto relative">
@@ -41,6 +60,7 @@ const EmployeeList: React.FC<Props> = ({ state }) => {
             <div
               key={index}
               className="flex justify-between bg-[var(--secondary)] px-4 rounded-2xl border border-[#30306D] hover:bg-[var(--primary)] hover:border-[#524fa5] cursor-pointer"
+              onClick={() => openConfirmPopup()}
             >
               <List>
                 <ListItem alignItems="flex-start" className="!p-0 !m-0">
@@ -70,6 +90,12 @@ const EmployeeList: React.FC<Props> = ({ state }) => {
           ))}
         </div>
       </div>
+      {isConfirmPopupOpen && (
+        <EmployeeConfirmation
+          closeConfirmPopup={closeConfirmPopup}
+          closePopup={state}
+        />
+      )}
     </div>
   );
 };
