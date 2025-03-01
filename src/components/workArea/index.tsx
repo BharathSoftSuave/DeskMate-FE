@@ -22,25 +22,31 @@ interface DummyInterface {
 }
 
 const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
-  const [dummyEmployee, setDummyEmployee] = useState<DummyInterface>({
-    users: [],
-    limit: 0,
-    skip: 0,
-    total: 0,
+  const [dummyEmployee, setDummyEmployee] = useState<DummyInterface>(() => {
+    const savedData = localStorage.getItem("dummyEmployee");
+    return savedData
+      ? JSON.parse(savedData)
+      : { users: [], limit: 0, skip: 0, total: 0 };
   });
 
   useEffect(() => {
-    const fetchDummyEmployee = async () => {
-      try {
-        const response = await axios.get("https://dummyjson.com/users");
-        setDummyEmployee(response.data);
-        console.log("Data fetched successfully:", response.data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-    fetchDummyEmployee();
+    if (!dummyEmployee.users.length) {
+      const fetchDummyEmployee = async () => {
+        try {
+          const response = await axios.get("https://dummyjson.com/users");
+          setDummyEmployee(response.data);
+          localStorage.setItem("dummyEmployee", JSON.stringify(response.data));
+        } catch (error) {
+          console.error("Failed to fetch data:", error);
+        }
+      };
+      fetchDummyEmployee();
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("dummyEmployee", JSON.stringify(dummyEmployee));
+  }, [dummyEmployee]);
 
   const handleDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -69,11 +75,12 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
 
   return (
     <div className="flex flex-col gap-7 w-full h-full overflow-y-auto scrollbar-hide scrollbar-none">
-      <div className="border border-[#30306D] flex p-2 justify-evenly rounded-lg w-full">
+      <div className="border border-[#30306D] flex p-2 justify-between rounded-lg w-full gap-3">
         {dummyEmployee.users.map(
           (employee, index) =>
             index < 11 && (
               <div
+                className="w-full"
                 key={index}
                 draggable
                 onDragStart={(event) => handleDragStart(event, index)}
@@ -163,31 +170,32 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
 
         {/* Right Side */}
         <div className="flex flex-col justify-between gap-7">
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-3">
-              {[...Array(2)].map((_, rowIndex) => (
-                <div
-                  key={rowIndex}
-                  className="border border-[#30306D] flex p-2 justify-evenly rounded-lg w-full"
-                >
-                  {dummyEmployee.users.map(
-                    (employee, index) =>
-                      index < 5 &&
-                      (index === 2 ? (
-                        <UnassignedDeskCard onClick={openPopup} />
-                      ) : (
-                        <DeskCard key={index} employee={employee} />
-                      ))
-                  )}
-                </div>
-              ))}
+              <div className="grid grid-cols-5 gap-2 border border-[#30306D] p-2 justify-evenly rounded-lg w-full">
+                {dummyEmployee.users.map(
+                  (employee, index) =>
+                    index >= 0 &&
+                    index < 10 && (
+                      <div
+                        key={index}
+                        draggable
+                        onDragStart={(event) => handleDragStart(event, index)}
+                        onDragOver={allowDrop}
+                        onDrop={(event) => handleDrop(event, index)}
+                      >
+                        <DeskCard employee={employee} />
+                      </div>
+                    )
+                )}
+              </div>
             </div>
             <div className="flex flex-col gap-3">
               <div className="grid grid-cols-5 gap-2 border border-[#30306D] p-2 justify-evenly rounded-lg w-full">
                 {dummyEmployee.users.map(
                   (employee, index) =>
-                    index >= 10 &&
-                    index < 20 && (
+                    index >= 0 &&
+                    index < 10 && (
                       <div
                         key={index}
                         draggable
