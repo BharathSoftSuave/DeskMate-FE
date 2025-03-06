@@ -64,16 +64,19 @@ const OTP: React.FC = () => {
       <Navbar />
       <div className="flex items-center justify-center h-screen">
         <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597] p-8">
-          <h4 className="text-center text-3xl font-bold text-white mb-4">Verify OTP</h4>
+          <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-32 after:h-[3px] after:bg-[#F85E00]">Verify OTP</h4>
+          <p className="px-10 pt-4 text-center text-base">Enter the six digit code we sent to your email address to
+            verify your Deskmate account.</p>
           {!isOtpVerified ? (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pt-8 w-full">
-              <div className="flex justify-center gap-3">
+              <div className="flex justify-center gap-4">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
                     type="text"
                     maxLength={1}
                     value={digit}
+                    placeholder="0"
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     ref={(el) => { inputRefs.current[index] = el; }}
@@ -82,19 +85,26 @@ const OTP: React.FC = () => {
                 ))}
               </div>
               {errors.otp && <p className="text-red-500 text-center">{errors.otp.message}</p>}
+              <div className="text-center flex mt-5 px-2 justify-between items-center w-full">
+                <p className="text-center text-base">
+                  {timeLeft > 0 ? `OTP valid for ${timeLeft}s` : "Didn't receive OTP?"}
+                </p>
+                <button
+                  onClick={handleResendOtp}
+                  className={`rounded-lg text-white font-semibold transition ${timeLeft > 0 ? "bg-[var(--primary)] hidden" : "hover:text-[var(--weight)]"
+                    }`}
+                  disabled={timeLeft > 0}
+                >
+                  Resend OTP
+                </button>
+              </div>
               <button type="submit" className="w-full bg-[var(--weight)] p-2 rounded-lg font-medium text-lg">
-                Submit
+                Continue
               </button>
             </form>
           ) : (
             <Typography variant="h5" color="green">OTP Verified Successfully!</Typography>
           )}
-          <div className="text-center mt-5">
-            <Typography variant="h6">{timeLeft > 0 ? `OTP valid for ${timeLeft}s` : "Didn't receive OTP?"}</Typography>
-            <Button onClick={handleResendOtp} variant="contained" color="primary" disabled={timeLeft > 0} sx={{ mt: 2 }}>
-              Resend OTP
-            </Button>
-          </div>
         </div>
       </div>
     </div>

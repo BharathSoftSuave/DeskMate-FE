@@ -7,6 +7,7 @@ import Dashboard from "../pages/dashboard";
 import CreateWorkArea from "../pages/createWorkarea";
 import EmployeeList from "../components/popups/employeeListPopup";
 import OTP from "../pages/OTP";
+import PasswordReset from "../pages/forgotPassword";
 const RouterComponent: React.FC = () => {
   return (
     <BrowserRouter>
@@ -18,6 +19,7 @@ const RouterComponent: React.FC = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/employeeList" element={<EmployeeList closePopup={() => { /* implement closePopup function */ }} />} />
         <Route path="/otp" element={<OTP />} />
+        <Route path="/forgot-password" element={<PasswordReset />} />
       </Routes>
     </BrowserRouter>
   );
