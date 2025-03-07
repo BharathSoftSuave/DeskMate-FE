@@ -60,7 +60,7 @@ const Login: React.FC = () => {
         <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597]">
           <div className="py-14 px-8 shadow-lg rounded-lg w-full">
             <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
-              Create Account
+            Welcome Back!
             </h4>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pt-8 w-full">
               <div className="relative w-ful">

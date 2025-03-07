@@ -3,7 +3,7 @@ import Navbar from "../NavBar";
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { doOTPVeify } from "../../service/loginService";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 interface OTPFormValues {
   otp: string[];
@@ -52,7 +52,7 @@ const OTP: React.FC = () => {
       const response = await doOTPVeify({ otp: enteredOtp, email: location.state?.email });
       if (response) {
         setIsOtpVerified(true);
-        navigate("/success");
+        navigate("/");
       }
     } catch (error) {
       console.error("OTP Verification Error:", error);

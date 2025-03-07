@@ -42,15 +42,18 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
                 <div key={rowIndex} className="flex flex-col gap-3 w-full">
                   {[...Array(2)].map((_, subRowIndex) => {
                     const startIdx = 11 + (rowIndex * 10) + (subRowIndex * 5);
+                    const desks = deskData.slice(startIdx, startIdx + 5);
+                    const randomIndex = Math.floor(Math.random() * desks.length); // Random index
+
                     return (
                       <div key={subRowIndex} className="border border-[#30306D] flex py-2 justify-evenly rounded-lg w-full">
-                        {deskData.slice(startIdx, startIdx + 5).map((desk: DeskData, index) => (
-                          index === 2 ? (
+                        {desks.map((desk: DeskData, index) =>
+                          index === randomIndex ? (
                             <UnassignedDeskCard key={desk.desk_id} onClick={openPopup} />
                           ) : (
                             <DeskCard key={desk.desk_id} deskData={desk} />
                           )
-                        ))}
+                        )}
                       </div>
                     );
                   })}
@@ -98,16 +101,19 @@ const WorkArea: React.FC<WorkAreaProps> = ({ openPopup }) => {
               {[...Array(8)].map((_, rowIndex) => (
                 <div key={rowIndex} className="flex flex-col gap-3 w-full">
                   {[...Array(2)].map((_, subRowIndex) => {
-                    const startIdx = 70 + (rowIndex * 10) + (subRowIndex * 5);
+                    const startIdx = 11 + (rowIndex * 10) + (subRowIndex * 5);
+                    const desks = deskData.slice(startIdx, startIdx + 5);
+                    const randomIndex = Math.floor(Math.random() * desks.length); // Random index
+
                     return (
                       <div key={subRowIndex} className="border border-[#30306D] flex py-2 justify-evenly rounded-lg w-full">
-                        {deskData.slice(startIdx, startIdx + 5).map((desk: DeskData, index, arr) => (
-                          index === 2 ? (
+                        {desks.map((desk: DeskData, index, arr) =>
+                          index === randomIndex ? (
                             <UnassignedDeskCard key={desk.desk_id} onClick={openPopup} />
                           ) : (
                             <DeskCard key={desk.desk_id} deskData={desk} isLast={index >= arr.length - 2} />
                           )
-                        ))}
+                        )}
                       </div>
                     );
                   })}
