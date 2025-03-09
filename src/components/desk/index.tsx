@@ -14,13 +14,14 @@ interface DeskProps {
     call_active: string;
   };
   isLast?: boolean;
+  isDragging?: boolean;
 }
 
 const truncateName = (name: string, maxLength: number) => {
 
   return name.length > maxLength ? `${name.substring(0, maxLength)}..` : name;
 };
-const DeskCard: React.FC<DeskProps> = ({ deskData, isLast }) => {
+const DeskCard: React.FC<DeskProps> = ({ deskData, isLast, isDragging }) => {
   return (
     <div className="relative group select-none">
       <div className="Desk flex justify-between items-center gap-1 bg-[var(--secondary)] text-white p-2 border border-[#49439B] rounded-lg w-[146px] shadow-md cursor-move ">
@@ -45,7 +46,7 @@ const DeskCard: React.FC<DeskProps> = ({ deskData, isLast }) => {
           </svg>
         </div>
       </div>
-      <div className={`info-desk absolute h-full w-full p-1 shadow-lg group-hover:opacity-100 ${isLast ? "-bottom-2 -left-[300px]" : " -bottom-2 left-0"} group-hover:block hidden transition-opacity z-40 translate-x-full translate-y-full`}>
+      <div className={`info-desk absolute h-full w-full p-1 shadow-lg group-hover:opacity-100 ${isLast ? "-bottom-2 -left-[300px]" : " -bottom-2 left-0"} ${isDragging ? "hidden" : "group-hover:block hidden"} transition-opacity z-40 translate-x-full translate-y-full`}>
         <NavigationRoundedIcon className={`text-[#b1b0b0] absolute ${isLast ? "rotate-45 -right-4 -top-4 " : "-left-2 -top-4 -rotate-45"}`} />
         <div className={`flex bg-white relative py-4 flex-col gap-2  border-b-[3px] border-solid border-t-0 border-x-0 rounded-b-xl border ${isLast ? "rounded-l-xl" : "rounded-r-xl"} ${deskData.status == "active" ? "border-green-500" : "border-red-600"
           }  h-fit p-2 justify-center items-center w-[240px] z-10 ${isLast ? "-bottom-0 -left-[100px]" : " -bottom-0 -right-2"}`}>
