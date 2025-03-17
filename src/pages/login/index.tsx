@@ -6,17 +6,12 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import {
-  TextField,
   Button,
-  Container,
-  Box,
   Typography,
   IconButton,
-  InputAdornment,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { Mail, Lock } from "@mui/icons-material";
 import "./styles.scss";
 import Navbar from "../NavBar";
 
@@ -32,34 +27,28 @@ const Login: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<LoginFormInputs>();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    console.log("Hi this is ");
+    localStorage.clear();
+    {localStorage.setItem("currentUserEmail",data.email)};
+    if (data.email === "kamaleshramachandran@softsuave.com") {
+      localStorage.setItem("userRole", "admin");
+    }
     try {
       const response = await doLogin(data);
       console.log("Login Response = ", response);
-      if (response) navigate("/home");
+      if (response) navigate("/dashboard");
       else {
         alert("Authentication in Invalid");
-        setError("Authentication in Invalid");
       }
     } catch (error) {
-      console.error("Sign  12334w Error:", error);
-      setError("Authentication in Invalid");
+      
     }
   };
 
-  function onForgotPassword(event: any): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
@@ -70,7 +59,10 @@ const Login: React.FC = () => {
             <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
               Create Account
             </h4>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pt-8 w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-5 pt-8 w-full"
+            >
               <div className="relative w-ful">
                 <MailOutlinedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
                 <input
@@ -115,12 +107,18 @@ const Login: React.FC = () => {
               </div>
               <div className="flex justify-between items-center px-2">
                 <FormControlLabel
-                  control={<Checkbox {...register("rememberMe")} size="small" sx={{
-                    color: "var(--white)",
-                    "&.Mui-checked": {
-                      color: "var(--weight)",
-                    },
-                  }} />}
+                  control={
+                    <Checkbox
+                      {...register("rememberMe")}
+                      size="small"
+                      sx={{
+                        color: "var(--white)",
+                        "&.Mui-checked": {
+                          color: "var(--weight)",
+                        },
+                      }}
+                    />
+                  }
                   label="Remember Me"
                 />
                 <button

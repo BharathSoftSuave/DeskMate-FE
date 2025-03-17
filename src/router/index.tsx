@@ -5,7 +5,8 @@ import Login from "../pages/login";
 import SignUp from "../pages/signup";
 import Dashboard from "../pages/dashboard";
 import CreateWorkArea from "../pages/createWorkarea";
-import EmployeeList from "../components/popups/employeeListPopup";
+import OTP from "../pages/OTP";
+import Drag1 from "../pages/Drag";
 const RouterComponent: React.FC = () => {
   return (
     <BrowserRouter>
@@ -13,9 +14,10 @@ const RouterComponent: React.FC = () => {
         <Route path="/" element={<Landingpage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/OTP" element={<OTP />} />
         <Route path="/create-workarea" element={<CreateWorkArea />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/employeeList" element={<EmployeeList />} />
+        <Route path="/drag" element={<Drag1 />} />
       </Routes>
     </BrowserRouter>
   );

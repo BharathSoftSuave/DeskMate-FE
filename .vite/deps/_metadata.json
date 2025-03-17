@@ -1,0 +1,118 @@
+{
+  "hash": "1f86311e",
+  "configHash": "a03edb98",
+  "lockfileHash": "e2dc03b6",
+  "browserHash": "b835775b",
+  "optimized": {
+    "@mui/icons-material": {
+      "src": "../../node_modules/@mui/icons-material/esm/index.js",
+      "file": "@mui_icons-material.js",
+      "fileHash": "98cfcd40",
+      "needsInterop": false
+    },
+    "@mui/material": {
+      "src": "../../node_modules/@mui/material/index.js",
+      "file": "@mui_material.js",
+      "fileHash": "b8262516",
+      "needsInterop": false
+    },
+    "@mui/x-date-pickers/AdapterDayjs": {
+      "src": "../../node_modules/@mui/x-date-pickers/AdapterDayjs/index.js",
+      "file": "@mui_x-date-pickers_AdapterDayjs.js",
+      "fileHash": "1e9c0612",
+      "needsInterop": false
+    },
+    "@mui/x-date-pickers/DatePicker": {
+      "src": "../../node_modules/@mui/x-date-pickers/DatePicker/index.js",
+      "file": "@mui_x-date-pickers_DatePicker.js",
+      "fileHash": "0c10aec5",
+      "needsInterop": false
+    },
+    "@mui/x-date-pickers/LocalizationProvider": {
+      "src": "../../node_modules/@mui/x-date-pickers/LocalizationProvider/index.js",
+      "file": "@mui_x-date-pickers_LocalizationProvider.js",
+      "fileHash": "970c95a6",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "bc33128f",
+      "needsInterop": false
+    },
+    "dayjs": {
+      "src": "../../node_modules/dayjs/dayjs.min.js",
+      "file": "dayjs.js",
+      "fileHash": "4ced3502",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "80e308cf",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "07712ee1",
+      "needsInterop": true
+    },
+    "react-hook-form": {
+      "src": "../../node_modules/react-hook-form/dist/index.esm.mjs",
+      "file": "react-hook-form.js",
+      "fileHash": "c542e0d0",
+      "needsInterop": false
+    },
+    "react-konva": {
+      "src": "../../node_modules/react-konva/es/ReactKonva.js",
+      "file": "react-konva.js",
+      "fileHash": "abc476ed",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "9168ad32",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-WHC732NP": {
+      "file": "chunk-WHC732NP.js"
+    },
+    "chunk-EZUIOUUT": {
+      "file": "chunk-EZUIOUUT.js"
+    },
+    "chunk-4SFFNAKB": {
+      "file": "chunk-4SFFNAKB.js"
+    },
+    "chunk-Q2BLGLKS": {
+      "file": "chunk-Q2BLGLKS.js"
+    },
+    "chunk-4K6GQQBT": {
+      "file": "chunk-4K6GQQBT.js"
+    },
+    "chunk-J7EWQZUD": {
+      "file": "chunk-J7EWQZUD.js"
+    },
+    "chunk-TL2KABBH": {
+      "file": "chunk-TL2KABBH.js"
+    },
+    "chunk-HQ6ZTAWL": {
+      "file": "chunk-HQ6ZTAWL.js"
+    },
+    "chunk-TKHB4QMX": {
+      "file": "chunk-TKHB4QMX.js"
+    },
+    "chunk-NFH2FJTI": {
+      "file": "chunk-NFH2FJTI.js"
+    },
+    "chunk-YLDSBLSF": {
+      "file": "chunk-YLDSBLSF.js"
+    },
+    "chunk-DC5AMYBS": {
+      "file": "chunk-DC5AMYBS.js"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import DeskOutlinedIcon from '@mui/icons-material/DeskOutlined';
-import WebAssetOutlinedIcon from '@mui/icons-material/WebAssetOutlined';
-import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
+import DeskOutlinedIcon from "@mui/icons-material/DeskOutlined";
+import WebAssetOutlinedIcon from "@mui/icons-material/WebAssetOutlined";
+import MeetingRoomOutlinedIcon from "@mui/icons-material/MeetingRoomOutlined";
 import "./styles.scss";
 import Navbar from "../NavBar";
 
@@ -16,15 +16,10 @@ const CreateWorkArea: React.FC = () => {
   const handleClick = () => {
     navigate("/dashboard");
   };
-  const {
-    register,
-    handleSubmit,
-  } = useForm<LoginFormInputs>();
-
+  const { register, handleSubmit } = useForm<LoginFormInputs>();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async () => {
     console.log("Hi this is ");
-
   };
 
   return (
@@ -33,12 +28,13 @@ const CreateWorkArea: React.FC = () => {
       <div className="flex items-center justify-center h-screen">
         <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597]">
           <div className="py-14 px-8 shadow-lg rounded-lg w-full">
-            <h4
-              className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]"
-            >
+            <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
               Create Workarea
             </h4>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pt-8 w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-5 pt-8 w-full"
+            >
               <div className="relative w-ful">
                 <WebAssetOutlinedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
                 <input
@@ -46,10 +42,6 @@ const CreateWorkArea: React.FC = () => {
                   placeholder="Work area Name"
                   {...register("text", {
                     required: "Work area name is required",
-                    // pattern: {
-                    //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    //   message: "Invalid email format",
-                    // },
                   })}
                   className="w-full text-white rounded-md py-3 pl-12 px-5 focus:outline-none focus:ring-1 focus:ring-[#F85E00]"
                 />
@@ -78,8 +70,6 @@ const CreateWorkArea: React.FC = () => {
                   />
                 </div>
               </div>
-
-
               <button
                 type="submit"
                 className="w-full bg-[var(--weight)] p-2 rounded-lg font-medium text-lg mt-4"
