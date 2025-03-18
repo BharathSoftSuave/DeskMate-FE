@@ -7,7 +7,7 @@ interface UnassignedDeskCardProps {
   deskKey: string;
   onClick: (deskKey: string) => void;
   swapSeats: any,
-  employee : any
+  employee: any
 }
 const ItemType = "SEAT";
 const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
@@ -18,28 +18,28 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
 }) => {
   const userRole = localStorage.getItem("userRole");
   let admin = userRole === "admin" ? true : false;
-      const [{ isDragging }, dragRef] = useDrag({
-        type: ItemType,
-        item: { deskKey, employee },
-        collect: (monitor) => ({
-          isDragging: monitor.isDragging(),
-        }),
-      });
-    
-      const [, dropRef] = useDrop({
-        accept: ItemType,
-        drop: (draggedItem) => {
-          if (draggedItem.deskKey !== deskKey) {
-            swapSeats(draggedItem.deskKey, deskKey);
-          }
-        },
-      });
+  const [{ isDragging }, dragRef] = useDrag({
+    type: ItemType,
+    item: { deskKey, employee },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [, dropRef] = useDrop({
+    accept: ItemType,
+    drop: (draggedItem) => {
+      if (draggedItem.deskKey !== deskKey) {
+        swapSeats(draggedItem.deskKey, deskKey);
+      }
+    },
+  });
 
   return (
     <>
 
       <div ref={(node) => dragRef(dropRef(node))}
-        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[125px] shadow-md"
+        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.125rem] shadow-md"
         onClick={() => {
           if (admin) onClick(deskKey);
         }}
