@@ -87,6 +87,7 @@ const WorkArea: React.FC = () => {
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee,setEditEmployee] = useState();
   const [edit,setEdit] = useState(false);
+  let searchName = "Bharath";
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
     console.log("Clicked desk:", deskKey);
@@ -133,8 +134,6 @@ const WorkArea: React.FC = () => {
         setVacant(temp[0].office.vacant_desks);
         setTotalDesk(temp[0].office.desks);
         setEmployee(temp);
-       
-       
       } catch (err) {
       } finally {
       }
@@ -186,31 +185,34 @@ const WorkArea: React.FC = () => {
     <>
          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full h-fit md:gap-8">
           <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
-            <div className="icon p-4 flex justify-center items-center rounded-full bg-[#a7cc22] my-auto">
+            <div className="icon p-4 flex justify-center items-center rounded-full bg-[#F664C8] my-auto">
               <svg
-                width="27"
-                height="27"
-                viewBox="0 0 27 27"
+                width="28"
+                height="29"
+                viewBox="0 0 28 29"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M23.594 22.8857V4.58475H18.8009V0.5L4.42163 2.97918V22.8857H0.5V24.6286H5.23318L18.8009 26.5V6.3277H21.8511V24.6286H26.6442V22.8857H23.594ZM17.058 24.5002L6.16457 22.9977V4.44739L17.058 2.56947V24.5002Z"
-                  fill="white"
+                  d="M14.0002 14.5V17.1M6.2002 19.05C6.2002 18.7052 6.33716 18.3746 6.58096 18.1308C6.82475 17.887 7.15541 17.75 7.5002 17.75H20.5002C20.845 17.75 21.1756 17.887 21.4194 18.1308C21.6632 18.3746 21.8002 18.7052 21.8002 19.05C21.8002 19.7396 21.5263 20.4009 21.0387 20.8885C20.5511 21.3761 19.8898 21.65 19.2002 21.65H8.8002C8.11063 21.65 7.44931 21.3761 6.96172 20.8885C6.47412 20.4009 6.2002 19.7396 6.2002 19.05ZM7.0166 7.6958C7.3312 5.0802 7.4872 3.7737 8.2438 2.8806C8.48381 2.59709 8.7631 2.34932 9.0732 2.1448C10.0482 1.5 11.3664 1.5 14.0002 1.5C16.634 1.5 17.9509 1.5 18.9272 2.1448C19.2373 2.34932 19.5166 2.59709 19.7566 2.8806C20.5132 3.7737 20.6705 5.0802 20.9838 7.6958L21.1021 8.6799C21.4271 11.3943 21.5909 12.7515 20.8148 13.6251C20.0387 14.5 18.6724 14.5 15.9398 14.5H12.0619C9.328 14.5 7.9617 14.5 7.1869 13.6251C6.4108 12.7515 6.5733 11.3943 6.8983 8.6799L7.0166 7.6958Z"
+                  stroke="white"
+                  strokeWidth="2"
                 />
                 <path
-                  d="M13.5723 12.4282H15.3152V15.9141H13.5723V12.4282Z"
-                  fill="white"
+                  d="M14 27.5V24.9M14 24.9V21.65M14 24.9L14.6058 25.0508C15.217 25.2036 15.7798 25.5081 16.242 25.9363C16.7042 26.3644 17.0509 26.9022 17.25 27.5M14 24.9L13.3942 25.0508C12.783 25.2036 12.2202 25.5081 11.758 25.9363C11.2958 26.3644 10.9491 26.9022 10.75 27.5M6.2 19.7L5.0755 16.3265C4.9806 16.0405 4.9325 15.8975 4.8415 15.6999C4.78131 15.5665 4.7118 15.4374 4.6335 15.3138C4.042 14.3388 3.2542 13.85 1 13.85M21.8 19.7L22.9245 16.3265C23.0194 16.0405 23.0675 15.8975 23.1585 15.6999C23.2521 15.501 23.2885 15.4386 23.3665 15.3138C23.9593 14.3388 24.7484 13.85 27 13.85"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
               </svg>
             </div>
             <div className="w-full flex flex-col gap-1 px-2 m-auto">
               <h3 className="text-left text-3xl font-semibold text-white">
-                05
+                {totalDesk}
               </h3>
-              <p className="text-left font-normal text-white">Total Rooms</p>
+              <p className="text-left font-normal text-white">Total Seats</p>
             </div>
-          </div>
+          </div>       
           <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
             <div className="icon p-4 flex justify-center items-center rounded-full bg-[#EE8C1B] my-auto">
               <svg
@@ -259,34 +261,31 @@ const WorkArea: React.FC = () => {
                 Unoccupied Seats
               </p>
             </div>
-          </div>
+          </div>  
           <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
-            <div className="icon p-4 flex justify-center items-center rounded-full bg-[#F664C8] my-auto">
+            <div className="icon p-4 flex justify-center items-center rounded-full bg-[#a7cc22] my-auto">
               <svg
-                width="28"
-                height="29"
-                viewBox="0 0 28 29"
+                width="27"
+                height="27"
+                viewBox="0 0 27 27"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M14.0002 14.5V17.1M6.2002 19.05C6.2002 18.7052 6.33716 18.3746 6.58096 18.1308C6.82475 17.887 7.15541 17.75 7.5002 17.75H20.5002C20.845 17.75 21.1756 17.887 21.4194 18.1308C21.6632 18.3746 21.8002 18.7052 21.8002 19.05C21.8002 19.7396 21.5263 20.4009 21.0387 20.8885C20.5511 21.3761 19.8898 21.65 19.2002 21.65H8.8002C8.11063 21.65 7.44931 21.3761 6.96172 20.8885C6.47412 20.4009 6.2002 19.7396 6.2002 19.05ZM7.0166 7.6958C7.3312 5.0802 7.4872 3.7737 8.2438 2.8806C8.48381 2.59709 8.7631 2.34932 9.0732 2.1448C10.0482 1.5 11.3664 1.5 14.0002 1.5C16.634 1.5 17.9509 1.5 18.9272 2.1448C19.2373 2.34932 19.5166 2.59709 19.7566 2.8806C20.5132 3.7737 20.6705 5.0802 20.9838 7.6958L21.1021 8.6799C21.4271 11.3943 21.5909 12.7515 20.8148 13.6251C20.0387 14.5 18.6724 14.5 15.9398 14.5H12.0619C9.328 14.5 7.9617 14.5 7.1869 13.6251C6.4108 12.7515 6.5733 11.3943 6.8983 8.6799L7.0166 7.6958Z"
-                  stroke="white"
-                  strokeWidth="2"
+                  d="M23.594 22.8857V4.58475H18.8009V0.5L4.42163 2.97918V22.8857H0.5V24.6286H5.23318L18.8009 26.5V6.3277H21.8511V24.6286H26.6442V22.8857H23.594ZM17.058 24.5002L6.16457 22.9977V4.44739L17.058 2.56947V24.5002Z"
+                  fill="white"
                 />
                 <path
-                  d="M14 27.5V24.9M14 24.9V21.65M14 24.9L14.6058 25.0508C15.217 25.2036 15.7798 25.5081 16.242 25.9363C16.7042 26.3644 17.0509 26.9022 17.25 27.5M14 24.9L13.3942 25.0508C12.783 25.2036 12.2202 25.5081 11.758 25.9363C11.2958 26.3644 10.9491 26.9022 10.75 27.5M6.2 19.7L5.0755 16.3265C4.9806 16.0405 4.9325 15.8975 4.8415 15.6999C4.78131 15.5665 4.7118 15.4374 4.6335 15.3138C4.042 14.3388 3.2542 13.85 1 13.85M21.8 19.7L22.9245 16.3265C23.0194 16.0405 23.0675 15.8975 23.1585 15.6999C23.2521 15.501 23.2885 15.4386 23.3665 15.3138C23.9593 14.3388 24.7484 13.85 27 13.85"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
+                  d="M13.5723 12.4282H15.3152V15.9141H13.5723V12.4282Z"
+                  fill="white"
                 />
               </svg>
             </div>
             <div className="w-full flex flex-col gap-1 px-2 m-auto">
               <h3 className="text-left text-3xl font-semibold text-white">
-                {totalDesk}
+                05
               </h3>
-              <p className="text-left font-normal text-white">Total Seats</p>
+              <p className="text-left font-normal text-white">Total Rooms</p>
             </div>
           </div>
         </div>
