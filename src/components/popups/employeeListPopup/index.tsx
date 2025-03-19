@@ -19,14 +19,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 interface WorkAreaProps {
   closePopup: () => void;
-  choosenDesk : any
+  choosenDesk: any
 }
 
 interface WorkAreaProps {
   closePopup: () => void;
 }
 const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
-  
+
   const handleCloseAll = async () => {
     const payload1 = {
       operation: "allocate",
@@ -36,8 +36,8 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
     };
     console.log("we go ", payload1);
     const response = await allocateOrRevokeDesk(payload1);
-    
-    if(response?.message){
+
+    if (response?.message) {
       toast.success(response.message, {
         style: {
           background: "#2B2A5C",
@@ -48,13 +48,13 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
-        draggable: true,   
+        draggable: true,
         closeButton: (
           <span style={{ color: "green", fontWeight: "bold", fontSize: "18px" }}>✖</span>
         ),
       });
     }
-    else{
+    else {
       toast.error(response.detail, {
         style: {
           background: "#2B2A5C",
@@ -62,7 +62,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
           borderRadius: "8px",
         },
         position: "top-right",
-        autoClose: 3000, 
+        autoClose: 3000,
         closeOnClick: true,
         draggable: true,
         closeButton: (
@@ -86,7 +86,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
   };
   // let totalPage=7;
   const [data, setData] = useState();
-  const [totalPage,setTotalPage] =  useState();
+  const [totalPage, setTotalPage] = useState();
   const [page, setPage] = useState(1);
   const payload = {
     page: 1,
@@ -95,11 +95,11 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-const filteredData = data?.filter((employee: any) =>
-  employee.full_name.toLowerCase().includes(searchQuery.toLowerCase())
-).slice(0+((page - 1) * 10), ((page - 1) * 10) + 10);
+  const filteredData = data?.filter((employee: any) =>
+    employee.full_name.toLowerCase().includes(searchQuery.toLowerCase())
+  ).slice(0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
 
-console.log("filtered data", filteredData,data, 0+((page - 1) * 10) , ((page - 1) * 10) + 10);
+  console.log("filtered data", filteredData, data, 0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
   useEffect(() => {
 
     console.log("get dashboard", choosenDesk);
@@ -108,13 +108,13 @@ console.log("filtered data", filteredData,data, 0+((page - 1) * 10) , ((page - 1
       setTotalPage(result.total_pages);
       setData(result.data);
       // console.log("data = ",result.data)
-      console.log("total page ",totalPage);
+      console.log("total page ", totalPage);
     };
     fetech();
 
     const handleOutsideClick = (event: MouseEvent) => {
       try {
-      } catch (err) {}
+      } catch (err) { }
       if ((event.target as HTMLElement).id === "popup-background") {
         closePopup();
       }
@@ -132,12 +132,12 @@ console.log("filtered data", filteredData,data, 0+((page - 1) * 10) , ((page - 1
       className="flex items-center justify-center fixed top-0 left-0 w-full h-full z-20 
              before:content-[''] before:absolute before:w-full before:h-full before:blur-[50px] 
              before:bg-[rgb(29,29,65,50%)]"
-            id="popup-background"
+      id="popup-background"
     >
       <div className="h-fit text-white shadow-lg rounded-2xl w-[500px] bg-[var(--primary)] border border-[#555597] m-auto relative">
         <div className="flex justify-between p-5">
           <h1 className="text-base font-medium">Desk Allocation</h1>
-          <CloseRoundedIcon onClick={closePopup} />
+          <CloseRoundedIcon className="cursor-pointer" onClick={closePopup} />
         </div>
         <Divider orientation="horizontal" color="#7A7C7E" flexItem />
         <div className="flex flex-col gap-5 p-5">

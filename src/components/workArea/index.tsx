@@ -13,22 +13,140 @@ import { ApiResponse } from "../../interface/dashboardInterface";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DeskAllocationPopup from "../popups/EditPopup/index";
-
+import Rooms from "../rooms";
 
 const seatMappingData = {
-  A1: null, A2: null, A3: null, A4: null, A5: null, A6: null, A7: null, A8: null, A9: null, A10: null,
-  B1: null, B2: null, B3: null, B4: null, B5: null, B6: null, B7: null, B8: null, B9: null, B10: null,
-  C1: null, C2: null, C3: null, C4: null, C5: null, C6: null, C7: null, C8: null, C9: null, C10: null,
-  D1: null, D2: null, D3: null, D4: null, D5: null, D6: null, D7: null, D8: null, D9: null, D10: null,
-  E1: null, E2: null, E3: null, E4: null, E5: null, E6: null, E7: null, E8: null, E9: null, E10: null,
-  F1: null, F2: null, F3: null, F4: null, F5: null, F6: null, F7: null, F8: null, F9: null, F10: null,
-  G1: null, G2: null, G3: null, G4: null, G5: null, G6: null, G7: null, G8: null, G9: null, G10: null,
-  H1: null, H2: null, H3: null, H4: null, H5: null, H6: null, H7: null, H8: null, H9: null, H10: null,
-  I1: null, I2: null, I3: null, I4: null, I5: null, I6: null, I7: null, I8: null, I9: null, I10: null,
-  J1: null, J2: null, J3: null, J4: null, J5: null, J6: null, J7: null, J8: null, J9: null, J10: null,
-  K1: null, K2: null, K3: null, K4: null, K5: null, K6: null, K7: null, K8: null, K9: null, K10: null,
-  L1: null, L2: null, L3: null, L4: null, L5: null, L6: null, L7: null, L8: null, L9: null, L10: null,
-  M1: null, M2: null, M3: null, M4: null, M5: null, M6: null, M7: null, M8: null, M9: null, M10: null
+  A1: null,
+  A2: null,
+  A3: null,
+  A4: null,
+  A5: null,
+  A6: null,
+  A7: null,
+  A8: null,
+  A9: null,
+  A10: null,
+  A11: null,
+  B1: null,
+  B2: null,
+  B3: null,
+  B4: null,
+  B5: null,
+  B6: null,
+  B7: null,
+  B8: null,
+  B9: null,
+  B10: null,
+  C1: null,
+  C2: null,
+  C3: null,
+  C4: null,
+  C5: null,
+  C6: null,
+  C7: null,
+  C8: null,
+  C9: null,
+  C10: null,
+  D1: null,
+  D2: null,
+  D3: null,
+  D4: null,
+  D5: null,
+  D6: null,
+  D7: null,
+  D8: null,
+  D9: null,
+  D10: null,
+  E1: null,
+  E2: null,
+  E3: null,
+  E4: null,
+  E5: null,
+  E6: null,
+  E7: null,
+  E8: null,
+  E9: null,
+  E10: null,
+  F1: null,
+  F2: null,
+  F3: null,
+  F4: null,
+  F5: null,
+  F6: null,
+  F7: null,
+  F8: null,
+  F9: null,
+  F10: null,
+  G1: null,
+  G2: null,
+  G3: null,
+  G4: null,
+  G5: null,
+  G6: null,
+  G7: null,
+  G8: null,
+  G9: null,
+  G10: null,
+  H1: null,
+  H2: null,
+  H3: null,
+  H4: null,
+  H5: null,
+  H6: null,
+  H7: null,
+  H8: null,
+  H9: null,
+  H10: null,
+  I1: null,
+  I2: null,
+  I3: null,
+  I4: null,
+  I5: null,
+  I6: null,
+  I7: null,
+  I8: null,
+  I9: null,
+  I10: null,
+  J1: null,
+  J2: null,
+  J3: null,
+  J4: null,
+  J5: null,
+  J6: null,
+  J7: null,
+  J8: null,
+  J9: null,
+  J10: null,
+  K1: null,
+  K2: null,
+  K3: null,
+  K4: null,
+  K5: null,
+  K6: null,
+  K7: null,
+  K8: null,
+  K9: null,
+  K10: null,
+  L1: null,
+  L2: null,
+  L3: null,
+  L4: null,
+  L5: null,
+  L6: null,
+  L7: null,
+  L8: null,
+  L9: null,
+  L10: null,
+  M1: null,
+  M2: null,
+  M3: null,
+  M4: null,
+  M5: null,
+  M6: null,
+  M7: null,
+  M8: null,
+  M9: null,
+  M10: null,
 };
 
 const ItemType = "SEAT";
@@ -87,6 +205,7 @@ const WorkArea: React.FC = () => {
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
   const [edit, setEdit] = useState(false);
+  const [zoom, setZoom] = useState<number>(1); // Default zoom level
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
     console.log("Clicked desk:", deskKey);
@@ -99,9 +218,24 @@ const WorkArea: React.FC = () => {
     setIsPopupOpen(false);
   };
 
+  // Handle Zoom In/Out
+  const handleZoom = (factor: number) => {
+    setZoom((prevZoom) => Math.min(2, Math.max(0.5, prevZoom + factor))); // Limit between 0.5x - 2x
+  };
+
+  // Handle Mouse Wheel Zoom (Ctrl + Scroll)
+  const handleWheelZoom = (e: WheelEvent<HTMLDivElement>) => {
+    if (e.ctrlKey) {
+      e.preventDefault();
+      setZoom((prevZoom) =>
+        Math.min(2, Math.max(0.5, prevZoom - e.deltaY * 0.0015))
+      );
+    }
+  };
+
   const editClosePopup = () => {
     setEdit(false);
-  }
+  };
   const [seatMapping, setSeatMapping] = useState(seatMappingData);
 
   // Swap function for drag-and-drop
@@ -127,14 +261,12 @@ const WorkArea: React.FC = () => {
       try {
         console.log("get dashboard");
         temp = await getDashboard(payload);
-        console.log(" occupued  ", temp[0].office.occupied_desks)
+        console.log(" occupued  ", temp[0].office.occupied_desks);
         console.log("temp212334 ", temp);
         setOccupied(temp[0].office.occupied_desks);
         setVacant(temp[0].office.vacant_desks);
         setTotalDesk(temp[0].office.desks);
         setEmployee(temp);
-
-
       } catch (err) {
       } finally {
       }
@@ -160,22 +292,18 @@ const WorkArea: React.FC = () => {
     fetchData();
   }, [trigger]);
 
-
-
-
   const openEdit = (employee: any) => {
     setEditEmployee(employee);
     console.log("hiisduid", employee);
     setEdit(true);
-  }
+  };
 
   useEffect(() => {
     console.log(" seat mapping changes.................", seatMapping);
     employee?.forEach((each) => {
       if (localStorage.getItem("userId") === each.user.id) {
-
       }
-    })
+    });
   }, [employee]);
 
   //  "desks": 130,
@@ -258,9 +386,7 @@ const WorkArea: React.FC = () => {
             <h3 className="text-left text-3xl font-semibold text-white">
               {vacant}
             </h3>
-            <p className="text-left font-normal text-white">
-              Unoccupied Seats
-            </p>
+            <p className="text-left font-normal text-white">Unoccupied Seats</p>
           </div>
         </div>
         <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
@@ -283,18 +409,18 @@ const WorkArea: React.FC = () => {
             </svg>
           </div>
           <div className="w-full flex flex-col gap-1 px-2 m-auto">
-            <h3 className="text-left text-3xl font-semibold text-white">
-              05
-            </h3>
+            <h3 className="text-left text-3xl font-semibold text-white">05</h3>
             <p className="text-left font-normal text-white">Total Rooms</p>
           </div>
         </div>
       </div>
       <DndProvider backend={HTML5Backend}>
-        <div className="w-full h-full scroll-container overflow-x-auto overflow-y-auto scrollbar-hide scrollbar-none">
-          <div className="border border-[#30306D] flex flex-wrap justify-evenly rounded-lg w-full gap-2">
-            {
-              Object.entries(seatMapping).slice(0, 10).map(([key, eachEmployee]) =>
+        <div className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none">
+          {/* Top Row */}
+          <div className="border border-[#30306D] flex p-2 gap-2 justify-evenly rounded-lg w-full">
+            {Object.entries(seatMapping)
+              .slice(0, 11)
+              .map(([key, eachEmployee]) =>
                 eachEmployee ? (
                   <DeskCard
                     deskKey={key}
@@ -314,145 +440,146 @@ const WorkArea: React.FC = () => {
                 )
               )}
           </div>
+          {isPopupOpen && (
+            <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} />
+          )}
 
-          <br></br>
-          <div className="flex flex-col gap-7 select-none">
-            {isPopupOpen && (
-              <EmployeeList
-                closePopup={closePopup}
-                choosenDesk={choosenDesk1}
+          {edit && (
+            <DeskAllocationPopup
+              editClosePopup={editClosePopup}
+              employee={editEmployee}
+            />
+          )}
+          {/* main workarea */}
+          <div className="grid grid-cols-[1fr_min-content_1fr] w-full">
+            <div className="flex flex-col gap-7 w-full flex-1 justify-between">
+              <div className="flex flex-col gap-12 w-full">
+                {[...Array(6)].map((_, rowIndex) => (
+                  <div key={rowIndex} className="flex flex-col gap-3 w-full">
+                    {[...Array(2)].map((_, subRowIndex) => {
+                      const startIdx = 11 + rowIndex * 10 + subRowIndex * 5;
+                      const desks = Object.entries(seatMapping)
+                        .slice(startIdx, startIdx + 5)
+                        .map(([key, eachEmployee]) => ({ key, eachEmployee }));
+
+                      return (
+                        <div
+                          key={subRowIndex}
+                          className="border border-[#30306D] flex gap-2 p-2 justify-start rounded-lg w-full"
+                        >
+                          {desks.map(({ key, eachEmployee }) =>
+                            eachEmployee ? (
+                              <DeskCard
+                                key={key}
+                                deskKey={key}
+                                employee={eachEmployee}
+                                triggerUseEffect={closePopup}
+                                swapSeats={swapSeats}
+                                openEdit={openEdit}
+                              />
+                            ) : (
+                              <UnassignedDeskCard
+                                key={key}
+                                deskKey={key}
+                                onClick={openPopup}
+                                swapSeats={swapSeats}
+                                employee={eachEmployee}
+                              />
+                            )
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-1 w-full">
+                <Rooms
+                  roomName="Server"
+                  borderColor="var(--main)"
+                  image={server}
+                  alt="server"
+                />
+                <Rooms
+                  roomName="Pantry Room"
+                  borderColor="#b8507d"
+                  image={pantry}
+                  alt="pantry"
+                />
+                <Rooms
+                  borderColor="#9941a1"
+                  image={meeting}
+                  alt="meeting room"
+                />
+                <Rooms
+                  roomName="Manager Cabin"
+                  borderColor="#6742ad"
+                  image={cabin}
+                  alt="cabin"
+                />
+              </div>
+            </div>
+            {/* Manager Room (Middle - Dynamic Width) */}
+            <div className="h-full flex items-end flex-auto w-full">
+              <Rooms
+                roomName="Manager Room"
+                borderColor="#c7662d"
+                image={cabin}
+                alt="Manager Room"
+                imageClassName="w-14 h-full"
               />
-            )}
+            </div>
+            {/* Right side Layout */}
+            <div className="flex flex-col gap-7 flex-1 justify-between">
+              <div className="flex flex-col gap-12">
+                {[...Array(8)].map((_, rowIndex) => (
+                  <div key={rowIndex} className="flex flex-col gap-3 w-full">
+                    {[...Array(2)].map((_, subRowIndex) => {
+                      const startIdx = 60 + rowIndex * 10 + subRowIndex * 5;
+                      const desks = Object.entries(seatMapping)
+                        .slice(startIdx, startIdx + 5)
+                        .map(([key, eachEmployee]) => ({ key, eachEmployee }));
 
-            {(edit) && <DeskAllocationPopup
-              editClosePopup={editClosePopup} employee={editEmployee}
-            />}
-            <div className="flex">
-              <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-4">
-                  {Object.entries(seatMapping).slice(10, 60)  // Convert object to array
-                    .reduce((rows, [key, eachEmployee], index) => {
-                      if (index % 5 === 0) rows.push([]); // Start a new row every 5 items
-                      rows[rows.length - 1].push({ key, eachEmployee });
-                      return rows;
-                    }, [])
-                    .map((row, rowIndex) => (
-                      <div
-                        key={rowIndex}
-                        className="border border-[#30306D] flex py-2 justify-evenly rounded-lg  w-full sm:w-[90%] md:w-[80%] lg:w-[680px] my-2"
-                      >
-                        {row.map(({ key, eachEmployee }) =>
-                          eachEmployee ? (
-                            <DeskCard
-                              deskKey={key}
-                              employee={eachEmployee}
-                              triggerUseEffect={closePopup}
-                              swapSeats={swapSeats}
-                              openEdit={openEdit}
-                            />
-                          ) : (
-                            <UnassignedDeskCard
-                              key={key}
-                              deskKey={key}
-                              onClick={openPopup}
-                              swapSeats={swapSeats}
-                              employee={eachEmployee}
-                            />
-                          )
-                        )}
-                      </div>
-                    ))}
-                </div>
-
-                <div className="flex flex-col gap-1 w-full pt-24">
-                  <div className="w-full justify-center items-center  border-[var(--main)] border-2">
-                    <div className="flex flex-col gap-2 w-full justify-center items-center py-6">
-                      <img src={server} alt="server" className="w-full h-20" />
-                      <p className="text-lg w-full text-center">
-                        Electrical and Server Room
-                      </p>
-                    </div>
+                      return (
+                        <div
+                          key={subRowIndex}
+                          className="border border-[#30306D] flex gap-2 p-2 justify-start rounded-lg w-full"
+                        >
+                          {desks.map(({ key, eachEmployee }) =>
+                            eachEmployee ? (
+                              <DeskCard
+                                key={key}
+                                deskKey={key}
+                                employee={eachEmployee}
+                                triggerUseEffect={closePopup}
+                                swapSeats={swapSeats}
+                                openEdit={openEdit}
+                              />
+                            ) : (
+                              <UnassignedDeskCard
+                                key={key}
+                                deskKey={key}
+                                onClick={openPopup}
+                                swapSeats={swapSeats}
+                                employee={eachEmployee}
+                              />
+                            )
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="w-full justify-center items-center border-[#b8507d] border-2">
-                    <div className="flex flex-col gap-2 w-full justify-center items-center py-6">
-                      <img src={pantry} alt="server" className="w-full h-20" />
-                      <p className="text-lg w-full text-center">Pantry Room</p>
-                    </div>
-                  </div>
-                  <div className="w-full justify-center items-center  border-[#9941a1] border-2">
-                    <div className="flex flex-col gap-2 w-full justify-center items-center py-8">
-                      <img src={meeting} alt="server" className="w-full h-28" />
-                      {/* <p className="text-lg w-full text-center">Meeting Room</p> */}
-                    </div>
-                  </div>
-                  <div className="w-full justify-center items-center  border-[#6742ad] border-2">
-                    <div className="flex flex-col gap-2 w-full justify-center items-center py-16">
-                      <img src={cabin} alt="server" className="w-full h-24" />
-                      <p className="text-lg w-full text-center">
-                        Manager Cabin
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
 
-              <div className=" flex  items-end">
-                <div className="justify-center items-center  border-[#c7662d]  w-40 border-2 ">
-                  <div className="flex flex-col gap-2 w-full justify-center items-center py-16">
-                    <img src={cabin} alt="server" className="w-70 h-full" />
-                    <p className="text-basew-full text-center">Manager Room</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-y-11">
-                <div className="flex flex-col gap-4">
-                  {Object.entries(seatMapping).slice(60, 130) // Convert object to array
-                    .reduce((rows, [key, eachEmployee], index) => {
-                      if (index % 5 === 0) rows.push([]); // Start a new row every 5 items
-                      rows[rows.length - 1].push({ key, eachEmployee });
-                      return rows;
-                    }, [])
-                    .map((row, rowIndex) => (
-                      <div
-                        key={rowIndex}
-                        className="border border-[#30306D] flex py-2 justify-evenly rounded-lg w-full sm:w-[90%] md:w-[80%] lg:w-[680px] my-2"
-                      >
-                        {row.map(({ key, eachEmployee }) =>
-                          eachEmployee ? (
-                            <DeskCard
-                              deskKey={key}
-                              employee={eachEmployee}
-                              triggerUseEffect={closePopup}
-                              swapSeats={swapSeats}
-                              openEdit={openEdit}
-                            />
-                          ) : (
-                            <UnassignedDeskCard
-                              key={key}
-                              deskKey={key}
-                              onClick={openPopup}
-                              swapSeats={swapSeats}
-                              employee={eachEmployee}
-                            />
-                          )
-                        )}
-                      </div>
-                    ))}
-                </div>
-
-                <div className="w-full justify-center items-center  border-[#9547d4] border-2 py-4">
-                  <div className="flex flex-col gap-2 w-full justify-center items-center py-20">
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <img
-                      src={conference}
-                      alt="server"
-                      className="w-full h-48"
-                    />
-                  </div>
+              <div className="w-full justify-center items-center  border-[#9547d4] border-2 py-4">
+                <div className="flex flex-col gap-2 w-full justify-center items-center py-20">
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <img src={conference} alt="server" className="w-full h-48" />
                 </div>
               </div>
             </div>

@@ -6,15 +6,15 @@ import { useDrag, useDrop } from "react-dnd";
 interface UnassignedDeskCardProps {
   deskKey: string;
   onClick: (deskKey: string) => void;
-  swapSeats: any,
-  employee: any
+  swapSeats: any;
+  employee: any;
 }
 const ItemType = "SEAT";
 const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
   deskKey,
   onClick,
   swapSeats,
-  employee
+  employee,
 }) => {
   const userRole = localStorage.getItem("userRole");
   let admin = userRole === "admin" ? true : false;
@@ -37,9 +37,9 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
 
   return (
     <>
-
-      <div ref={(node) => dragRef(dropRef(node))}
-        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.125rem] shadow-md"
+      <div
+        ref={(node) => dragRef(dropRef(node))}
+        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-full max-w-[10.2rem] shadow-md"
         onClick={() => {
           if (admin) onClick(deskKey);
         }}
