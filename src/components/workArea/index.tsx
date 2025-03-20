@@ -312,7 +312,7 @@ const WorkArea: React.FC = () => {
   //  "rooms": 5
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full h-fit md:gap-8">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full h-fit md:gap-8 ">
         <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
           <div className="icon p-4 flex justify-center items-center rounded-full bg-[#F664C8] my-auto">
             <svg
@@ -415,9 +415,9 @@ const WorkArea: React.FC = () => {
         </div>
       </div>
       <DndProvider backend={HTML5Backend}>
-        <div className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none">
+        <div className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none ">
           {/* Top Row */}
-          <div className="border border-[#30306D] flex p-2 gap-2 justify-evenly rounded-lg w-full">
+          <div className="border border-[#30306D] flex p-2 gap-2 justify-evenly rounded-lg w-fit">
             {Object.entries(seatMapping)
               .slice(0, 11)
               .map(([key, eachEmployee]) =>
@@ -455,7 +455,7 @@ const WorkArea: React.FC = () => {
             <div className="flex flex-col gap-7 w-full flex-1 justify-between">
               <div className="flex flex-col gap-12 w-full">
                 {[...Array(6)].map((_, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col gap-3 w-full">
+                  <div key={rowIndex} className="flex flex-col gap-3 w-fit">
                     {[...Array(2)].map((_, subRowIndex) => {
                       const startIdx = 11 + rowIndex * 10 + subRowIndex * 5;
                       const desks = Object.entries(seatMapping)
@@ -534,7 +534,7 @@ const WorkArea: React.FC = () => {
             <div className="flex flex-col gap-7 flex-1 justify-between">
               <div className="flex flex-col gap-12">
                 {[...Array(8)].map((_, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col gap-3 w-full">
+                  <div key={rowIndex} className="flex flex-col gap-3 w-fit">
                     {[...Array(2)].map((_, subRowIndex) => {
                       const startIdx = 60 + rowIndex * 10 + subRowIndex * 5;
                       const desks = Object.entries(seatMapping)

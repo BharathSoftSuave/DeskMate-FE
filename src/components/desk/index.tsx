@@ -73,8 +73,14 @@ const DeskCard: React.FC<DeskCardProps> = ({
 
   let searchName = "bharath";
 
-  const truncateText = (text, maxLength) => {
-    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  const getFirstName = (fullName, maxLength) => {
+    if (!fullName) return "";
+
+    const firstName = fullName.split(" ")[0]; // Extract first name
+
+    return firstName.length > maxLength
+      ? firstName.slice(0, maxLength) + "..."
+      : firstName;
   };
 
   const openEdit1 = () => {
@@ -148,7 +154,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
           employee?.user?.full_name.includes(searchName)
             ? "border-[orange]"
             : "border-[#49439B]"
-        } rounded-lg w-full max-w-40 min-w-36 shadow-md`}
+        } rounded-lg w-[9.2rem] shadow-md`}
       >
         <div className="flex items-center gap-2 w-full">
           <p className="cursor-move text-sm text-gray-400">⋮⋮</p>
@@ -159,8 +165,8 @@ const DeskCard: React.FC<DeskCardProps> = ({
           ${break1 ? "bg-red-500" : "bg-green-500"}`}
             ></span>
           </div>
-          <span className="text-[10px] font-medium cursor-move select-none">
-            {truncateText(employee?.user?.full_name, 10)}
+          <span className="text-xs font-medium cursor-move select-none">
+            {getFirstName(employee?.user?.full_name, 10)}
           </span>
         </div>
       </div>
