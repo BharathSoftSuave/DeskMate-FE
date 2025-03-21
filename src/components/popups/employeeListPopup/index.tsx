@@ -31,7 +31,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
     const payload1 = {
       operation: "allocate",
       user_id: choosenemp,
-      office_id: "67d59b0a8058c844cca6d9ac",
+      office_id: "67dd364d7c1b361e5c24bf73",
       desk_num: choosenDesk,
     };
     console.log("we go ", payload1);
@@ -96,7 +96,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredData = data?.filter((employee: any) =>
-    employee.full_name.toLowerCase().includes(searchQuery.toLowerCase())
+    employee.full_name.toLowerCase().startsWith(searchQuery.toLowerCase())
   ).slice(0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
 
   console.log("filtered data", filteredData, data, 0 + ((page - 1) * 10), ((page - 1) * 10) + 10);

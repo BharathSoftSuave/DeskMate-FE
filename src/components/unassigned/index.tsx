@@ -39,7 +39,7 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
     <>
       <div
         ref={(node) => dragRef(dropRef(node))}
-        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.2rem] shadow-md"
+        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.3rem] h-[42px] shadow-md"
         onClick={() => {
           if (admin) onClick(deskKey);
         }}
@@ -51,7 +51,7 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
           </div>
           <span className="absolute top-0 right-0 w-2 h-2 border-1 border-[var(--secondary)] rounded-full"></span>
         </div>
-        <span className="text-[12px] font-medium cursor-move select-none">
+        <span className="text-xs font-medium cursor-move font-lato select-none">
           Unassigned
         </span>
       </div>

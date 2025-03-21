@@ -13,6 +13,10 @@ import { ApiResponse } from "../../interface/dashboardInterface";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DeskAllocationPopup from "../popups/EditPopup/index";
+import { FaMinus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import { TbZoomReset } from "react-icons/tb";
+
 import Rooms from "../rooms";
 
 const seatMappingData = {
@@ -147,6 +151,15 @@ const seatMappingData = {
   M8: null,
   M9: null,
   M10: null,
+  N1: null,
+  N2: null,
+  N3: null,
+  N4: null,
+  N5: null,
+  N6: null,
+  N7: null,
+  N8: null,
+  N9: null,
 };
 
 const ItemType = "SEAT";
@@ -195,7 +208,7 @@ const seatMapping1 = {
 };
 
 const payload = {
-  office_id: "67d59b0a8058c844cca6d9ac",
+  office_id: "67dd364d7c1b361e5c24bf73",
 };
 
 const WorkArea: React.FC = () => {
@@ -204,8 +217,8 @@ const WorkArea: React.FC = () => {
   const [employee, setEmployee] = useState<ApiResponse[]>();
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
+  const [zoomLevel, setZoomLevel] = useState(1);
   const [edit, setEdit] = useState(false);
-  const [zoom, setZoom] = useState<number>(1); // Default zoom level
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
     console.log("Clicked desk:", deskKey);
@@ -218,20 +231,28 @@ const WorkArea: React.FC = () => {
     setIsPopupOpen(false);
   };
 
-  // Handle Zoom In/Out
-  const handleZoom = (factor: number) => {
-    setZoom((prevZoom) => Math.min(2, Math.max(0.5, prevZoom + factor))); // Limit between 0.5x - 2x
+  // Handle Zoom In / Out
+  const handleZoom = (type: "in" | "out") => {
+    setZoomLevel((prev) => {
+      let newZoom = type === "in" ? prev * 1.1 : prev / 1.1;
+      return Math.max(0.5, Math.min(newZoom, 2)); // Limit zoom range
+    });
   };
 
-  // Handle Mouse Wheel Zoom (Ctrl + Scroll)
-  const handleWheelZoom = (e: WheelEvent<HTMLDivElement>) => {
-    if (e.ctrlKey) {
-      e.preventDefault();
-      setZoom((prevZoom) =>
-        Math.min(2, Math.max(0.5, prevZoom - e.deltaY * 0.0015))
-      );
-    }
-  };
+  // Handle Scroll Zoom
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) {
+        event.preventDefault();
+        setZoomLevel((prev) => {
+          let newZoom = event.deltaY < 0 ? prev * 1.1 : prev / 1.1;
+          return Math.max(0.5, Math.min(newZoom, 4)); // Keep zoom between 0.5x and 2x
+        });
+      }
+    };
+    document.addEventListener("wheel", handleWheel, { passive: false });
+    return () => document.removeEventListener("wheel", handleWheel);
+  }, []);
 
   const editClosePopup = () => {
     setEdit(false);
@@ -414,173 +435,214 @@ const WorkArea: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Zoom Controls */}
       <DndProvider backend={HTML5Backend}>
-        <div className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none ">
-          {/* Top Row */}
-          <div className="border border-[#30306D] flex p-2 gap-2 justify-evenly rounded-lg w-fit">
-            {Object.entries(seatMapping)
-              .slice(0, 11)
-              .map(([key, eachEmployee]) =>
-                eachEmployee ? (
-                  <DeskCard
-                    deskKey={key}
-                    employee={eachEmployee}
-                    triggerUseEffect={closePopup}
-                    swapSeats={swapSeats}
-                    openEdit={openEdit}
-                  />
-                ) : (
-                  <UnassignedDeskCard
-                    key={key}
-                    deskKey={key}
-                    employee={eachEmployee}
-                    onClick={openPopup}
-                    swapSeats={swapSeats}
-                  />
-                )
-              )}
+        <div className="absolute bg-[#24244b] rounded-lg z-10 right-[5rem] bottom-[3rem] opacity-50 hover:opacity-100">
+          <div className=" flex gap-4 items-center py-2 px-4">
+            <button
+              className="w-6 h-6 p-2 flex justify-center items-center border rounded-md"
+              onClick={() => handleZoom("in")}
+            >
+              <FaPlus className="text-xs" />
+            </button>
+            <p className="font-normal font-rubik">
+              {(zoomLevel * 100).toFixed(0)}%
+            </p>
+            <button
+              className="w-6 h-6 p-2 flex justify-center items-center border rounded-md"
+              onClick={() => handleZoom("out")}
+            >
+              <FaMinus className="text-xs" />
+            </button>
+            <button
+              onClick={() => setZoomLevel(1)}
+              className="w-full h-6 px-2 py-4 flex gap-2 justify-between items-center border rounded-md"
+            >
+              <TbZoomReset className="text-base" />
+              <span className="font-normal w-10 font-lato items-center justify-center text-center">
+                Reset
+              </span>
+            </button>
           </div>
+        </div>
+        <div className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none ">
           {isPopupOpen && (
             <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} />
           )}
-
-          {edit && (
-            <DeskAllocationPopup
-              editClosePopup={editClosePopup}
-              employee={editEmployee}
-            />
-          )}
-          {/* main workarea */}
-          <div className="grid grid-cols-[1fr_min-content_1fr] w-full">
-            <div className="flex flex-col gap-7 w-full flex-1 justify-between">
-              <div className="flex flex-col gap-12 w-full">
-                {[...Array(6)].map((_, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col gap-3 w-fit">
-                    {[...Array(2)].map((_, subRowIndex) => {
-                      const startIdx = 11 + rowIndex * 10 + subRowIndex * 5;
-                      const desks = Object.entries(seatMapping)
-                        .slice(startIdx, startIdx + 5)
-                        .map(([key, eachEmployee]) => ({ key, eachEmployee }));
-
-                      return (
-                        <div
-                          key={subRowIndex}
-                          className="border border-[#30306D] flex gap-2 p-2 justify-start rounded-lg w-full"
-                        >
-                          {desks.map(({ key, eachEmployee }) =>
-                            eachEmployee ? (
-                              <DeskCard
-                                key={key}
-                                deskKey={key}
-                                employee={eachEmployee}
-                                triggerUseEffect={closePopup}
-                                swapSeats={swapSeats}
-                                openEdit={openEdit}
-                              />
-                            ) : (
-                              <UnassignedDeskCard
-                                key={key}
-                                deskKey={key}
-                                onClick={openPopup}
-                                swapSeats={swapSeats}
-                                employee={eachEmployee}
-                              />
-                            )
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-1 w-full">
-                <Rooms
-                  roomName="Server"
-                  borderColor="var(--main)"
-                  image={server}
-                  alt="server"
-                />
-                <Rooms
-                  roomName="Pantry Room"
-                  borderColor="#b8507d"
-                  image={pantry}
-                  alt="pantry"
-                />
-                <Rooms
-                  borderColor="#9941a1"
-                  image={meeting}
-                  alt="meeting room"
-                />
-                <Rooms
-                  roomName="Manager Cabin"
-                  borderColor="#6742ad"
-                  image={cabin}
-                  alt="cabin"
-                />
-              </div>
+          <div
+            className="flex flex-col select-none gap-12 w-full h-full  overflow-auto scrollbar-hide  "
+            style={{
+              transform: `scale(${zoomLevel})`,
+              transformOrigin: "center",
+            }}
+          >
+            {/* Top Row */}
+            <div className="border border-[#30306D] flex py-2 px-4 gap-2 rounded-lg w-fit">
+              {Object.entries(seatMapping)
+                .slice(0, 11)
+                .map(([key, eachEmployee]) =>
+                  eachEmployee ? (
+                    <DeskCard
+                      deskKey={key}
+                      employee={eachEmployee}
+                      triggerUseEffect={closePopup}
+                      swapSeats={swapSeats}
+                      openEdit={openEdit}
+                    />
+                  ) : (
+                    <UnassignedDeskCard
+                      key={key}
+                      deskKey={key}
+                      employee={eachEmployee}
+                      onClick={openPopup}
+                      swapSeats={swapSeats}
+                    />
+                  )
+                )}
             </div>
-            {/* Manager Room (Middle - Dynamic Width) */}
-            <div className="h-full flex items-end flex-auto w-full">
-              <Rooms
-                roomName="Manager Room"
-                borderColor="#c7662d"
-                image={cabin}
-                alt="Manager Room"
-                imageClassName="w-14 h-full"
+            {edit && (
+              <DeskAllocationPopup
+                editClosePopup={editClosePopup}
+                employee={editEmployee}
               />
-            </div>
-            {/* Right side Layout */}
-            <div className="flex flex-col gap-7 flex-1 justify-between">
-              <div className="flex flex-col gap-12">
-                {[...Array(8)].map((_, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col gap-3 w-fit">
-                    {[...Array(2)].map((_, subRowIndex) => {
-                      const startIdx = 60 + rowIndex * 10 + subRowIndex * 5;
-                      const desks = Object.entries(seatMapping)
-                        .slice(startIdx, startIdx + 5)
-                        .map(([key, eachEmployee]) => ({ key, eachEmployee }));
+            )}
+            {/* main workarea */}
+            <div className="grid grid-cols-[1fr_min-content_1fr] justify-center w-fit gap-1">
+              <div className="flex flex-col gap-36 w-fit flex-1 justify-between ">
+                <div className="flex flex-col gap-12 w-full">
+                  {[...Array(6)].map((_, rowIndex) => (
+                    <div key={rowIndex} className="flex flex-col gap-3 w-fit">
+                      {[...Array(2)].map((_, subRowIndex) => {
+                        const startIdx = 11 + rowIndex * 10 + subRowIndex * 5;
+                        const desks = Object.entries(seatMapping)
+                          .slice(startIdx, startIdx + 5)
+                          .map(([key, eachEmployee]) => ({
+                            key,
+                            eachEmployee,
+                          }));
 
-                      return (
-                        <div
-                          key={subRowIndex}
-                          className="border border-[#30306D] flex gap-2 p-2 justify-start rounded-lg w-full"
-                        >
-                          {desks.map(({ key, eachEmployee }) =>
-                            eachEmployee ? (
-                              <DeskCard
-                                key={key}
-                                deskKey={key}
-                                employee={eachEmployee}
-                                triggerUseEffect={closePopup}
-                                swapSeats={swapSeats}
-                                openEdit={openEdit}
-                              />
-                            ) : (
-                              <UnassignedDeskCard
-                                key={key}
-                                deskKey={key}
-                                onClick={openPopup}
-                                swapSeats={swapSeats}
-                                employee={eachEmployee}
-                              />
-                            )
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
-
-              <div className="w-full justify-center items-center  border-[#9547d4] border-2 py-4">
-                <div className="flex flex-col gap-2 w-full justify-center items-center py-20">
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <img src={conference} alt="server" className="w-full h-48" />
+                        return (
+                          <div
+                            key={subRowIndex}
+                            className="border border-[#30306D] flex gap-2 p-2 justify-start rounded-lg w-full"
+                          >
+                            {desks.map(({ key, eachEmployee }) =>
+                              eachEmployee ? (
+                                <DeskCard
+                                  key={key}
+                                  deskKey={key}
+                                  employee={eachEmployee}
+                                  triggerUseEffect={closePopup}
+                                  swapSeats={swapSeats}
+                                  openEdit={openEdit}
+                                />
+                              ) : (
+                                <UnassignedDeskCard
+                                  key={key}
+                                  deskKey={key}
+                                  onClick={openPopup}
+                                  swapSeats={swapSeats}
+                                  employee={eachEmployee}
+                                />
+                              )
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
+
+                <div className="flex flex-col gap-1 w-full">
+                  <Rooms
+                    roomName="Server"
+                    borderColor="var(--main)"
+                    image={server}
+                    alt="server"
+                  />
+                  <Rooms
+                    roomName="Pantry Room"
+                    borderColor="#b8507d"
+                    image={pantry}
+                    alt="pantry"
+                  />
+                  <Rooms
+                    roomName="Meeting Room"
+                    borderColor="#9941a1"
+                    image={meeting}
+                    alt="meeting room"
+                    imageClassName="h-full"
+                  />
+                  <Rooms
+                    roomName="Manager Cabin"
+                    borderColor="#6742ad"
+                    image={cabin}
+                    alt="cabin"
+                  />
+                </div>
+              </div>
+              {/* Manager Room (Middle - Dynamic Width) */}
+              <div className="h-full flex items-end flex-auto w-full">
+                <Rooms
+                  roomName="Manager Room"
+                  borderColor="#c7662d"
+                  image={cabin}
+                  alt="Manager Room"
+                  imageClassName="w-14 h-full"
+                />
+              </div>
+              {/* Right side Layout */}
+              <div className="flex flex-col gap-7 flex-1 justify-between">
+                <div className="flex flex-col gap-12">
+                  {[...Array(8)].map((_, rowIndex) => (
+                    <div key={rowIndex} className="flex flex-col gap-3 w-fit">
+                      {[...Array(2)].map((_, subRowIndex) => {
+                        const startIdx = 60 + rowIndex * 10 + subRowIndex * 5;
+                        const desks = Object.entries(seatMapping)
+                          .slice(startIdx, startIdx + 5)
+                          .map(([key, eachEmployee]) => ({
+                            key,
+                            eachEmployee,
+                          }));
+
+                        return (
+                          <div
+                            key={subRowIndex}
+                            className="border border-[#30306D] flex gap-2 p-2 justify-start rounded-lg w-full"
+                          >
+                            {desks.map(({ key, eachEmployee }) =>
+                              eachEmployee ? (
+                                <DeskCard
+                                  key={key}
+                                  deskKey={key}
+                                  employee={eachEmployee}
+                                  triggerUseEffect={closePopup}
+                                  swapSeats={swapSeats}
+                                  openEdit={openEdit}
+                                />
+                              ) : (
+                                <UnassignedDeskCard
+                                  key={key}
+                                  deskKey={key}
+                                  onClick={openPopup}
+                                  swapSeats={swapSeats}
+                                  employee={eachEmployee}
+                                />
+                              )
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+                <Rooms
+                  roomName="Conference Room"
+                  borderColor="#9547d4"
+                  image={conference}
+                  alt="conference"
+                  imageClassName="w-full h-64 py-6"
+                />
               </div>
             </div>
           </div>
