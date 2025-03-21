@@ -46,7 +46,7 @@ interface DeskCardProps {
   swapSeats: (sourceKey: any, targetKey: any) => void;
   deskKey: any;
   openEdit: (employee: ApiResponse) => void;
-  searchName : any;
+  searchName: any;
 }
 
 const ItemType = "SEAT";
@@ -57,7 +57,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
   triggerUseEffect,
   swapSeats,
   openEdit,
-  searchName
+  searchName,
 }) => {
   // Drag & Drop Hooks
   const [{ isDragging }, dragRef] = useDrag({
@@ -88,14 +88,29 @@ const DeskCard: React.FC<DeskCardProps> = ({
   const isAdmin = userRole === "admin";
 
   // Extract First Name (Shorten if needed)
-  const getFirstName = (fullName: string, maxLength: number) => {
-    if (!fullName) return "";
-    const firstName = fullName.split(" ")[0];
-    return firstName.length > maxLength
-      ? firstName.slice(0, maxLength) + "..."
-      : firstName;
+  const getFirstName = (fullName: string, maxLength?: number) => {
+    if (!fullName) return { firstName: "", secondName: "" };
+
+    const nameParts = fullName.split(" ");
+
+    if (nameParts.length === 1) {
+      return {
+        firstName: truncateName(nameParts[0], maxLength),
+        secondName: "", // No second name if there's only one word
+      };
+    }
+
+    const firstName = truncateName(nameParts[0], maxLength);
+    let secondName = nameParts.slice(1).join(" ");
+
+    return { firstName, secondName };
   };
 
+  // Helper function to truncate the first name if needed
+  const truncateName = (name: string, maxLength?: number) => {
+    if (!maxLength || name.length <= maxLength) return name;
+    return name.slice(0, maxLength) + "...";
+  };
   // Close Dropdown on Outside Click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -161,7 +176,9 @@ const DeskCard: React.FC<DeskCardProps> = ({
       <div
         ref={(node) => dragRef(dropRef(node))}
         className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
-          employee?.user?.full_name?.toLowerCase().startsWith(searchName ? searchName : "$")
+          employee?.user?.full_name
+            ?.toLowerCase()
+            .startsWith(searchName ? searchName : "$")
             ? "border-[orange]"
             : "border-[#49439B]"
         } rounded-lg w-[9.3rem] shadow-md`}
@@ -177,7 +194,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
             />
           </div>
           <span className="text-xs font-medium cursor-move select-none font-lato">
-            {getFirstName(employee?.user?.full_name, 10)}
+            {getFirstName(employee?.user?.full_name, 10).firstName}
           </span>
         </div>
       </div>
@@ -189,7 +206,11 @@ const DeskCard: React.FC<DeskCardProps> = ({
           className="info-desk absolute h-full w-full -bottom-2 -right-2 p-1 shadow-lg z-40 translate-x-full translate-y-full"
         >
           <NavigationRoundedIcon className="text-[#b1b0b0] absolute -left-4 -top-4 -rotate-45" />
-          <div className="flex bg-white relative py-4 flex-col gap-2 rounded-r-xl border-b-[3px] border  h-fit p-2 justify-center items-center w-[240px] z-10">
+          <div
+            className={`flex bg-white relative py-4 flex-col gap-2 rounded-r-xl rounded-b-xl border-b-[3px]${
+              isOnBreak ? "border-red-500" : "border-green-500"
+            } h-fit justify-center items-center w-[240px] z-10`}
+          >
             <span
               className={`h-3 left-1 top-1 w-3 absolute rounded-full ${
                 isOnBreak ? "bg-red-500" : "bg-green-500"
@@ -210,7 +231,12 @@ const DeskCard: React.FC<DeskCardProps> = ({
                     : "text-black"
                 } font-semibold mt-2`}
               >
-                {employee?.user?.full_name}
+                {getFirstName(employee?.user?.full_name).firstName}
+              </p>
+              <p className="text-slate-900">
+                {getFirstName(
+                  employee?.user?.full_name
+                ).secondName.toLowerCase()}
               </p>
               <p className="text-xs text-gray-900 font-medium mb-2">
                 {employee?.user?.designation}

@@ -14,9 +14,7 @@ const Rooms: React.FC<RoomsProps> = ({
 }) => {
   return (
     <div
-      className={`w-full justify-center items-center border-2 ${
-        roomName === "Manager Room" ? "px-7" : ""
-      }`}
+      className={`w-full justify-center items-center border-2 `}
       style={{ borderColor: borderColor }}
     >
       <div className="flex flex-col gap-2 w-full justify-center items-center py-6 px-4">

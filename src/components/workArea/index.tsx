@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import "./styles.scss";
 import DeskCard from "../desk";
 import server from "../../assets/Images/server.svg";
@@ -13,10 +13,9 @@ import { ApiResponse } from "../../interface/dashboardInterface";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DeskAllocationPopup from "../popups/EditPopup/index";
-import { FaMinus } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
-import { TbZoomReset } from "react-icons/tb";
-
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
+import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
 import Rooms from "../rooms";
 import { toast } from "react-toastify";
 
@@ -151,6 +150,16 @@ const seatMappingData = {
   M8: null,
   M9: null,
   M10: null,
+  N1: null,
+  N2: null,
+  N3: null,
+  N4: null,
+  N5: null,
+  N6: null,
+  N7: null,
+  N8: null,
+  N9: null,
+  N10: null,
 };
 
 interface SearchBarProps {
@@ -168,9 +177,56 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const [employee, setEmployee] = useState<ApiResponse[]>();
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
-  const [zoomLevel, setZoomLevel] = useState(1);
   const [edit, setEdit] = useState(false);
-  let searchName1 = "Bharath";
+
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Handle zoom with buttons
+  const handleZoom = (type: "in" | "out") => {
+    setZoomLevel((prev) => {
+      let newZoom = type === "in" ? prev * 1.1 : prev / 1.1;
+      return Math.max(0.5, Math.min(newZoom, 3)); // Limit zoom range
+    });
+  };
+
+  // Reset zoom to default
+  const handleReset = () => {
+    setZoomLevel(1);
+    if (containerRef.current) {
+      containerRef.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  };
+
+  // Handle CTRL + Scroll (Zoom) and SHIFT + Scroll (Horizontal Scroll)
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      if (!containerRef.current) return;
+
+      if (event.ctrlKey) {
+        event.preventDefault();
+        setZoomLevel((prev) => {
+          let newZoom = event.deltaY < 0 ? prev * 1.1 : prev / 1.1;
+          return Math.max(0.5, Math.min(newZoom, 3));
+        });
+      } else if (event.shiftKey) {
+        event.preventDefault();
+        containerRef.current.scrollLeft += event.deltaY;
+      }
+    };
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+      let searchName1 = "Bharath";
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, []);
+
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
     console.log("Clicked desk:", deskKey);
@@ -182,29 +238,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     setTrigger((prev) => !prev);
     setIsPopupOpen(false);
   };
-
-  // Handle Zoom In / Out
-  const handleZoom = (type: "in" | "out") => {
-    setZoomLevel((prev) => {
-      let newZoom = type === "in" ? prev * 1.1 : prev / 1.1;
-      return Math.max(0.5, Math.min(newZoom, 2)); // Limit zoom range
-    });
-  };
-
-  // Handle Scroll Zoom
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      if (event.ctrlKey) {
-        event.preventDefault();
-        setZoomLevel((prev) => {
-          let newZoom = event.deltaY < 0 ? prev * 1.1 : prev / 1.1;
-          return Math.max(0.5, Math.min(newZoom, 4)); // Keep zoom between 0.5x and 2x
-        });
-      }
-    };
-    document.addEventListener("wheel", handleWheel, { passive: false });
-    return () => document.removeEventListener("wheel", handleWheel);
-  }, []);
 
   const editClosePopup = () => {
     setEdit(false);
@@ -426,51 +459,48 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
           </div>
         </div>
       </div>
-      {/* Zoom Controls */}
       <DndProvider backend={HTML5Backend}>
-        <div className="absolute bg-[#24244b] rounded-lg z-10 right-[5rem] bottom-[3rem] opacity-50 hover:opacity-100">
+        <div className="flex gap-4 absolute bg-[#24244b] rounded-lg z-10 right-[5rem] bottom-[3rem] opacity-50 hover:opacity-100">
           <div className=" flex gap-4 items-center py-2 px-4">
             <button
-              className="w-6 h-6 p-2 flex justify-center items-center border rounded-md"
               onClick={() => handleZoom("in")}
-            >
-              <FaPlus className="text-xs" />
-            </button>
-            <p className="font-normal font-rubik">
-              {(zoomLevel * 100).toFixed(0)}%
-            </p>
-            <button
               className="w-6 h-6 p-2 flex justify-center items-center border rounded-md"
-              onClick={() => handleZoom("out")}
             >
-              <FaMinus className="text-xs" />
+              <AddRoundedIcon />
             </button>
             <button
-              onClick={() => setZoomLevel(1)}
+              onClick={() => handleZoom("out")}
+              className="w-6 h-6 p-2 flex justify-center items-center border rounded-md"
+            >
+              <RemoveRoundedIcon />
+            </button>
+            <button
+              onClick={handleReset}
               className="w-full h-6 px-2 py-4 flex gap-2 justify-between items-center border rounded-md"
             >
-              <TbZoomReset className="text-base" />
               <span className="font-normal w-10 font-lato items-center justify-center text-center">
                 Reset
               </span>
+              <CropFreeRoundedIcon />
             </button>
           </div>
         </div>
-        <div className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none ">
-          {isPopupOpen && (
-            <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} />
-          )}
+        <div
+          className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none "
+          ref={containerRef}
+          style={{ whiteSpace: "nowrap" }}
+        >
           <div
-            className="flex flex-col select-none gap-12 w-full h-full  overflow-auto scrollbar-hide  "
+            className="flex flex-col select-none gap-12 w-full h-full"
             style={{
               transform: `scale(${zoomLevel})`,
-              transformOrigin: "center",
+              transformOrigin: "top left",
             }}
           >
             {/* Top Row */}
             <div className="border border-[#30306D] flex py-2 px-4 gap-2 rounded-lg w-fit">
               {Object.entries(seatMapping)
-                .slice(0,11)
+                .slice(0, 11)
                 .map(([key, eachEmployee]) =>
                   eachEmployee ? (
                     <DeskCard
@@ -492,12 +522,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                   )
                 )}
             </div>
-            {edit && (
-              <DeskAllocationPopup
-                editClosePopup={editClosePopup}
-                employee={editEmployee}
-              />
-            )}
+
             {/* main workarea */}
             <div className="grid grid-cols-[1fr_min-content_1fr] justify-center w-fit gap-1">
               <div className="flex flex-col gap-36 w-fit flex-1 justify-between ">
@@ -585,7 +610,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                 />
               </div>
               {/* Right side Layout */}
-              <div className="flex flex-col gap-7 flex-1 justify-between">
+              <div className="flex flex-col gap-7 flex-1 justify-between w-fit">
                 <div className="flex flex-col gap-12">
                   {[...Array(8)].map((_, rowIndex) => (
                     <div key={rowIndex} className="flex flex-col gap-3 w-fit">
@@ -640,6 +665,15 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
               </div>
             </div>
           </div>
+          {edit && (
+            <DeskAllocationPopup
+              editClosePopup={editClosePopup}
+              employee={editEmployee}
+            />
+          )}
+          {isPopupOpen && (
+            <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} />
+          )}
         </div>
       </DndProvider>
     </>

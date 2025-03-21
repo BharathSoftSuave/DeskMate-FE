@@ -19,14 +19,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 interface WorkAreaProps {
   closePopup: () => void;
-  choosenDesk: any
+  choosenDesk: any;
 }
 
 interface WorkAreaProps {
   closePopup: () => void;
 }
 const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
-
   const handleCloseAll = async () => {
     const payload1 = {
       operation: "allocate",
@@ -50,11 +49,14 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
         closeOnClick: true,
         draggable: true,
         closeButton: (
-          <span style={{ color: "green", fontWeight: "bold", fontSize: "18px" }}>✖</span>
+          <span
+            style={{ color: "green", fontWeight: "bold", fontSize: "18px" }}
+          >
+            ✖
+          </span>
         ),
       });
-    }
-    else {
+    } else {
       toast.error(response.detail, {
         style: {
           background: "#2B2A5C",
@@ -66,7 +68,9 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
         closeOnClick: true,
         draggable: true,
         closeButton: (
-          <span style={{ color: "red", fontWeight: "bold", fontSize: "18px" }}>✖</span>
+          <span style={{ color: "red", fontWeight: "bold", fontSize: "18px" }}>
+            ✖
+          </span>
         ),
       });
     }
@@ -97,12 +101,17 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
 
   const filteredData = data?.filter((employee: any) =>
     employee.full_name.toLowerCase().startsWith(searchQuery.toLowerCase())
-  )
+  );
   // .slice(0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
 
-  console.log("filtered data", filteredData, data, 0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
+  console.log(
+    "filtered data",
+    filteredData,
+    data,
+    0 + (page - 1) * 10,
+    (page - 1) * 10 + 10
+  );
   useEffect(() => {
-
     console.log("get dashboard", choosenDesk);
     const fetech = async () => {
       const result = await getPopup(payload);
@@ -115,7 +124,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
 
     const handleOutsideClick = (event: MouseEvent) => {
       try {
-      } catch (err) { }
+      } catch (err) {}
       if ((event.target as HTMLElement).id === "popup-background") {
         closePopup();
       }
@@ -137,13 +146,12 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
     >
       <div className="h-fit text-white shadow-lg rounded-2xl w-[500px] bg-[var(--primary)] border border-[#555597] m-auto relative">
         <div className="flex justify-between p-5">
-          <h1 className="text-base font-medium">Desk Allocation</h1>
+          <h1 className="text-base font-medium font-rubik">Desk Allocation</h1>
           <CloseRoundedIcon className="cursor-pointer" onClick={closePopup} />
         </div>
         <Divider orientation="horizontal" color="#7A7C7E" flexItem />
         <div className="flex flex-col gap-5 p-5">
-          <div className="flex justify-between">
-          </div>
+          {/* <div className="flex justify-between"></div> */}
           <div className="flex justify-between relative">
             <SearchRoundedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
@@ -170,12 +178,14 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
                       />
                     </ListItemAvatar>
                     <ListItemText
+                      className="font-lato"
                       primary={employee.full_name}
                       secondary={
                         <React.Fragment>
                           <Typography
                             component="span"
                             variant="body2"
+                            fontFamily={"Rubik"}
                             sx={{ color: "#7A7C7E", display: "inline" }}
                           >
                             {employee.designation}
@@ -191,7 +201,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
         </div>
       </div>
       {isConfirmPopupOpen && (
-        <div className="h-screen w-full flex items-center absolute left-0 top-0 before:content-[''] before:absolute before:w-full before:h-full before:blur-lg bg-blend-color-burn before:bg-[rgb(29,29,65,80%)] z-10">
+        <div className="h-screen w-full flex items-center absolute left-0 top-0 before:content-[''] before:absolute before:w-full before:h-full before:blur-lg bg-blend-color-burn before:bg-[rgb(29,29,65,90%)] z-10">
           <div className="h-fit text-white shadow-lg rounded-2xl w-[500px] bg-[var(--primary)] border border-[#30306D] m-auto relative">
             <div className="flex justify-between p-5">
               <h1 className="text-base font-medium">Confirm Assign Employee</h1>
