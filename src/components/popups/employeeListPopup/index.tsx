@@ -97,7 +97,8 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
 
   const filteredData = data?.filter((employee: any) =>
     employee.full_name.toLowerCase().startsWith(searchQuery.toLowerCase())
-  ).slice(0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
+  )
+  // .slice(0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
 
   console.log("filtered data", filteredData, data, 0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
   useEffect(() => {
@@ -186,29 +187,6 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
                 </List>
               </div>
             ))}
-          </div>
-
-          <div className="p-5">
-            <Pagination
-              count={13}
-              page={page}
-              onChange={(_, value) => setPage(value)}
-              shape="rounded"
-              variant="outlined"
-              sx={{
-                backgroundColor: "#1D1D41", // Background color
-                padding: "8px",
-                borderRadius: "8px",
-                "& .MuiPaginationItem-root": {
-                  color: "white", // Text color of page numbers
-                },
-                "& .Mui-selected": {
-                  backgroundColor: "#141332 !important", // Active page background
-                  color: "white !important", // Active page text color
-                  borderColor: "purple !important",
-                },
-              }}
-            />
           </div>
         </div>
       </div>

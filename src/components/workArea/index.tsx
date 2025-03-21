@@ -8,7 +8,7 @@ import cabin from "../../assets/Images/cabin.svg";
 import conference from "../../assets/Images/conference.svg";
 import UnassignedDeskCard from "../unassigned";
 import EmployeeList from "../popups/employeeListPopup";
-import { getDashboard } from "../../service/loginService";
+import { getDashboard, swap } from "../../service/loginService";
 import { ApiResponse } from "../../interface/dashboardInterface";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -18,6 +18,7 @@ import { FaPlus } from "react-icons/fa";
 import { TbZoomReset } from "react-icons/tb";
 
 import Rooms from "../rooms";
+import { toast } from "react-toastify";
 
 const seatMappingData = {
   A1: null,
@@ -30,7 +31,6 @@ const seatMappingData = {
   A8: null,
   A9: null,
   A10: null,
-  A11: null,
   B1: null,
   B2: null,
   B3: null,
@@ -151,67 +151,18 @@ const seatMappingData = {
   M8: null,
   M9: null,
   M10: null,
-  N1: null,
-  N2: null,
-  N3: null,
-  N4: null,
-  N5: null,
-  N6: null,
-  N7: null,
-  N8: null,
-  N9: null,
 };
 
-const ItemType = "SEAT";
-
-const Seat = ({ deskKey, employee, swapSeats }) => {
-  const [{ isDragging }, dragRef] = useDrag({
-    type: ItemType,
-    item: { deskKey, employee },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  const [, dropRef] = useDrop({
-    accept: ItemType,
-    drop: (draggedItem) => {
-      if (draggedItem.deskKey !== deskKey) {
-        swapSeats(draggedItem.deskKey, deskKey);
-      }
-    },
-  });
-
-  return (
-    <div
-      ref={(node) => dragRef(dropRef(node))}
-      className="border border-gray-500 p-4 w-24 h-24 flex items-center justify-center rounded-md bg-blue-200 cursor-grab"
-      style={{ opacity: isDragging ? 0.5 : 1 }}
-    >
-      {employee ? `👤 ${employee.name}` : "🪑 Empty"}
-    </div>
-  );
-};
-
-const seatMapping1 = {
-  Z1: null,
-  Z2: null,
-  Z3: null,
-  Z4: null,
-  Z5: null,
-  Z6: null,
-  Z7: null,
-  Z8: null,
-  Z9: null,
-  Z10: null,
-  Z11: null,
-};
+interface SearchBarProps {
+  searchName: string;
+}
 
 const payload = {
   office_id: "67dd364d7c1b361e5c24bf73",
 };
 
-const WorkArea: React.FC = () => {
+const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
+  console.log(" work area  search name", searchName);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [choosenDesk1, setchoosenDesk] = useState<string>();
   const [employee, setEmployee] = useState<ApiResponse[]>();
@@ -219,6 +170,7 @@ const WorkArea: React.FC = () => {
   const [editEmployee, setEditEmployee] = useState();
   const [zoomLevel, setZoomLevel] = useState(1);
   const [edit, setEdit] = useState(false);
+  let searchName1 = "Bharath";
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
     console.log("Clicked desk:", deskKey);
@@ -260,7 +212,8 @@ const WorkArea: React.FC = () => {
   const [seatMapping, setSeatMapping] = useState(seatMappingData);
 
   // Swap function for drag-and-drop
-  const swapSeats = (from, to) => {
+
+  const swapSeats = async (from, to) => {
     console.log("before ", seatMapping);
     setSeatMapping((prev) => {
       const updated = { ...prev };
@@ -268,7 +221,46 @@ const WorkArea: React.FC = () => {
       console.log("update ", updated);
       return updated;
     });
+    // console.log(seatMapping[from].desk.id, " another", seatMapping[to].desk.id);
+
+    const payload = {
+      current_desk_id: seatMapping[from].desk.id,
+    };
+
+    if (seatMapping[to]?.desk.id)
+      payload.target_desk_id = seatMapping[to].desk.id;
+    else payload.target_desk_num = to;
+
+    const response = await swap(payload);
+
+    let message;
+    if (seatMapping[from]?.user?.full_name && seatMapping[to]?.user?.full_name)
+      message = `Desk swapped between ${seatMapping[from]?.user?.full_name} and ${seatMapping[to]?.user?.full_name}`;
+    else if (seatMapping[from]?.user?.full_name)
+      message = `${seatMapping[from]?.user?.full_name} swapped with Unassinged desk`;
+    else
+      message = `${seatMapping[to]?.user?.full_name} swapped with Unassinged desk`;
+    toast.success(message, {
+      style: {
+        background: "#2B2A5C",
+        color: "white",
+        borderRadius: "8px",
+      },
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      closeButton: (
+        <span style={{ color: "green", fontWeight: "bold", fontSize: "18px" }}>
+          ✖
+        </span>
+      ),
+    });
+    console.log(" Response from swap ", response);
+    setTrigger((prev) => !prev);
   };
+
   const [occupied, setOccupied] = useState();
   const [vacant, setVacant] = useState();
 
@@ -326,7 +318,6 @@ const WorkArea: React.FC = () => {
       }
     });
   }, [employee]);
-
   //  "desks": 130,
   //  "occupied_desks": 11,
   //  "vacant_desks": 119,
@@ -479,7 +470,7 @@ const WorkArea: React.FC = () => {
             {/* Top Row */}
             <div className="border border-[#30306D] flex py-2 px-4 gap-2 rounded-lg w-fit">
               {Object.entries(seatMapping)
-                .slice(0, 11)
+                .slice(0,11)
                 .map(([key, eachEmployee]) =>
                   eachEmployee ? (
                     <DeskCard
@@ -488,6 +479,7 @@ const WorkArea: React.FC = () => {
                       triggerUseEffect={closePopup}
                       swapSeats={swapSeats}
                       openEdit={openEdit}
+                      searchName={searchName}
                     />
                   ) : (
                     <UnassignedDeskCard
@@ -535,6 +527,7 @@ const WorkArea: React.FC = () => {
                                   triggerUseEffect={closePopup}
                                   swapSeats={swapSeats}
                                   openEdit={openEdit}
+                                  searchName={searchName}
                                 />
                               ) : (
                                 <UnassignedDeskCard
@@ -619,6 +612,7 @@ const WorkArea: React.FC = () => {
                                   triggerUseEffect={closePopup}
                                   swapSeats={swapSeats}
                                   openEdit={openEdit}
+                                  searchName={searchName}
                                 />
                               ) : (
                                 <UnassignedDeskCard

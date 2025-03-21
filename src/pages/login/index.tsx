@@ -24,15 +24,16 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const {
+    register,
+    handleSubmit,
+  } = useForm<LoginFormInputs>();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     localStorage.clear();
-    {
-      localStorage.setItem("currentUserEmail", data.email);
-    }
+    {localStorage.setItem("currentUserEmail",data.email)};
     if (data.email === "kamalesh.ramachandran@softsuave.com") {
       localStorage.setItem("userRole", "admin");
     }
@@ -43,8 +44,11 @@ const Login: React.FC = () => {
       else {
         alert("Authentication in Invalid");
       }
-    } catch (error) {}
+    } catch (error) {
+      
+    }
   };
+
 
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
@@ -53,7 +57,7 @@ const Login: React.FC = () => {
         <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597]">
           <div className="py-14 px-8 shadow-lg rounded-lg w-full">
             <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
-              Welcome Back!
+            Welcome Back!
             </h4>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -132,7 +136,7 @@ const Login: React.FC = () => {
               >
                 Login
               </button>
-              <div className="flex items-center justify-center space-x-2 mt-2">
+              <div className="flex flex-col items-center justify-center space-x-2 mt-2">
                 <Typography variant="body2">Don't have an account?</Typography>
                 <Button
                   variant="text"
@@ -142,7 +146,7 @@ const Login: React.FC = () => {
                 >
                   Sign Up
                 </Button>
-              </div>
+               </div>
             </form>
           </div>
         </div>

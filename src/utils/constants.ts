@@ -1,4 +1,3 @@
-
 export const ENDPOINTS = {
   user: "/user",
   login: "/auth/login",
@@ -6,5 +5,6 @@ export const ENDPOINTS = {
   getMe : "/user/me",
   getDashboard : "/dashboard/",
   Ausers : "/admin/users",
-  desk : "/desk"
+  desk : "/desk",
+  swap : "admin/swap-desk"
 };

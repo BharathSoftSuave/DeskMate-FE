@@ -22,6 +22,8 @@ const CreateWorkArea: React.FC = () => {
     console.log("Hi this is ");
   };
 
+  // const
+
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
       <Navbar />

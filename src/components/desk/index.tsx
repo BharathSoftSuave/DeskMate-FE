@@ -46,6 +46,7 @@ interface DeskCardProps {
   swapSeats: (sourceKey: any, targetKey: any) => void;
   deskKey: any;
   openEdit: (employee: ApiResponse) => void;
+  searchName : any;
 }
 
 const ItemType = "SEAT";
@@ -56,6 +57,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
   triggerUseEffect,
   swapSeats,
   openEdit,
+  searchName
 }) => {
   // Drag & Drop Hooks
   const [{ isDragging }, dragRef] = useDrag({
@@ -159,7 +161,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
       <div
         ref={(node) => dragRef(dropRef(node))}
         className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
-          employee?.user?.full_name.includes("bharath")
+          employee?.user?.full_name?.toLowerCase().startsWith(searchName ? searchName : "$")
             ? "border-[orange]"
             : "border-[#49439B]"
         } rounded-lg w-[9.3rem] shadow-md`}

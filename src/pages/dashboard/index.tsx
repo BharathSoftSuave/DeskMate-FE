@@ -7,6 +7,7 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import profile from "../../assets/Images/profile.png";
 import WorkArea from "../../components/workArea";
+import { TextField } from "@mui/material";
 
 const Dashboard: React.FC = () => {
   useEffect(() => {}, []);
@@ -15,8 +16,9 @@ const Dashboard: React.FC = () => {
   const handleHomeClick = () => {
     navigate("/");
   };
-
+  
   const [isOpen, setIsOpen] = useState(false);
+  const [searchName , setSearchName] = useState("");
   const dropdownRef = useRef(null);
 
   const [userName, setUserName] = useState(localStorage.getItem("currentUser"));
@@ -30,6 +32,11 @@ const Dashboard: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
     setUserName(localStorage.getItem("currentUser"));
   }, []);
+  
+  function onSearch(value: string): void {
+    console.log(" search value", value);
+    setSearchName(value);
+  }
 
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex relative flex-col select-none">
@@ -40,6 +47,30 @@ const Dashboard: React.FC = () => {
           </h4>
         </div>
         <div className="my-auto flex items-center gap-6">
+
+        <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 w-72 bg-blue">
+      <svg
+        className="w-5 h-5 text-gray-500"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M21 21l-4.35-4.35M15 10a5 5 0 10-10 0 5 5 0 0010 0z"
+        ></path>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search..."
+        className="ml-2 w-full outline-none bg-transparent text-gray-700"
+        onChange={(e) => onSearch(e.target.value)} 
+      />
+    </div>
+
           <div className="relative w-full sm:hidden lg:block">
             <ExpandLessRoundedIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 rotate-180 text-white" />
             <input
@@ -57,6 +88,8 @@ const Dashboard: React.FC = () => {
             <NotificationsNoneOutlinedIcon className="text-white" />
           </Badge>
           <div className="relative" ref={dropdownRef}>
+
+    
       {/* Profile Picture & Name (Click to Toggle Dropdown) */}
       <div
         className="flex items-center gap-2 cursor-pointer"
@@ -82,7 +115,7 @@ const Dashboard: React.FC = () => {
         </div>
       </nav>
       <div className="h-full w-full mx-auto flex flex-col px-4 lg:px-20 gap-10 py-10 overflow-y-auto">
-        <WorkArea />
+        <WorkArea searchName = {searchName.toLowerCase()} />
       </div>
     </div>
   );
