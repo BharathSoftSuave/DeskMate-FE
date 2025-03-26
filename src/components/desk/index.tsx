@@ -10,9 +10,8 @@ import { useDrag, useDrop } from "react-dnd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
-import { useSelector } from "react-redux";
 
-
+// Type Definitions
 interface User {
   id: string;
   full_name: string;
@@ -61,9 +60,6 @@ const DeskCard: React.FC<DeskCardProps> = ({
   searchName,
 }) => {
   // Drag & Drop Hooks
-
-  const { userName } = useSelector((state:any) => state.auth);
-  // console.log( "Username from redux", username);
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType,
     item: { deskKey, employee },
@@ -89,6 +85,10 @@ const DeskCard: React.FC<DeskCardProps> = ({
   // Admin Check
   const userRole = localStorage.getItem("userRole");
   const userId = localStorage.getItem("userId");
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<"left" | "right">(
+    "right"
+  );
   const isAdmin = userRole === "admin";
 
   // Extract First Name (Shorten if needed)
@@ -109,6 +109,19 @@ const DeskCard: React.FC<DeskCardProps> = ({
 
     return { firstName, secondName };
   };
+
+  useEffect(() => {
+    if (isOpen && cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      const screenWidth = window.innerWidth;
+
+      if (rect.right + 250 > screenWidth) {
+        setDropdownPosition("left"); // Show on the left if it's too close to the right edge
+      } else {
+        setDropdownPosition("right");
+      }
+    }
+  }, [isOpen]);
 
   // Helper function to truncate the first name if needed
   const truncateName = (name: string, maxLength?: number) => {
@@ -173,11 +186,12 @@ const DeskCard: React.FC<DeskCardProps> = ({
 
   return (
     <div
+      ref={cardRef}
       onClick={() => setIsOpen(!isOpen)}
       className="relative group select-none"
     >
-      {/* Desk Card */}  
-    <div
+      {/* Desk Card */}
+      <div
         ref={(node) => dragRef(dropRef(node))}
         className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
           employee?.user?.full_name
@@ -207,9 +221,17 @@ const DeskCard: React.FC<DeskCardProps> = ({
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="info-desk absolute h-full w-full -bottom-2 -right-2 p-1 shadow-lg z-40 translate-x-full translate-y-full"
+          className={`info-desk absolute h-full w-full p-1 shadow-lg z-40 ${
+            dropdownPosition === "left"
+              ? "-left-2 -bottom-2 -translate-x-full translate-y-full"
+              : "-right-2 -bottom-2 translate-x-full translate-y-full"
+          }`}
         >
-          <NavigationRoundedIcon className="text-[#b1b0b0] absolute -left-4 -top-4 -rotate-45" />
+          <NavigationRoundedIcon
+            className={`text-[#b1b0b0] absolute -top-4 ${
+              dropdownPosition === "left" ? "-right-4 rotate-45" : "-left-4 -rotate-45"
+            }`}
+          />
           <div
             className={`flex bg-white relative py-4 flex-col gap-2 rounded-r-xl rounded-b-xl border-b-[3px]${
               isOnBreak ? "border-red-500" : "border-green-500"
