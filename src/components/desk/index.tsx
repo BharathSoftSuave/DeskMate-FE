@@ -10,8 +10,9 @@ import { useDrag, useDrop } from "react-dnd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
+import { useSelector } from "react-redux";
 
-// Type Definitions
+
 interface User {
   id: string;
   full_name: string;
@@ -60,6 +61,9 @@ const DeskCard: React.FC<DeskCardProps> = ({
   searchName,
 }) => {
   // Drag & Drop Hooks
+
+  const { userName } = useSelector((state:any) => state.auth);
+  // console.log( "Username from redux", username);
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType,
     item: { deskKey, employee },
@@ -172,8 +176,8 @@ const DeskCard: React.FC<DeskCardProps> = ({
       onClick={() => setIsOpen(!isOpen)}
       className="relative group select-none"
     >
-      {/* Desk Card */}
-      <div
+      {/* Desk Card */}  
+    <div
         ref={(node) => dragRef(dropRef(node))}
         className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
           employee?.user?.full_name

@@ -4,15 +4,20 @@ import { useNavigate } from "react-router-dom";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import Badge from "@mui/material/Badge";
-import Avatar from "@mui/material/Avatar";
 import profile from "../../assets/Images/profile.png";
 import WorkArea from "../../components/workArea";
-import { TextField } from "@mui/material";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { setUserName } from "../../Store/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../Store";
 
 const Dashboard: React.FC = () => {
+
   useEffect(() => {}, []);
 
+  const dispatch = useDispatch<AppDispatch>();
+  const { userName } = useSelector((state: RootState) => state.auth);
+  console.log(" login username ", userName);
   const navigate = useNavigate();
   const handleHomeClick = () => {
     navigate("/");
@@ -22,7 +27,7 @@ const Dashboard: React.FC = () => {
   const [searchName, setSearchName] = useState("");
   const dropdownRef = useRef(null);
 
-  const [userName, setUserName] = useState(localStorage.getItem("currentUser"));
+
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -30,12 +35,15 @@ const Dashboard: React.FC = () => {
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
+ 
     return () => document.removeEventListener("mousedown", handleClickOutside);
-    setUserName(localStorage.getItem("currentUser"));
   }, []);
 
   function onSearch(value: string): void {
     console.log(" search value", value);
+    console.log(userName, " in field userName");
+    dispatch(setUserName(value));
+
     setSearchName(value);
   }
 
@@ -67,9 +75,9 @@ const Dashboard: React.FC = () => {
             >
               <div className="flex flex-col gap-2">
                 <option value="Navalur" className="p-2">
-                  Navalur
+                  Navalur Beta Block
                 </option>
-                <option value="Beta Block">Alpha Beta Block</option>
+                <option value="Beta Block">Navalur Alpha Block</option>
               </div>
             </select>
           </div>

@@ -10,7 +10,7 @@ import UnassignedDeskCard from "../unassigned";
 import EmployeeList from "../popups/employeeListPopup";
 import { getDashboard, swap } from "../../service/loginService";
 import { ApiResponse } from "../../interface/dashboardInterface";
-import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DeskAllocationPopup from "../popups/EditPopup/index";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -20,147 +20,22 @@ import Rooms from "../rooms";
 import { toast } from "react-toastify";
 
 const seatMappingData = {
-  A1: null,
-  A2: null,
-  A3: null,
-  A4: null,
-  A5: null,
-  A6: null,
-  A7: null,
-  A8: null,
-  A9: null,
-  A10: null,
-  B1: null,
-  B2: null,
-  B3: null,
-  B4: null,
-  B5: null,
-  B6: null,
-  B7: null,
-  B8: null,
-  B9: null,
-  B10: null,
-  C1: null,
-  C2: null,
-  C3: null,
-  C4: null,
-  C5: null,
-  C6: null,
-  C7: null,
-  C8: null,
-  C9: null,
-  C10: null,
-  D1: null,
-  D2: null,
-  D3: null,
-  D4: null,
-  D5: null,
-  D6: null,
-  D7: null,
-  D8: null,
-  D9: null,
-  D10: null,
-  E1: null,
-  E2: null,
-  E3: null,
-  E4: null,
-  E5: null,
-  E6: null,
-  E7: null,
-  E8: null,
-  E9: null,
-  E10: null,
-  F1: null,
-  F2: null,
-  F3: null,
-  F4: null,
-  F5: null,
-  F6: null,
-  F7: null,
-  F8: null,
-  F9: null,
-  F10: null,
-  G1: null,
-  G2: null,
-  G3: null,
-  G4: null,
-  G5: null,
-  G6: null,
-  G7: null,
-  G8: null,
-  G9: null,
-  G10: null,
-  H1: null,
-  H2: null,
-  H3: null,
-  H4: null,
-  H5: null,
-  H6: null,
-  H7: null,
-  H8: null,
-  H9: null,
-  H10: null,
-  I1: null,
-  I2: null,
-  I3: null,
-  I4: null,
-  I5: null,
-  I6: null,
-  I7: null,
-  I8: null,
-  I9: null,
-  I10: null,
-  J1: null,
-  J2: null,
-  J3: null,
-  J4: null,
-  J5: null,
-  J6: null,
-  J7: null,
-  J8: null,
-  J9: null,
-  J10: null,
-  K1: null,
-  K2: null,
-  K3: null,
-  K4: null,
-  K5: null,
-  K6: null,
-  K7: null,
-  K8: null,
-  K9: null,
-  K10: null,
-  L1: null,
-  L2: null,
-  L3: null,
-  L4: null,
-  L5: null,
-  L6: null,
-  L7: null,
-  L8: null,
-  L9: null,
-  L10: null,
-  M1: null,
-  M2: null,
-  M3: null,
-  M4: null,
-  M5: null,
-  M6: null,
-  M7: null,
-  M8: null,
-  M9: null,
-  M10: null,
-  N1: null,
-  N2: null,
-  N3: null,
-  N4: null,
-  N5: null,
-  N6: null,
-  N7: null,
-  N8: null,
-  N9: null,
-  N10: null,
+   A1: null, A2: null, A3: null, A4: null, A5: null, A6: null, A7: null, A8: null, A9: null, A10: null ,
+   B1: null, B2: null, B3: null, B4: null, B5: null, B6: null, B7: null, B8: null, B9: null, B10: null ,
+   C1: null, C2: null, C3: null, C4: null, C5: null, C6: null, C7: null, C8: null, C9: null, C10: null ,
+   D1: null, D2: null, D3: null, D4: null, D5: null, D6: null, D7: null, D8: null, D9: null, D10: null ,
+   E1: null, E2: null, E3: null, E4: null, E5: null, E6: null, E7: null, E8: null, E9: null, E10: null ,
+   F1: null, F2: null, F3: null, F4: null, F5: null, F6: null, F7: null, F8: null, F9: null, F10: null ,
+   G1: null, G2: null, G3: null, G4: null, G5: null, G6: null, G7: null, G8: null, G9: null, G10: null ,
+   H1: null, H2: null, H3: null, H4: null, H5: null, H6: null, H7: null, H8: null, H9: null, H10: null ,
+   I1: null, I2: null, I3: null, I4: null, I5: null, I6: null, I7: null, I8: null, I9: null, I10: null ,
+   J1: null, J2: null, J3: null, J4: null, J5: null, J6: null, J7: null, J8: null, J9: null, J10: null ,
+   K1: null, K2: null, K3: null, K4: null, K5: null, K6: null, K7: null, K8: null, K9: null, K10: null ,
+   L1: null, L2: null, L3: null, L4: null, L5: null, L6: null, L7: null, L8: null, L9: null, L10: null ,
+   M1: null, M2: null, M3: null, M4: null, M5: null, M6: null, M7: null, M8: null, M9: null, M10: null ,
+   N1: null, N2: null, N3: null, N4: null, N5: null, N6: null, N7: null, N8: null, N9: null, N10: null 
 };
+
 
 interface SearchBarProps {
   searchName: string;
@@ -178,6 +53,21 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
   const [edit, setEdit] = useState(false);
+ 
+
+   // Store refs for all seats
+   const seatRefs = useRef([]);
+
+   // Function to scroll to a specific seat (hardcoded to seat 10)
+   const scrollToSeat = (seatNumber:any) => {
+     const seatIndex = seatNumber - 1; // Array index starts from 0
+     if (seatRefs.current[seatIndex]) {
+       seatRefs.current[seatIndex].scrollIntoView({
+         behavior: "smooth",
+         block: "center",
+       });
+     }
+   };
 
   const [zoomLevel, setZoomLevel] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -498,9 +388,9 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
             }}
           >
             {/* Top Row */}
-            <div className="border border-[#30306D] flex py-2 px-4 gap-2 rounded-lg w-fit">
+            <div className="border border-[#30306D] flex py-2 px-44 gap-2 rounded-lg w-fit">
               {Object.entries(seatMapping)
-                .slice(0, 11)
+                .slice(0, 9)
                 .map(([key, eachEmployee]) =>
                   eachEmployee ? (
                     <DeskCard
@@ -510,6 +400,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                       swapSeats={swapSeats}
                       openEdit={openEdit}
                       searchName={searchName}
+                      ref={(el) => (seatRefs.current[key] = el)}
                     />
                   ) : (
                     <UnassignedDeskCard

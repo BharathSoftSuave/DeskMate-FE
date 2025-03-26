@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { doLogin } from "../../service/loginService";
+import { doLogin, getMe } from "../../service/loginService";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
@@ -14,7 +14,9 @@ import {
 } from "@mui/material";
 import "./styles.scss";
 import Navbar from "../NavBar";
-
+import { useDispatch } from "react-redux";
+import { setUserName, setUserRole } from "../../Store/authSlice";
+import { AppDispatch } from "../../Store";
 interface LoginFormInputs {
   email: string;
   password: string;
@@ -24,31 +26,35 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm<LoginFormInputs>();
+  const { register, handleSubmit } = useForm<LoginFormInputs>();
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const dispatch = useDispatch<AppDispatch>();
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     localStorage.clear();
-    {localStorage.setItem("currentUserEmail",data.email)};
+    localStorage.setItem("currentUserEmail", data.email);
+   
     if (data.email === "kamalesh.ramachandran@softsuave.com") {
       localStorage.setItem("userRole", "admin");
     }
     try {
       const response = await doLogin(data);
       console.log("Login Response = ", response);
-      if (response) navigate("/dashboard");
+      if (response) {
+         const myDetails = await getMe();
+         console.log(" set userName ",myDetails.full_name, myDetails.full_name.split("")[0]);
+         dispatch(setUserName(myDetails.full_name.split(" ")[0]));
+         myDetails.roles.forEach( (element:string) => {
+             element == 'admin' ? dispatch(setUserRole("admin")) : '';
+         });
+        navigate("/dashboard");
+      }
       else {
         alert("Authentication in Invalid");
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
-
 
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
@@ -57,7 +63,7 @@ const Login: React.FC = () => {
         <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597]">
           <div className="py-14 px-8 shadow-lg rounded-lg w-full">
             <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
-            Welcome Back!
+              Welcome Back!
             </h4>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -146,7 +152,7 @@ const Login: React.FC = () => {
                 >
                   Sign Up
                 </Button>
-               </div>
+              </div>
             </form>
           </div>
         </div>

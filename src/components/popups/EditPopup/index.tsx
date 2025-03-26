@@ -45,7 +45,7 @@ const DeskAllocationPopup = ({
         </div>
         <Divider orientation="horizontal" color="#7A7C7E" flexItem />
 
-        {/* 📝 Form Section */}
+
         <form
           className="flex flex-col gap-5 p-5"
           onSubmit={handleSubmit(onSubmit)}
@@ -78,7 +78,7 @@ const DeskAllocationPopup = ({
             />
           </div>
 
-          {/* 🔘 Submit Button */}
+ 
           <button
             type="submit"
             className="bg-[#F85E00] text-white py-2 rounded-md hover:bg-[#d84e00] transition"
@@ -88,7 +88,6 @@ const DeskAllocationPopup = ({
         </form>
       </div>
 
-      {/* 🛑 Confirmation Popup */}
       {isConfirmPopupOpen && (
         <div className="h-screen w-full flex items-center absolute left-0 top-0 before:content-[''] before:absolute before:w-full before:h-full before:blur-lg bg-blend-color-burn before:bg-[rgb(29,29,65,80%)] z-10">
           <div className="h-fit text-white shadow-lg rounded-2xl w-[500px] bg-[var(--primary)] border border-[#30306D] m-auto relative">

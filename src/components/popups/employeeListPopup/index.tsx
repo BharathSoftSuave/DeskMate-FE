@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Pagination } from "@mui/material";
 import {
   Avatar,
   Divider,
@@ -117,7 +116,6 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
       const result = await getPopup(payload);
       setTotalPage(result.total_pages);
       setData(result.data);
-      // console.log("data = ",result.data)
       console.log("total page ", totalPage);
     };
     fetech();
@@ -130,8 +128,8 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
       }
     };
 
-    const newValue = Math.random().toString(36).substring(7); // Generate a random value
-    localStorage.setItem("triggerEffect", newValue); // Store in localStorage
+    const newValue = Math.random().toString(36).substring(7);
+    localStorage.setItem("triggerEffect", newValue);
     window.dispatchEvent(new Event("storage"));
 
     document.addEventListener("click", handleOutsideClick);
@@ -151,7 +149,6 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
         </div>
         <Divider orientation="horizontal" color="#7A7C7E" flexItem />
         <div className="flex flex-col gap-5 p-5">
-          {/* <div className="flex justify-between"></div> */}
           <div className="flex justify-between relative">
             <SearchRoundedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input

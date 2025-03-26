@@ -13,7 +13,6 @@ export const doLogin = async (payload: ILoginPayload) => {
     if (response) {
       localStorage.setItem("accessToken", response.data.access_token);
     }
-    getMe();
     return response.data;
   } catch (error) {
     console.error("API Request Error:", error);
