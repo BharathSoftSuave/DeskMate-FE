@@ -6,9 +6,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
   IconButton,
-
 } from "@mui/material";
-import "./styles.scss";
+
 import Navbar from "../NavBar";
 
 interface LoginFormInputs {

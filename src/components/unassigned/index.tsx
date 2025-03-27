@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.scss";
 import PersonIcon from "@mui/icons-material/Person";
 import { useDrag, useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
@@ -12,6 +11,7 @@ interface UnassignedDeskCardProps {
   employee: any;
 }
 const ItemType = "SEAT";
+
 const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
   deskKey,
   onClick,
@@ -20,7 +20,9 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
 }) => {
 
   const { userRole } = useSelector((state: RootState) => state.auth);
+
   let admin = userRole === "admin" ? true : false;
+
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType,
     item: { deskKey, employee },

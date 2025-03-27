@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.scss";
 import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
@@ -7,10 +6,10 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/login"); // Change to your target route
+    navigate("/login"); 
   };
   const handleHomeClick = () => {
-    navigate("/"); // Change to your target route
+    navigate("/"); 
   };
 
 

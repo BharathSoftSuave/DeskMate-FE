@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Button, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 
 const EmployeeAllocationPopup = ({
   editClosePopup,
 }: {
   editClosePopup: () => void;
 }) => {
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       full_name: "",
       email: "",
@@ -32,7 +31,10 @@ const EmployeeAllocationPopup = ({
       <div className="h-fit text-white shadow-lg rounded-2xl w-[500px] bg-[var(--primary)] border border-[#555597] m-auto relative">
         <div className="flex justify-between p-5">
           <h1 className="text-base font-medium">Employee Details</h1>
-          <CloseRoundedIcon onClick={editClosePopup} className="cursor-pointer" />
+          <CloseRoundedIcon
+            onClick={editClosePopup}
+            className="cursor-pointer"
+          />
         </div>
         <Divider orientation="horizontal" color="#7A7C7E" flexItem />
 

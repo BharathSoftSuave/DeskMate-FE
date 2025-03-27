@@ -9,9 +9,8 @@ import { allocateOrRevokeDesk } from "../../service/loginService";
 import { useDrag, useDrop } from "react-dnd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./styles.scss";
 
-// Type Definitions
+
 interface User {
   id: string;
   full_name: string;
@@ -59,7 +58,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
   openEdit,
   searchName,
 }) => {
-  // Drag & Drop Hooks
+ 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType,
     item: { deskKey, employee },
@@ -77,12 +76,12 @@ const DeskCard: React.FC<DeskCardProps> = ({
     },
   });
 
-  // UI State
+
   const [isOpen, setIsOpen] = useState(false);
   const [isOnBreak, setIsOnBreak] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // Admin Check
+
   const userRole = localStorage.getItem("userRole");
   const userId = localStorage.getItem("userId");
   const cardRef = useRef<HTMLDivElement | null>(null);
@@ -91,7 +90,6 @@ const DeskCard: React.FC<DeskCardProps> = ({
   );
   const isAdmin = userRole === "admin";
 
-  // Extract First Name (Shorten if needed)
   const getFirstName = (fullName: string, maxLength?: number) => {
     if (!fullName) return { firstName: "", secondName: "" };
 
@@ -100,7 +98,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
     if (nameParts.length === 1) {
       return {
         firstName: truncateName(nameParts[0], maxLength),
-        secondName: "", // No second name if there's only one word
+        secondName: "", 
       };
     }
 
@@ -116,19 +114,19 @@ const DeskCard: React.FC<DeskCardProps> = ({
       const screenWidth = window.innerWidth;
 
       if (rect.right + 250 > screenWidth) {
-        setDropdownPosition("left"); // Show on the left if it's too close to the right edge
+        setDropdownPosition("left"); 
       } else {
         setDropdownPosition("right");
       }
     }
   }, [isOpen]);
 
-  // Helper function to truncate the first name if needed
+  
   const truncateName = (name: string, maxLength?: number) => {
     if (!maxLength || name.length <= maxLength) return name;
     return name.slice(0, maxLength) + "...";
   };
-  // Close Dropdown on Outside Click
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -142,7 +140,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Open Microsoft Teams Chat
+
   const openChat = useCallback(() => {
     window.open(
       `https://teams.microsoft.com/l/chat/0/0?users=daniel.abishek@softsuave.org`,
@@ -150,7 +148,6 @@ const DeskCard: React.FC<DeskCardProps> = ({
     );
   }, []);
 
-  // Delete (Revoke Desk)
   const deleteDesk = async () => {
     const payload = {
       operation: "revoke",
@@ -190,7 +187,7 @@ const DeskCard: React.FC<DeskCardProps> = ({
       onClick={() => setIsOpen(!isOpen)}
       className="relative group select-none"
     >
-      {/* Desk Card */}
+      
       <div
         ref={(node) => dragRef(dropRef(node))}
         className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
@@ -217,7 +214,6 @@ const DeskCard: React.FC<DeskCardProps> = ({
         </div>
       </div>
 
-      {/* Dropdown (Employee Details) */}
       {isOpen && (
         <div
           ref={dropdownRef}
@@ -269,7 +265,6 @@ const DeskCard: React.FC<DeskCardProps> = ({
               </p>
             </div>
 
-            {/* Actions */}
             {isAdmin ? (
               <div className="flex h-full w-full justify-evenly">
                 <div

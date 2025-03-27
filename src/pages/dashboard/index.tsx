@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./styles.scss";
 import { useNavigate } from "react-router-dom";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import Badge from "@mui/material/Badge";
 import profile from "../../assets/Images/profile.png";
 import WorkArea from "../../components/workArea";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
@@ -81,15 +78,9 @@ const Dashboard: React.FC = () => {
               </div>
             </select>
           </div>
-          <Badge
-            badgeContent={4}
-            color="warning"
-            className="sm:hidden lg:block"
-          >
-            <NotificationsNoneOutlinedIcon className="text-white" />
-          </Badge>
+
           <div className="relative" ref={dropdownRef}>
-            {/* Profile Picture & Name (Click to Toggle Dropdown) */}
+   
             <div
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => setIsOpen(!isOpen)}
@@ -102,7 +93,6 @@ const Dashboard: React.FC = () => {
               <p className="text-sm font-semibold text-white">{userName}</p>
             </div>
 
-            {/* Dropdown (Shown When isOpen is true) */}
             {isOpen && (
               <div className="absolute top-full left-0 mt-3 w-40 bg-white shadow-lg rounded-lg p-2 text-gray-800">
                 <button className="block w-full text-left px-3 py-2 hover:bg-gray-200 rounded">

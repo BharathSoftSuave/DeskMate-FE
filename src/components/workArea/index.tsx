@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import "./styles.scss";
 import DeskCard from "../desk";
 import server from "../../assets/Images/server.svg";
 import pantry from "../../assets/Images/pantry.svg";
@@ -18,24 +17,9 @@ import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
 import Rooms from "../rooms";
 import { toast } from "react-toastify";
+import { navalurBetaSeatMappingData } from "../../utils/seatMappingObject";
 
-const seatMappingData = {
-   A1: null, A2: null, A3: null, A4: null, A5: null, A6: null, A7: null, A8: null, A9: null, A10: null ,
-   B1: null, B2: null, B3: null, B4: null, B5: null, B6: null, B7: null, B8: null, B9: null, B10: null ,
-   C1: null, C2: null, C3: null, C4: null, C5: null, C6: null, C7: null, C8: null, C9: null, C10: null ,
-   D1: null, D2: null, D3: null, D4: null, D5: null, D6: null, D7: null, D8: null, D9: null, D10: null ,
-   E1: null, E2: null, E3: null, E4: null, E5: null, E6: null, E7: null, E8: null, E9: null, E10: null ,
-   F1: null, F2: null, F3: null, F4: null, F5: null, F6: null, F7: null, F8: null, F9: null, F10: null ,
-   G1: null, G2: null, G3: null, G4: null, G5: null, G6: null, G7: null, G8: null, G9: null, G10: null ,
-   H1: null, H2: null, H3: null, H4: null, H5: null, H6: null, H7: null, H8: null, H9: null, H10: null ,
-   I1: null, I2: null, I3: null, I4: null, I5: null, I6: null, I7: null, I8: null, I9: null, I10: null ,
-   J1: null, J2: null, J3: null, J4: null, J5: null, J6: null, J7: null, J8: null, J9: null, J10: null ,
-   K1: null, K2: null, K3: null, K4: null, K5: null, K6: null, K7: null, K8: null, K9: null, K10: null ,
-   L1: null, L2: null, L3: null, L4: null, L5: null, L6: null, L7: null, L8: null, L9: null, L10: null ,
-   M1: null, M2: null, M3: null, M4: null, M5: null, M6: null, M7: null, M8: null, M9: null, M10: null ,
-   N1: null, N2: null, N3: null, N4: null, N5: null, N6: null, N7: null, N8: null, N9: null, N10: null 
-};
-
+const seatMappingData =  navalurBetaSeatMappingData;
 
 interface SearchBarProps {
   searchName: string;
@@ -107,7 +91,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     const container = containerRef.current;
     if (container) {
       container.addEventListener("wheel", handleWheel, { passive: false });
-      let searchName1 = "Bharath";
     }
 
     return () => {
@@ -119,12 +102,11 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
 
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
-    console.log("Clicked desk:", deskKey);
     setIsPopupOpen(true);
   }, []);
-  let name: string;
+
+
   const closePopup = () => {
-    console.log("close pop");
     setTrigger((prev) => !prev);
     setIsPopupOpen(false);
   };
@@ -163,6 +145,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
       message = `${seatMapping[from]?.user?.full_name} swapped with Unassinged desk`;
     else
       message = `${seatMapping[to]?.user?.full_name} swapped with Unassinged desk`;
+
     toast.success(message, {
       style: {
         background: "#2B2A5C",
@@ -193,18 +176,19 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     console.log("after re-render", seatMapping);
     console.log("Use effect workarea");
     let temp: any;
+
     const fetchData = async () => {
       try {
-        console.log("get dashboard");
+    
         temp = await getDashboard(payload);
-        console.log(" occupued  ", temp[0].office.occupied_desks);
-        console.log("temp212334 ", temp);
         setOccupied(temp[0].office.occupied_desks);
         setVacant(temp[0].office.vacant_desks);
         setTotalDesk(temp[0].office.desks);
         setEmployee(temp);
       } catch (err) {
+
       } finally {
+
       }
 
       let temp1 = Object.keys(seatMapping).reduce((acc, key) => {
@@ -212,9 +196,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
         return acc;
       }, {} as Record<string, null>);
 
-      console.log("before seat ", seatMapping);
-      console.log("Processing seat mapping...");
-      console.log("employee ,", temp);
 
       temp?.forEach((item: any) => {
         console.log("item = ", item.desk.desk_num);
@@ -223,28 +204,23 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
         }
       });
       setSeatMapping(temp1);
-      console.log("after seat ", seatMapping);
+
     };
     fetchData();
   }, [trigger]);
 
   const openEdit = (employee: any) => {
     setEditEmployee(employee);
-    console.log("hiisduid", employee);
     setEdit(true);
   };
 
   useEffect(() => {
-    console.log(" seat mapping changes.................", seatMapping);
     employee?.forEach((each) => {
       if (localStorage.getItem("userId") === each.user.id) {
       }
     });
   }, [employee]);
-  //  "desks": 130,
-  //  "occupied_desks": 11,
-  //  "vacant_desks": 119,
-  //  "rooms": 5
+
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full h-fit md:gap-8 ">
@@ -421,7 +397,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                   {[...Array(6)].map((_, rowIndex) => (
                     <div key={rowIndex} className="flex flex-col gap-3 w-fit">
                       {[...Array(2)].map((_, subRowIndex) => {
-                        const startIdx = 11 + rowIndex * 10 + subRowIndex * 5;
+                        const startIdx = 9 + rowIndex * 10 + subRowIndex * 5;
                         const desks = Object.entries(seatMapping)
                           .slice(startIdx, startIdx + 5)
                           .map(([key, eachEmployee]) => ({
@@ -506,7 +482,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                   {[...Array(8)].map((_, rowIndex) => (
                     <div key={rowIndex} className="flex flex-col gap-3 w-fit">
                       {[...Array(2)].map((_, subRowIndex) => {
-                        const startIdx = 60 + rowIndex * 10 + subRowIndex * 5;
+                        const startIdx = 69 + rowIndex * 10 + subRowIndex * 5;
                         const desks = Object.entries(seatMapping)
                           .slice(startIdx, startIdx + 5)
                           .map(([key, eachEmployee]) => ({

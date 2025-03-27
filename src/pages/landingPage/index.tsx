@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.scss";
 import Navbar from "../NavBar";
 import { motion } from "framer-motion";
 import pic1 from "../../assets/Images/landing-page-img.png";
