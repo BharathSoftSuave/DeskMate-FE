@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Avatar,
   Divider,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import { getPopup } from "../../../service/loginService";
+import { getPaginatedEmployeesList } from "../../../service/loginService";
 import AttributionIcon from "@mui/icons-material/Attribution";
 import { Button } from "@mui/material";
 import { allocateOrRevokeDesk } from "../../../service/loginService";
@@ -26,6 +26,17 @@ interface WorkAreaProps {
   closePopup: () => void;
 }
 const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
+  const [choosenemp, setChoosenemp] = useState();
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [employees, setEmployees] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [userFilter, setUserFilter] = useState<UserFilter>({
+    office_condition: "all",
+    desk_condition: "without_desk",
+    office_id: "string",
+  });
+
   const handleCloseAll = async () => {
     const payload1 = {
       operation: "allocate",
@@ -78,13 +89,6 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
     closeConfirmPopup();
     closePopup();
   };
-  const [choosenemp, setChoosenemp] = useState();
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
-  const [userFilter, setUserFilter] = useState<UserFilter>({
-    office_condition: "all",
-    desk_condition: "without_desk",
-    office_id: "string",
-  });
 
   const handleDeskChange = (event: any) => {
     setUserFilter((prev) => ({
@@ -92,7 +96,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
       desk_condition: event.target.value,
     }));
   };
-  console.log(userFilter);
+
   const openConfirmPopup = (c_emp: any) => {
     setChoosenemp(c_emp);
     setIsConfirmPopupOpen(true);
@@ -101,54 +105,41 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
   const closeConfirmPopup = () => {
     setIsConfirmPopupOpen(false);
   };
-  // let totalPage=7;
-  const [data, setData] = useState();
-  const [totalPage, setTotalPage] = useState();
-  const [page, setPage] = useState(1);
-  const payload = {
-    page: 1,
-    size: 200,
-  };
 
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredData = data?.filter((employee: any) =>
-    employee.full_name.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
-  // .slice(0 + ((page - 1) * 10), ((page - 1) * 10) + 10);
-
-  console.log(
-    "filtered data",
-    filteredData,
-    data,
-    0 + (page - 1) * 10,
-    (page - 1) * 10 + 10
-  );
   useEffect(() => {
-    console.log("get dashboard", choosenDesk);
-    const fetech = async () => {
-      const result = await getPopup(payload, userFilter);
-      setTotalPage(result.total_pages);
-      setData(result.data);
-      console.log("total page ", totalPage);
-    };
-    fetech();
-
     const handleOutsideClick = (event: MouseEvent) => {
-      try {
-      } catch (err) {}
-      if ((event.target as HTMLElement).id === "popup-background") {
-        closePopup();
-      }
+      if ((event.target as HTMLElement).id === "popup-background") closePopup();
     };
-
-    const newValue = Math.random().toString(36).substring(7);
-    localStorage.setItem("triggerEffect", newValue);
-    window.dispatchEvent(new Event("storage"));
 
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
-  }, [page, closePopup, userFilter]);
+  }, []);
+
+  useEffect(() => {
+    if (!employees.length) return;
+
+    setFilteredEmployees(
+      employees.filter((employee: any) =>
+        employee.full_name.toLowerCase().startsWith(searchQuery.toLowerCase())
+      )
+    );
+  }, [employees, searchQuery, setFilteredEmployees]);
+
+  const getEmployeesList = useCallback(async () => {
+    const result = await getPaginatedEmployeesList(
+      { page: 1, size: 200 },
+      userFilter
+    );
+    setEmployees(result.data);
+  }, [userFilter, setEmployees]);
+
+  useEffect(() => {
+    getEmployeesList();
+    const newValue = Math.random().toString(36).substring(7);
+    localStorage.setItem("triggerEffect", newValue);
+    window.dispatchEvent(new Event("storage"));
+  }, [getEmployeesList]);
+
   return (
     <div
       className="flex items-center justify-center fixed top-0 left-0 w-full h-full z-20 
@@ -196,7 +187,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
             </label>
           </div>
           <div className="h-[300px] overflow-y-auto scrollbar-hide">
-            {filteredData?.map((employee: any) => (
+            {filteredEmployees?.map((employee: any) => (
               <div
                 key={employee.id}
                 className="flex justify-between bg-[var(--secondary)] px-4 mb-2 rounded-2xl border border-[#30306D] hover:bg-[var(--primary)] hover:border-[#524fa5] cursor-pointer"
