@@ -69,7 +69,7 @@ const p1 = {
   office_id: "string",
 };
 
-export const getPopup = async (queryParam: IPopup, userFilter: UserFilter) => {
+export const getPaginatedEmployeesList = async (queryParam: IPopup, userFilter: UserFilter) => {
   try {
     const response = await apiClient.post(ENDPOINTS.Ausers, userFilter, {
       params: queryParam,
