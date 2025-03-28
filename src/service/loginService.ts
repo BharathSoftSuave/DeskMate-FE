@@ -63,12 +63,6 @@ export const getDashboard = async (payload: IDashBoard) => {
   }
 };
 
-const p1 = {
-  office_condition: "all",
-  desk_condition: "without_desk",
-  office_id: "string",
-};
-
 export const getPaginatedEmployeesList = async (queryParam: IPopup, userFilter: UserFilter) => {
   try {
     const response = await apiClient.post(ENDPOINTS.Ausers, userFilter, {
