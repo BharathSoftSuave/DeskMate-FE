@@ -13,6 +13,12 @@ interface User {
   designation: string;
 }
 
+export interface UserFilter {
+  office_condition: string,
+  desk_condition: string,
+  office_id: string,
+}
+
 interface Status {
   id: string;
   display_name: string;

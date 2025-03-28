@@ -16,6 +16,7 @@ import { Button } from "@mui/material";
 import { allocateOrRevokeDesk } from "../../../service/loginService";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { UserFilter } from "../../../interface/dashboardInterface";
 interface WorkAreaProps {
   closePopup: () => void;
   choosenDesk: any;
@@ -79,6 +80,19 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
   };
   const [choosenemp, setChoosenemp] = useState();
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [userFilter, setUserFilter] = useState<UserFilter>({
+    office_condition: "all",
+    desk_condition: "without_desk",
+    office_id: "string",
+  });
+
+  const handleDeskChange = (event: any) => {
+    setUserFilter((prev) => ({
+      ...prev,
+      desk_condition: event.target.value,
+    }));
+  };
+  console.log(userFilter);
   const openConfirmPopup = (c_emp: any) => {
     setChoosenemp(c_emp);
     setIsConfirmPopupOpen(true);
@@ -113,7 +127,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
   useEffect(() => {
     console.log("get dashboard", choosenDesk);
     const fetech = async () => {
-      const result = await getPopup(payload);
+      const result = await getPopup(payload, userFilter);
       setTotalPage(result.total_pages);
       setData(result.data);
       console.log("total page ", totalPage);
@@ -134,7 +148,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
 
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
-  }, [page, closePopup]);
+  }, [page, closePopup, userFilter]);
   return (
     <div
       className="flex items-center justify-center fixed top-0 left-0 w-full h-full z-20 
@@ -158,6 +172,28 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+          </div>
+          <div className="flex gap-4 p-2 rounded-lg shadow-sm">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                value="with_desk"
+                checked={userFilter.desk_condition === "with_desk"}
+                onChange={handleDeskChange}
+                className="accent-blue-500"
+              />
+              Assigned
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                value="without_desk"
+                checked={userFilter.desk_condition === "without_desk"}
+                onChange={handleDeskChange}
+                className="accent-blue-500"
+              />
+              Unassigned
+            </label>
           </div>
           <div className="h-[300px] overflow-y-auto scrollbar-hide">
             {filteredData?.map((employee: any) => (

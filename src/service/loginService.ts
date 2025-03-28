@@ -3,7 +3,7 @@ import {
   IOTPPayload,
   ISignPayload,
 } from "../interface/authInterface";
-import { IDashBoard, IPopup } from "../interface/dashboardInterface";
+import { IDashBoard, IPopup, UserFilter } from "../interface/dashboardInterface";
 import { ENDPOINTS } from "../utils/constants";
 import apiClient from "./baseService";
 
@@ -69,9 +69,9 @@ const p1 = {
   office_id: "string",
 };
 
-export const getPopup = async (queryParam: IPopup) => {
+export const getPopup = async (queryParam: IPopup, userFilter: UserFilter) => {
   try {
-    const response = await apiClient.post(ENDPOINTS.Ausers, p1, {
+    const response = await apiClient.post(ENDPOINTS.Ausers, userFilter, {
       params: queryParam,
     });
     console.log(" pop in ", response.data);
