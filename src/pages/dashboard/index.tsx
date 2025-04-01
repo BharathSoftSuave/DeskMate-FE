@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchName, setSearchName] = useState("");
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
