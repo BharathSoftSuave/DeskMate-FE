@@ -18,6 +18,7 @@ import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
 import Rooms from "../rooms";
 import { toast } from "react-toastify";
 import { navalurBetaSeatMappingData } from "../../utils/seatMappingObject";
+import useDebounce from "../../hooks/useDebounce";
 
 const seatMappingData = navalurBetaSeatMappingData;
 
@@ -41,6 +42,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const seatRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [seatMapping, setSeatMapping] = useState(seatMappingData);
+  const debouncedSearchName = useDebounce(searchName, 700);
 
   // Handle zoom with buttons
   const handleZoom = (type: "in" | "out") => {
@@ -87,14 +89,14 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   }, []);
 
   const scrollToEmployee = useCallback(() => {
-    if (!searchName) return;
+    if (!debouncedSearchName) return;
 
     const foundEmployee = Object.entries(seatMapping).find(
       ([key, employee]) => {
         if (!employee) return false;
         return employee.user?.full_name
           ?.toLowerCase()
-          .includes(searchName.toLowerCase());
+          .includes(debouncedSearchName.toLowerCase());
       }
     );
 
@@ -115,7 +117,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
         });
       }
     }
-  }, [searchName, seatMapping, zoomLevel]);
+  }, [debouncedSearchName, seatMapping, zoomLevel]);
 
   useEffect(() => {
     scrollToEmployee();
