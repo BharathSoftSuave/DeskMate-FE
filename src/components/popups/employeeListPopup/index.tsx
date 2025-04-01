@@ -230,7 +230,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
             heading: "Confirm Assign Employee",
             body: "Are you sure want to assign this employee in this desk?",
             confirm: "Confirm",
-            cancel: "cancel",
+            cancel: "Reassign",
             icon: <AttributionIcon />,
           }}
           actions={{
