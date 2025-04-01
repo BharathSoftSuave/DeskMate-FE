@@ -19,7 +19,7 @@ import Rooms from "../rooms";
 import { toast } from "react-toastify";
 import { navalurBetaSeatMappingData } from "../../utils/seatMappingObject";
 
-const seatMappingData =  navalurBetaSeatMappingData;
+const seatMappingData = navalurBetaSeatMappingData;
 
 interface SearchBarProps {
   searchName: string;
@@ -37,24 +37,10 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
   const [edit, setEdit] = useState(false);
- 
-
-   // Store refs for all seats
-   const seatRefs = useRef([]);
-
-   // Function to scroll to a specific seat (hardcoded to seat 10)
-   const scrollToSeat = (seatNumber:any) => {
-     const seatIndex = seatNumber - 1; // Array index starts from 0
-     if (seatRefs.current[seatIndex]) {
-       seatRefs.current[seatIndex].scrollIntoView({
-         behavior: "smooth",
-         block: "center",
-       });
-     }
-   };
-
   const [zoomLevel, setZoomLevel] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const seatRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [seatMapping, setSeatMapping] = useState(seatMappingData);
 
   // Handle zoom with buttons
   const handleZoom = (type: "in" | "out") => {
@@ -100,11 +86,45 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     };
   }, []);
 
+  const scrollToEmployee = useCallback(() => {
+    if (!searchName) return;
+
+    const foundEmployee = Object.entries(seatMapping).find(
+      ([key, employee]) => {
+        if (!employee) return false;
+        return employee.user?.full_name
+          ?.toLowerCase()
+          .includes(searchName.toLowerCase());
+      }
+    );
+
+    if (foundEmployee && foundEmployee.length) {
+      const deskKey = foundEmployee[0];
+      const deskElement = seatRefs.current[deskKey];
+      if (deskElement && containerRef.current) {
+        const rect = deskElement.getBoundingClientRect();
+        const containerRect = containerRef.current.getBoundingClientRect();
+
+        const scrollLeft = (rect.left - containerRect.left) * zoomLevel;
+        const scrollTop = (rect.top - containerRect.top) * zoomLevel;
+
+        containerRef.current.scrollTo({
+          left: scrollLeft - containerRect.width / 2 + rect.width / 2,
+          top: scrollTop - containerRect.height / 2 + rect.height / 2,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [searchName, seatMapping, zoomLevel]);
+
+  useEffect(() => {
+    scrollToEmployee();
+  }, [searchName, scrollToEmployee]);
+
   const openPopup = useCallback((deskKey: string) => {
     setchoosenDesk(deskKey);
     setIsPopupOpen(true);
   }, []);
-
 
   const closePopup = () => {
     setTrigger((prev) => !prev);
@@ -114,7 +134,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const editClosePopup = () => {
     setEdit(false);
   };
-  const [seatMapping, setSeatMapping] = useState(seatMappingData);
 
   // Swap function for drag-and-drop
 
@@ -179,23 +198,19 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
 
     const fetchData = async () => {
       try {
-    
         temp = await getDashboard(payload);
         setOccupied(temp[0].office.occupied_desks);
         setVacant(temp[0].office.vacant_desks);
         setTotalDesk(temp[0].office.desks);
         setEmployee(temp);
       } catch (err) {
-
       } finally {
-
       }
 
       let temp1 = Object.keys(seatMapping).reduce((acc, key) => {
         acc[key] = null;
         return acc;
       }, {} as Record<string, null>);
-
 
       temp?.forEach((item: any) => {
         console.log("item = ", item.desk.desk_num);
@@ -204,7 +219,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
         }
       });
       setSeatMapping(temp1);
-
     };
     fetchData();
   }, [trigger]);
@@ -376,7 +390,11 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                       swapSeats={swapSeats}
                       openEdit={openEdit}
                       searchName={searchName}
-                      ref={(el) => (seatRefs.current[key] = el)}
+                      ref={(el) => {
+                        if (el) {
+                          seatRefs.current[key] = el;
+                        }
+                      }}
                     />
                   ) : (
                     <UnassignedDeskCard
@@ -420,6 +438,11 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                                   swapSeats={swapSeats}
                                   openEdit={openEdit}
                                   searchName={searchName}
+                                  ref={(el) => {
+                                    if (el) {
+                                      seatRefs.current[key] = el;
+                                    }
+                                  }}
                                 />
                               ) : (
                                 <UnassignedDeskCard
@@ -505,6 +528,11 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                                   swapSeats={swapSeats}
                                   openEdit={openEdit}
                                   searchName={searchName}
+                                  ref={(el) => {
+                                    if (el) {
+                                      seatRefs.current[key] = el;
+                                    }
+                                  }}
                                 />
                               ) : (
                                 <UnassignedDeskCard
