@@ -12,11 +12,11 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { getPaginatedEmployeesList } from "../../../service/loginService";
 import AttributionIcon from "@mui/icons-material/Attribution";
-import ConfirmationPopup from "../confirmationPopup/index";
 import { allocateOrRevokeDesk } from "../../../service/loginService";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { UserFilter } from "../../../interface/dashboardInterface";
+import ConfirmationPopup from "../../../common/popups/ConfirmationPopup";
 interface WorkAreaProps {
   closePopup: () => void;
   choosenDesk: any;
