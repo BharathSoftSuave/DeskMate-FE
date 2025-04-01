@@ -8,7 +8,7 @@ import conference from "../../assets/Images/conference.svg";
 import UnassignedDeskCard from "../unassigned";
 import EmployeeList from "../popups/employeeListPopup";
 import { getDashboard, swap } from "../../service/loginService";
-import { seatDetails } from "../../interface/dashboardInterface";
+import { ApiResponse } from "../../interface/dashboardInterface";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DeskAllocationPopup from "../popups/EditPopup/index";
@@ -27,11 +27,6 @@ interface SearchBarProps {
   searchName: string;
 }
 
-interface ISwapPayload {
-  current_desk_id : string|undefined;
-  target_desk_id?: string|null;
-  target_desk_num?: string|undefined;
-}
 const payload = {
   office_id: "67dd364d7c1b361e5c24bf73",
 };
@@ -40,7 +35,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   console.log(" work area  search name", searchName);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [choosenDesk1, setchoosenDesk] = useState<string>();
-  const [employee, setEmployee] = useState<seatDetails[]>();
+  const [employee, setEmployee] = useState<ApiResponse[]>();
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
   const [edit, setEdit] = useState(false);
@@ -101,7 +96,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
 
   // Swap function for drag-and-drop
 
-  const swapSeats = async (from:string, to:string) => {
+  const swapSeats = async (from, to) => {
     console.log("before ", seatMapping);
     setSeatMapping((prev) => {
       const updated = { ...prev };
@@ -111,13 +106,13 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     });
     // console.log(seatMapping[from].desk.id, " another", seatMapping[to].desk.id);
 
-    const payload : ISwapPayload = {
-      current_desk_id: seatMapping[from]?.desk?.id,
-      target_desk_id: seatMapping[to]?.desk?.id ?? null,
-      target_desk_num: seatMapping[to]?.desk?.id ? undefined : to,
+    const payload = {
+      current_desk_id: seatMapping[from].desk.id,
     };
 
-
+    if (seatMapping[to]?.desk.id)
+      payload.target_desk_id = seatMapping[to].desk.id;
+    else payload.target_desk_num = to;
 
     const response = await swap(payload);
 
