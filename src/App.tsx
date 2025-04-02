@@ -10,8 +10,8 @@ function App() {
   return (
     <>
       <Provider store={store}>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <RouterComponent />
+        <ToastContainer position="top-right" autoClose={3000} />
+        <RouterComponent />
       </Provider>
     </>
   );
