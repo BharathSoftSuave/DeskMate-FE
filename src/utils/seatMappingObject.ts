@@ -1,5 +1,6 @@
+import { seatDetails } from "../interface/dashboardInterface";
 
-export const navalurBetaSeatMappingData = {
+export const navalurBetaSeatMappingData: Record<string, null | seatDetails>  = {
     A1: null, A2: null, A3: null, A4: null, A5: null, A6: null, A7: null, A8: null, A9: null, A10: null ,
     B1: null, B2: null, B3: null, B4: null, B5: null, B6: null, B7: null, B8: null, B9: null, B10: null ,
     C1: null, C2: null, C3: null, C4: null, C5: null, C6: null, C7: null, C8: null, C9: null, C10: null ,
