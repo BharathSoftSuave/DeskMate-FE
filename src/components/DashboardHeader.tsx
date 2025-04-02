@@ -15,8 +15,14 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  
   const handleHomeClick = () => {
     navigate("/");
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -80,7 +86,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
               </button>
               <button
                 className="block w-full text-left px-3 py-2 hover:bg-gray-200 rounded"
-                onClick={() => navigate("/login")}
+                onClick={logoutHandler}
               >
                 🚪 Logout
               </button>

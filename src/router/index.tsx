@@ -7,6 +7,7 @@ import Dashboard from "../pages/dashboard";
 import CreateWorkArea from "../pages/createWorkarea";
 import OTP from "../pages/OTP";
 import KeepChildInside from "../test";
+import ProtectedRoute from "../common/ProtectedRoute";
 
 const RouterComponent: React.FC = () => {
   return (
@@ -17,7 +18,9 @@ const RouterComponent: React.FC = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/OTP" element={<OTP />} />
         <Route path="/create-workarea" element={<CreateWorkArea />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
         <Route path="/test" element={<KeepChildInside />} />
       </Routes>
     </BrowserRouter>
