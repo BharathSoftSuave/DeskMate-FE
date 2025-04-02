@@ -33,7 +33,7 @@ interface Office {
   branch: string;
 }
 
-export interface ApiResponse {
+export interface seatDetails {
   user: User;
   status: Status;
   desk: Desk;
