@@ -15,41 +15,14 @@ import { allocateOrRevokeDesk } from "../../service/loginService";
 import { useDrag, useDrop } from "react-dnd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-interface User {
-  id: string;
-  full_name: string;
-  designation: string;
-}
-
-interface Status {
-  id: string;
-  display_name: string;
-}
-
-interface Desk {
-  id: string;
-  desk_num: string;
-}
-
-interface Office {
-  id: string;
-  branch: string;
-}
-
-interface ApiResponse {
-  user: User;
-  status: Status;
-  desk: Desk;
-  office: Office;
-}
+import { seatDetails } from "../../interface/dashboardInterface";
 
 interface DeskCardProps {
-  employee: ApiResponse;
+  employee: seatDetails;
   triggerUseEffect: () => void;
   swapSeats: (sourceKey: any, targetKey: any) => void;
   deskKey: any;
-  openEdit: (employee: ApiResponse) => void;
+  openEdit: (employee: seatDetails) => void;
   searchName: any;
 }
 
