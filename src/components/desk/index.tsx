@@ -60,6 +60,17 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
     { deskKey, employee, triggerUseEffect, swapSeats, openEdit, searchName },
     ref
   ) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOnBreak, setIsOnBreak] = useState(false);
+    const [dropdownPosition, setDropdownPosition] = useState<"left" | "right">(
+      "right"
+    );
+    const cardRef = useRef<HTMLDivElement | null>(null);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const userRole = localStorage.getItem("userRole");
+    const userId = localStorage.getItem("userId");
+    const isAdmin = userRole === "admin";
+
     const [{ isDragging }, dragRef] = useDrag({
       type: ItemType,
       item: { deskKey, employee },
@@ -76,18 +87,6 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
         }
       },
     });
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isOnBreak, setIsOnBreak] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-    const userRole = localStorage.getItem("userRole");
-    const userId = localStorage.getItem("userId");
-    const cardRef = useRef<HTMLDivElement | null>(null);
-    const [dropdownPosition, setDropdownPosition] = useState<"left" | "right">(
-      "right"
-    );
-    const isAdmin = userRole === "admin";
 
     const getFirstName = (fullName: string, maxLength?: number) => {
       if (!fullName) return { firstName: "", secondName: "" };
@@ -181,7 +180,10 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
 
     return (
       <div
-        ref={ref}
+        ref={(ele) => {
+          cardRef.current = ele;
+          ref(ele);
+        }}
         onClick={() => setIsOpen(!isOpen)}
         className="relative group select-none"
       >
