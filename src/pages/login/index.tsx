@@ -17,6 +17,7 @@ import Navbar from "../NavBar";
 import { useDispatch } from "react-redux";
 import { setUserName, setUserRole } from "../../Store/authSlice";
 import { AppDispatch } from "../../Store";
+import APIErrorPopup from "../../common/popups/APIErrorPopup";
 interface LoginFormInputs {
   email: string;
   password: string;
@@ -27,7 +28,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<LoginFormInputs>();
-
+  const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -39,21 +40,16 @@ const Login: React.FC = () => {
       localStorage.setItem("userRole", "admin");
     }
     try {
-      const response = await doLogin(data);
-      console.log("Login Response = ", response);
-      if (response) {
-         const myDetails = await getMe();
-         console.log(" set userName ",myDetails.full_name, myDetails.full_name.split("")[0]);
-         dispatch(setUserName(myDetails.full_name.split(" ")[0]));
-         myDetails.roles.forEach( (element:string) => {
-             element == 'admin' ? dispatch(setUserRole("admin")) : '';
-         });
-        navigate("/dashboard");
-      }
-      else {
-        alert("Authentication in Invalid");
-      }
-    } catch (error) {}
+      await doLogin(data);
+      const myDetails = await getMe();
+      dispatch(setUserName(myDetails.full_name.split(" ")[0]));
+      myDetails.roles.forEach((element: string) => {
+        element == "admin" ? dispatch(setUserRole("admin")) : "";
+      });
+      navigate("/dashboard");
+    } catch (error: any) {
+      setError(error.response.data.detail);
+    }
   };
 
   return (
@@ -155,6 +151,9 @@ const Login: React.FC = () => {
               </div>
             </form>
           </div>
+          {error && (
+            <APIErrorPopup message={error} onClose={() => setError("")} />
+          )}
         </div>
       </div>
     </div>
