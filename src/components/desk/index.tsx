@@ -44,9 +44,10 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
     const userId = localStorage.getItem("userId");
     const isAdmin = userRole === "admin";
 
-    const [{ isDragging }, dragRef] = useDrag({
+    const [, dragRef] = useDrag({
       type: ItemType,
       item: { deskKey, employee },
+      canDrag: isAdmin,
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
@@ -63,7 +64,6 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
 
     const getFirstName = (fullName: string, maxLength?: number) => {
       if (!fullName) return { firstName: "", secondName: "" };
-
       const nameParts = fullName.split(" ");
 
       if (nameParts.length === 1) {
@@ -75,7 +75,6 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
 
       const firstName = truncateName(nameParts[0], maxLength);
       let secondName = nameParts.slice(1).join(" ");
-
       return { firstName, secondName };
     };
 
@@ -161,7 +160,9 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
         className="relative group select-none"
       >
         <div
-          ref={(node) => dragRef(dropRef(node))}
+          ref={(node) => {
+            dragRef(dropRef(node));
+          }}
           className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
             employee?.user?.full_name
               ?.toLowerCase()
@@ -239,7 +240,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                 </p>
               </div>
 
-              {isAdmin ? (
+              {isAdmin && (
                 <div className="flex h-full w-full justify-evenly">
                   <div
                     className="p-2 bg-[var(--weight)] w-26 rounded-full flex justify-center items-center"
@@ -260,7 +261,9 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                     <DeleteRoundedIcon sx={{ fontSize: "24px" }} />
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {employee.user.id === userId && (
                 <Button
                   variant="contained"
                   sx={{ backgroundColor: isOnBreak ? "#4CAF50" : "#FFD700" }}

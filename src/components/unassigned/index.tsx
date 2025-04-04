@@ -1,8 +1,6 @@
 import React from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import { useDrag, useDrop } from "react-dnd";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Store";
 
 interface UnassignedDeskCardProps {
   deskKey: string;
@@ -18,14 +16,13 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
   swapSeats,
   employee,
 }) => {
+  const userRole = localStorage.getItem("userRole");
+  const isAdmin = userRole === "admin";
 
-  const { userRole } = useSelector((state: RootState) => state.auth);
-
-  let admin = userRole === "admin" ? true : false;
-
-  const [{ isDragging }, dragRef] = useDrag({
+  const [, dragRef] = useDrag({
     type: ItemType,
     item: { deskKey, employee },
+    canDrag: isAdmin,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -33,7 +30,7 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
 
   const [, dropRef] = useDrop({
     accept: ItemType,
-    drop: (draggedItem) => {
+    drop: (draggedItem: any) => {
       if (draggedItem.deskKey !== deskKey) {
         swapSeats(draggedItem.deskKey, deskKey);
       }
@@ -43,10 +40,12 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
   return (
     <>
       <div
-        ref={(node) => dragRef(dropRef(node))}
+        ref={(node) => {
+          dragRef(dropRef(node));
+        }}
         className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.3rem] h-[42px] shadow-md"
         onClick={() => {
-          if (admin) onClick(deskKey);
+          if (isAdmin) onClick(deskKey);
         }}
       >
         <p className="cursor-move text-sm text-white">⋮⋮</p>
