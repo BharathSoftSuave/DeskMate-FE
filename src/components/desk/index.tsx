@@ -78,6 +78,11 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
       return { firstName, secondName };
     };
 
+    const onBreakHandler = (e: any) => {
+      e.stopPropagation();
+      setIsOnBreak(!isOnBreak);
+    }
+
     useEffect(() => {
       if (isOpen && cardRef.current) {
         const rect = cardRef.current.getBoundingClientRect();
@@ -267,7 +272,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                 <Button
                   variant="contained"
                   sx={{ backgroundColor: isOnBreak ? "#4CAF50" : "#FFD700" }}
-                  onClick={() => setIsOnBreak(!isOnBreak)}
+                  onClick={onBreakHandler}
                 >
                   {isOnBreak ? "Back" : "Break"}
                 </Button>
