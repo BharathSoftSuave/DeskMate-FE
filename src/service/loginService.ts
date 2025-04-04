@@ -92,3 +92,12 @@ export const swap = async (payload: any) => {
     return error.response.data;
   }
 };
+
+export const uploadEmployees = async (payload: any) => {
+  try {
+    const response = await apiClient.post(ENDPOINTS.uploadEmployees, payload);
+    return response.data;
+  } catch (error: any) {
+    throw error;
+  }
+};

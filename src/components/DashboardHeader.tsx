@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
 import profile from "../assets/Images/profile.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store";
+import ImportEmployeePopup from "./popups/ImportEmployeePopup";
 
 interface DashboardHeaderProps {
   onSearch: Function;
@@ -13,12 +15,19 @@ interface DashboardHeaderProps {
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
   const { userName } = useSelector((state: RootState) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [importPopup, setImportPopup] = useState({ isOpen: false, importType: null})
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  
+
   const handleHomeClick = () => {
     navigate("/");
   };
+
+  const dropDownClickHandler = (e: any) => {
+    setDropDownOpen(false);
+    setImportPopup({isOpen:true, importType: e.target.textContent});
+  }
 
   const logoutHandler = () => {
     localStorage.removeItem("accessToken");
@@ -44,6 +53,27 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
         </h4>
       </div>
       <div className="my-auto flex items-center gap-6">
+        <div className="relative">
+          <div
+            className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg shadow-md transition duration-200 cursor-pointer"
+            onClick={() => setDropDownOpen(!dropDownOpen)}
+          >
+            <ImportExportIcon className="w-5 h-5 text-gray-600" />
+            <p className="font-medium">Import</p>
+          </div>
+          {dropDownOpen && (
+            <div onClick={dropDownClickHandler} className="absolute left-0 mt-2 w-35 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+              <ul className="py-2">
+                <li className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer">
+                  Employees
+                </li>
+                <li className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer">
+                  Import 2
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
         <div className="relative w-full">
           <SearchRoundedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
           <input
@@ -94,6 +124,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
           )}
         </div>
       </div>
+      {(importPopup.isOpen && importPopup.importType === "Employees") && <ImportEmployeePopup onClose={() => setImportPopup({ isOpen: false, importType: null})} />}
     </nav>
   );
 };

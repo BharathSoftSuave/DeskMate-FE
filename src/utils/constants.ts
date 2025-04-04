@@ -6,5 +6,6 @@ export const ENDPOINTS = {
   getDashboard : "/dashboard/",
   Ausers : "/admin/users",
   desk : "/desk",
-  swap : "admin/swap-desk"
+  swap : "admin/swap-desk",
+  uploadEmployees: "upload-data"
 };
