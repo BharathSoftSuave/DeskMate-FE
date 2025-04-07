@@ -76,18 +76,16 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
       setIsOnBreak(!isOnBreak);
     };
 
-    useEffect(() => {
-      if (isOpen && cardRef.current) {
+    const employeeInfoPopupHandler = () => {
+      if (cardRef.current) {
         const rect = cardRef.current.getBoundingClientRect();
         const screenWidth = window.innerWidth;
 
-        if (rect.right + 350 > screenWidth) {
-          setDropdownPosition("left");
-        } else {
-          setDropdownPosition("right");
-        }
+        const position = rect.right + 350 > screenWidth ? "left" : "right";
+        setDropdownPosition(position);
       }
-    }, [isOpen]);
+      setIsOpen(!isOpen)
+    };
 
     const truncateName = (name: string, maxLength?: number) => {
       if (!maxLength || name.length <= maxLength) return name;
@@ -156,7 +154,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
             ref(ele);
           }
         }}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={employeeInfoPopupHandler}
         className="relative group select-none"
       >
         <div
