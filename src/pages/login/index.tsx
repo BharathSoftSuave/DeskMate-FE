@@ -35,7 +35,7 @@ const Login: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     localStorage.clear();
     localStorage.setItem("currentUserEmail", data.email);
-   
+
     if (data.email === "kamalesh.ramachandran@softsuave.com") {
       localStorage.setItem("userRole", "admin");
     }
@@ -55,8 +55,8 @@ const Login: React.FC = () => {
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
       <Navbar />
-      <div className="flex items-center justify-center lg:px-16 px-10 h-screen">
-        <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597]">
+      <div className="flex items-start justify-center lg:px-16 px-10 py-20 h-full overflow-auto">
+        <div className="w-[500px] bg-[var(--primary)] rounded-lg border border-[#555597] m-auto">
           <div className="py-14 px-8 shadow-lg rounded-lg w-full">
             <h4 className="relative text-center text-3xl  font-bold text-white mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-48 after:h-[3px] after:bg-[#F85E00]">
               Welcome Back!
