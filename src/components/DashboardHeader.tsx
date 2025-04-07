@@ -110,12 +110,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
           </div>
 
           {isOpen && (
-            <div className="absolute top-full left-0 mt-3 w-40 bg-white shadow-lg rounded-lg p-2 text-gray-800">
-              <button className="block w-full text-left px-3 py-2 hover:bg-gray-200 rounded">
+            <div className="absolute top-full left-1/2 translate-x-[-50%] mt-3 w-40 bg-[#282846] shadow-lg rounded-lg border border-[var(--border)] p-2 text-white">
+              <button className="block w-full text-left px-3 py-2 hover:bg-[#1e1b3a] rounded">
                 ⚙️ Settings
               </button>
               <button
-                className="block w-full text-left px-3 py-2 hover:bg-gray-200 rounded"
+                className="block w-full text-left px-3 py-2 hover:bg-[#1e1b3a] rounded"
                 onClick={logoutHandler}
               >
                 🚪 Logout

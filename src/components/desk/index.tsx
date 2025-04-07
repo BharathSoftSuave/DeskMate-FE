@@ -1,16 +1,9 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  forwardRef,
-} from "react";
-import profile from "../../assets/Images/profile.png";
+import { useEffect, useRef, useState, useCallback, forwardRef } from "react";
 import NavigationRoundedIcon from "@mui/icons-material/NavigationRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { allocateOrRevokeDesk } from "../../service/loginService";
 import { useDrag, useDrop } from "react-dnd";
 import { toast } from "react-toastify";
@@ -81,14 +74,14 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
     const onBreakHandler = (e: any) => {
       e.stopPropagation();
       setIsOnBreak(!isOnBreak);
-    }
+    };
 
     useEffect(() => {
       if (isOpen && cardRef.current) {
         const rect = cardRef.current.getBoundingClientRect();
         const screenWidth = window.innerWidth;
 
-        if (rect.right + 250 > screenWidth) {
+        if (rect.right + 350 > screenWidth) {
           setDropdownPosition("left");
         } else {
           setDropdownPosition("right");
@@ -159,7 +152,9 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
       <div
         ref={(ele) => {
           cardRef.current = ele;
-          ref(ele);
+          if (typeof ref === "function") {
+            ref(ele);
+          }
         }}
         onClick={() => setIsOpen(!isOpen)}
         className="relative group select-none"
@@ -179,7 +174,12 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
           <div className="flex items-center gap-2 w-full">
             <p className="cursor-move text-sm text-gray-400">⋮⋮</p>
             <div className="relative">
-              <img src={profile} alt="User" className="w-6 h-6 rounded-full" />
+              {/* <img src={profile} alt="User" className="w-6 h-6 rounded-full" /> */}
+              <Avatar
+                alt={employee?.user?.full_name}
+                src={employee?.user?.avatar || "/static/images/avatar/1.jpg"}
+                sx={{ width: 24, height: 24 }}
+              />
               <span
                 className={`absolute top-0 right-0 w-2 h-2 rounded-full ${
                   isOnBreak ? "bg-red-500" : "bg-green-500"
@@ -195,7 +195,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
         {isOpen && (
           <div
             ref={dropdownRef}
-            className={`info-desk absolute h-full w-full p-1 shadow-lg z-40 ${
+            className={`info-desk absolute h-full w-fit p-1 shadow-lg z-40 ${
               dropdownPosition === "left"
                 ? "-left-2 -bottom-2 -translate-x-full translate-y-full"
                 : "-right-2 -bottom-2 translate-x-full translate-y-full"
@@ -209,20 +209,22 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
               }`}
             />
             <div
-              className={`flex bg-white relative py-4 flex-col gap-2 rounded-r-xl rounded-b-xl border-b-[3px]${
+              className={`flex bg-white relative py-4 flex-col gap-2 ${
+                dropdownPosition === "left" ? "rounded-l-xl" : "rounded-r-xl"
+              } rounded-b-xl border-b-[3px]${
                 isOnBreak ? "border-red-500" : "border-green-500"
               } h-fit justify-center items-center w-[240px] z-10`}
             >
               <span
-                className={`h-3 left-1 top-1 w-3 absolute rounded-full ${
+                className={`h-3 top-1 w-3 absolute rounded-full ${
                   isOnBreak ? "bg-red-500" : "bg-green-500"
-                }`}
+                } ${dropdownPosition === "left" ? "right-1" : "left-1"}`}
               />
               <div className="flex flex-col justify-center items-center w-full h-full">
-                <img
-                  src={profile}
-                  alt="User"
-                  className="w-16 h-16 rounded-full"
+                <Avatar
+                  alt={employee?.user?.full_name}
+                  src={employee?.user?.avatar || "/static/images/avatar/1.jpg"}
+                  sx={{ width: 80, height: 80 }}
                 />
                 <p
                   className={`text-base ${
@@ -233,12 +235,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                       : "text-black"
                   } font-semibold mt-2`}
                 >
-                  {getFirstName(employee?.user?.full_name).firstName}
-                </p>
-                <p className="text-slate-900">
-                  {getFirstName(
-                    employee?.user?.full_name
-                  ).secondName.toLowerCase()}
+                  {employee?.user?.full_name}
                 </p>
                 <p className="text-xs text-gray-900 font-medium mb-2">
                   {employee?.user?.designation}
@@ -248,19 +245,19 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
               {isAdmin && (
                 <div className="flex h-full w-full justify-evenly">
                   <div
-                    className="p-2 bg-[var(--weight)] w-26 rounded-full flex justify-center items-center"
+                    className="p-2 bg-[var(--weight)] hover:bg-[#c15116] hover:scale-105 transition-all w-26 rounded-full flex justify-center items-center cursor-pointer"
                     onClick={openChat}
                   >
                     <ChatRoundedIcon sx={{ fontSize: "24px" }} />
                   </div>
                   <div
-                    className="p-2 bg-[var(--weight)] w-26 rounded-full flex justify-center items-center"
+                    className="p-2 bg-[var(--weight)] hover:bg-[#c15116] hover:scale-105 transition-all w-26 rounded-full flex justify-center items-center cursor-pointer"
                     onClick={() => openEdit(employee)}
                   >
                     <EditRoundedIcon sx={{ fontSize: "24px" }} />
                   </div>
                   <div
-                    className="p-2 bg-[var(--weight)] w-26 rounded-full flex justify-center items-center"
+                    className="p-2 bg-[var(--weight)] hover:bg-[#c15116] hover:scale-105 transition-all w-26 rounded-full flex justify-center items-center cursor-pointer"
                     onClick={deleteDesk}
                   >
                     <DeleteRoundedIcon sx={{ fontSize: "24px" }} />

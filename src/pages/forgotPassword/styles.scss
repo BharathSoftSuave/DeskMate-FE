@@ -3,15 +3,18 @@ input {
   color: var(--white) !important;
 }
 
-/* Autofill styles */
-input:-webkit-autofill {
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-  -webkit-text-fill-color: var(--white) !important;
-  box-shadow: 0 0 0px 1000px var(--primary) inset !important;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  background-color: #28234a !important;
+  -webkit-box-shadow: 0 0 0px 1000px #28234a inset !important;
+  color: white !important;
+}
+input:-webkit-autofill:focus {
+  border: 1px solid rgb(248 94 0 / var(--tw-ring-opacity, 1)) !important;
 }
 
-input:-webkit-autofill:focus {
-  background-color: var(--primary) !important;
-  -webkit-text-fill-color: var(--white) !important;
+input:-webkit-autofill {
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
