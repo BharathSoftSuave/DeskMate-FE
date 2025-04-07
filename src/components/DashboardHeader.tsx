@@ -9,14 +9,18 @@ import { RootState } from "../Store";
 import ImportEmployeePopup from "./popups/ImportEmployeePopup";
 
 interface DashboardHeaderProps {
-  onSearch: Function;
+  onSearch: (value: string) => void;
+  switchBlockHandler: (block: string) => void;
 }
 
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
+const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch, switchBlockHandler }) => {
   const { userName } = useSelector((state: RootState) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const [importPopup, setImportPopup] = useState({ isOpen: false, importType: null})
+  const [importPopup, setImportPopup] = useState({
+    isOpen: false,
+    importType: null,
+  });
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -26,13 +30,17 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
 
   const dropDownClickHandler = (e: any) => {
     setDropDownOpen(false);
-    setImportPopup({isOpen:true, importType: e.target.textContent});
-  }
+    setImportPopup({ isOpen: true, importType: e.target.textContent });
+  };
 
   const logoutHandler = () => {
     localStorage.removeItem("accessToken");
     navigate("/login");
   };
+
+  const selectBlockHandler = (e: any) => {
+    switchBlockHandler(e.target.value);
+  }
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -62,7 +70,10 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
             <p className="font-medium">Import</p>
           </div>
           {dropDownOpen && (
-            <div onClick={dropDownClickHandler} className="absolute left-0 mt-2 w-35 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+            <div
+              onClick={dropDownClickHandler}
+              className="absolute left-0 mt-2 w-35 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
+            >
               <ul className="py-2">
                 <li className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer">
                   Employees
@@ -90,12 +101,13 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
           <select
             defaultValue="Navalur Beta Block"
             className="w-full text-white text-sm font-medium font-sans rounded-md py-2 pl-4 pr-12 focus:outline-none focus:ring-1 focus:ring-[#F85E00] bg-[var(--input)] appearance-none"
+            onChange={selectBlockHandler}
           >
             <div className="flex flex-col gap-2">
-              <option value="Navalur" className="p-2">
+              <option value="Navalur Beta Block" className="p-2">
                 Navalur Beta Block
               </option>
-              <option value="Beta Block">Navalur Alpha Block</option>
+              <option value="Navalur Alpha Block">Navalur Alpha Block</option>
             </div>
           </select>
         </div>
@@ -124,7 +136,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onSearch }) => {
           )}
         </div>
       </div>
-      {(importPopup.isOpen && importPopup.importType === "Employees") && <ImportEmployeePopup onClose={() => setImportPopup({ isOpen: false, importType: null})} />}
+      {importPopup.isOpen && importPopup.importType === "Employees" && (
+        <ImportEmployeePopup
+          onClose={() => setImportPopup({ isOpen: false, importType: null })}
+        />
+      )}
     </nav>
   );
 };
