@@ -54,7 +54,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     if (!debouncedSearchName) return;
 
     const foundEmployee = Object.entries(seatMapping).find(
-      ([key, employee]) => {
+      ([, employee]) => {
         if (!employee) return false;
         return employee.user?.full_name
           ?.toLowerCase()
