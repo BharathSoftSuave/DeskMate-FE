@@ -13,6 +13,7 @@ const WorkAreaHeader: React.FC<WorkAreaHeaderProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full h-fit md:gap-8 ">
+      {/* Total Seats */}
       <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
         <div className="icon p-4 flex justify-center items-center rounded-full bg-[#F664C8] my-auto">
           <svg
@@ -42,6 +43,7 @@ const WorkAreaHeader: React.FC<WorkAreaHeaderProps> = ({
           <p className="text-left font-normal text-white">Total Seats</p>
         </div>
       </div>
+      {/* occupied */}
       <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
         <div className="icon p-4 flex justify-center items-center rounded-full bg-[#EE8C1B] my-auto">
           <svg
@@ -65,6 +67,7 @@ const WorkAreaHeader: React.FC<WorkAreaHeaderProps> = ({
           <p className="text-left font-normal text-white">Occupied</p>
         </div>
       </div>
+              {/* vacant */}
       <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
         <div className="icon p-4 flex justify-center items-center rounded-full bg-[#50B4D9] my-auto">
           <svg
@@ -89,6 +92,7 @@ const WorkAreaHeader: React.FC<WorkAreaHeaderProps> = ({
           <p className="text-left font-normal text-white">Unoccupied Seats</p>
         </div>
       </div>
+      {/* Total Rooms */}
       <div className="w-full h-fit py-4 px-8  flex gap-3 border bg-[#282846] rounded-3xl border-[var(--border)]">
         <div className="icon p-4 flex justify-center items-center rounded-full bg-[#a7cc22] my-auto">
           <svg
