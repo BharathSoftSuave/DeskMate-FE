@@ -50,6 +50,7 @@ export function CustomDatePicker() {
 
 const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -59,18 +60,14 @@ const SignUp: React.FC = () => {
   } = useForm<SignUpFormInputs>();
 
   const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
-    console.log(data);
-    alert("Hi this is my ");
     try {
+      setIsSubmit(true);
       data.date_of_birth = dayjs(data.date_of_birth).format("YYYY-MM-DD");
       const response = await doSignUp(data);
-      console.log("Sign up succesfully");
+      setIsSubmit(false);
       navigate("/otp", { state: { email: data.email } });
       if (response) {
-        console.log("Sign up succesfully", response, "   ireiureuiiu");
         navigate("/otp", { state: { email: data.email } });
-      } else {
-        console.log("");
       }
     } catch (error) {
       console.error("Sign up Error:", error);
@@ -269,9 +266,9 @@ const SignUp: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[var(--weight)] p-2 rounded-lg font-medium text-lg"
+                className={`w-full bg-[var(--weight)] p-2 rounded-lg font-medium text-lg ${isSubmit ? "opacity-50 cursor-not-allowed" : ""}`}
               >
-                Sign Up
+                {isSubmit ?"Sign Up..." : "Sign Up"}
               </button>
             </form>
           </div>

@@ -21,11 +21,9 @@ const authSlice = createSlice({
    initialState,
    reducers :  {
     setUserName : (state,action:PayloadAction<string>) =>{
-      console.log("Received action:", action);
       state.userName = action.payload;
     },
     setUserRole : (state, action:PayloadAction<string>) =>{
-      console.log("User role ", action);
       state.userRole = action.payload;
     }
    }

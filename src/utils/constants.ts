@@ -9,6 +9,8 @@ export const ENDPOINTS = {
   swap : "admin/swap-desk",
   uploadEmployees: "upload-data"
 };
+
 export const STATUS_ENDPOINTS = {
   getAllStatus :"/status/me/all",
+  updateStatus: "/status/me/update",
 }
