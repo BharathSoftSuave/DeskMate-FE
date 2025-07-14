@@ -1,3 +1,5 @@
+
+
 export const ENDPOINTS = {
   user: "/user",
   login: "/auth/login",
@@ -13,4 +15,6 @@ export const ENDPOINTS = {
 export const STATUS_ENDPOINTS = {
   getAllStatus :"/status/me/all",
   updateStatus: "/status/me/update",
+  getStatusTimeline: "/chronolog",
+  updatecChronoLog:"/chronolog/check/"
 }

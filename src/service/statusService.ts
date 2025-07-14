@@ -23,3 +23,24 @@ export const updateStatus = async (status: string) => {
     throw error;
   }
 };
+
+export const getStatusTimeline = async () => {
+  try {
+    const response = await apiClient.get(STATUS_ENDPOINTS.getStatusTimeline);
+    return response.data;
+  } catch (error) {
+    console.error("API Request Error:", error);
+    throw error;
+  }
+}
+
+export const updatecChronoLog = async () => {
+  try {
+    let urlStr = STATUS_ENDPOINTS.updatecChronoLog;
+    const response = await apiClient.get(urlStr);
+    return response.data;
+  } catch (error) {
+    console.error("API Request Error:", error);
+    throw error;
+  }
+}

@@ -6,12 +6,14 @@ import {
 import { IDashBoard, IPopup, UserFilter } from "../interface/dashboardInterface";
 import { ENDPOINTS } from "../utils/constants";
 import apiClient from "./baseService";
+import { connectSocket } from "../Socket/socket";
 
 export const doLogin = async (payload: ILoginPayload) => {
   try {
     const response = await apiClient.post(ENDPOINTS.login, payload);
     if (response) {
       localStorage.setItem("accessToken", response.data.access_token);
+      connectSocket(response.data.access_token);
     }
     return response.data;
   } catch (error) {

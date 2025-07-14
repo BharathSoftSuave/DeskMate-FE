@@ -16,6 +16,7 @@ import "./styles.scss";
 import Navbar from "../NavBar";
 import { useDispatch } from "react-redux";
 import { setUserName, setUserRole } from "../../Store/authSlice";
+import { setCheckinStatus } from "../../Store/statusSlice";
 import { AppDispatch } from "../../Store";
 import APIErrorPopup from "../../common/popups/APIErrorPopup";
 interface LoginFormInputs {
@@ -42,10 +43,13 @@ const Login: React.FC = () => {
     try {
       await doLogin(data);
       const myDetails = await getMe();
+      const status = myDetails.status || "offline";
+      dispatch(setCheckinStatus(status));
+      console.log("User Details:", myDetails);
       dispatch(setUserName(myDetails.full_name.split(" ")[0]));
-      myDetails.roles.forEach((element: string) => {
-        element == "admin" ? dispatch(setUserRole("admin")) : "";
-      });
+      if (myDetails.roles.includes("admin")) {
+        dispatch(setUserRole("admin"));
+      }
       navigate("/dashboard");
     } catch (error: any) {
       setError(error.response.data.detail);

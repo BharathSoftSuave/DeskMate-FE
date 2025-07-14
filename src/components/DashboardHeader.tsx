@@ -32,7 +32,7 @@ const StatusItem: React.FC<{
       style={{ backgroundColor: statusColorMapping.get(status) }}
       onClick={() => onSelect({ status, display_name })}
     >
-      <span className="text-sm text-white text-center">{display_name}</span>
+      <span className="text-sm text-gray-700 text-center">{display_name}</span>
     </button>
   );
 };
@@ -40,7 +40,7 @@ const StatusItem: React.FC<{
 const DashboardHeader: React.FC = () => {
   const { setSearchName, setBlock } = useDashboardContext();
   const status = useSelector((state: RootState) => state.status);
-  const { userName } = useSelector((state: RootState) => state.auth);
+  // const { userName } = useSelector((state: RootState) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [statusList, setStatusList] = useState([]);
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -63,9 +63,7 @@ const DashboardHeader: React.FC = () => {
     status: string;
     display_name: string;
   }) => {
-    console.log("Status clicked:", status);
     const updatedStatus = await updateStatus(status.status);
-    console.log("Updated status:", updatedStatus);
     dispatch(setStatus(status));
   };
 
@@ -101,7 +99,7 @@ const DashboardHeader: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+// console.log("Status in header:", status);
   return (
     <nav className="w-full h-16 bg-[#1D1D41] flex py-3 sticky z-20 top-0 justify-between lg:px-20 px-4 self-center">
       <div className="self-center cursor-pointer" onClick={handleHomeClick}>
@@ -171,7 +169,7 @@ const DashboardHeader: React.FC = () => {
           </div>
 
           {isOpen && (
-            <div className="absolute top-full left-1/2 translate-x-[-50%] mt-3 w-40 bg-[#282846] shadow-lg rounded-lg border border-[var(--border)] p-2 text-white">
+            <div className="absolute top-full left-1/2 translate-x-[-50%] mt-3 w-40 bg-[#282846] shadow-lg rounded-lg border border-[var(--border)] p-2">
               <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                 {statusList && statusList.length > 0
                   ? statusList

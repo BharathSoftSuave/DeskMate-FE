@@ -40,3 +40,9 @@ export interface seatDetails {
   desk: Desk;
   office: Office;
 }
+
+
+export type StatusData = {
+  time: number; // timestamp in ms
+  status: string;
+};

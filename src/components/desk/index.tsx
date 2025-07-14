@@ -9,7 +9,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { seatDetails } from "../../interface/dashboardInterface";
-
+import { statusColorMapping } from "../../utils/statusColorMapping";
 interface DeskCardProps {
   employee: seatDetails;
   triggerUseEffect: () => void;
@@ -84,7 +84,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
         const position = rect.right + 350 > screenWidth ? "left" : "right";
         setDropdownPosition(position);
       }
-      setIsOpen(!isOpen)
+      setIsOpen(!isOpen);
     };
 
     const truncateName = (name: string, maxLength?: number) => {
@@ -171,6 +171,7 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
         >
           <div className="flex items-center gap-2 w-full">
             <p className="cursor-move text-sm text-gray-400">⋮⋮</p>
+            {/* status update change */}
             <div className="relative">
               {/* <img src={profile} alt="User" className="w-6 h-6 rounded-full" /> */}
               <Avatar
@@ -179,10 +180,41 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                 sx={{ width: 24, height: 24 }}
               />
               <span
-                className={`absolute top-0 right-0 w-2 h-2 rounded-full ${
-                  isOnBreak ? "bg-red-500" : "bg-green-500"
-                }`}
-              />
+                className="absolute top-0 right-0 w-2 h-2 rounded-full flex items-center justify-center"
+                style={{
+                  backgroundColor: statusColorMapping.get(
+                    employee?.status?.status || "offline"
+                  ),
+                }}
+              >
+                {employee?.status?.status === "offline" && (
+                  <svg
+                  width="80%"
+                  height="80%"
+                  viewBox="0 0 8 8"
+                  style={{ display: "block", margin: "auto" }}
+                  >
+                  <line
+                    x1="2"
+                    y1="2"
+                    x2="6"
+                    y2="6"
+                    stroke="black"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
+                  <line
+                    x1="6"
+                    y1="2"
+                    x2="2"
+                    y2="6"
+                    stroke="black"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
+                  </svg>
+                )}
+              </span>
             </div>
             <span className="text-xs font-medium cursor-move select-none font-lato">
               {getFirstName(employee?.user?.full_name, 10).firstName}

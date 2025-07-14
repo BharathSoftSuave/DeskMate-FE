@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
   const { email, userName } = useSelector((state: RootState) => state.auth);
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
   const navigate = useNavigate();
   const toggleSidebar = () => setIsOpen((prev) => !prev);
   const logoutHandler = () => {

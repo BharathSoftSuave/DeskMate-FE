@@ -20,6 +20,7 @@ import ZoomPanel from "../../common/ZoomPanel";
 import FallbackWrapper from "../../common/FallbackWrapper";
 import Loader from "../../common/fallbacks/Loader";
 import WorkAreaHeader from "./WorkAreaHeader";
+import { getSocket } from "../../Socket/socket";
 
 const seatMappingData = navalurBetaSeatMappingData;
 
@@ -28,16 +29,15 @@ interface SearchBarProps {
 }
 
 interface ISwapPayload {
-  current_desk_id : string|undefined;
-  target_desk_id?: string|null;
-  target_desk_num?: string|undefined;
+  current_desk_id: string | undefined;
+  target_desk_id?: string | null;
+  target_desk_num?: string | undefined;
 }
 const payload = {
   office_id: "67dd364d7c1b361e5c24bf73",
 };
 
 const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
-  console.log(" work area  search name", searchName);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [choosenDesk1, setchoosenDesk] = useState<string>();
   const [employee, setEmployee] = useState<seatDetails[]>();
@@ -53,14 +53,12 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const scrollToEmployee = useCallback(() => {
     if (!debouncedSearchName) return;
 
-    const foundEmployee = Object.entries(seatMapping).find(
-      ([, employee]) => {
-        if (!employee) return false;
-        return employee.user?.full_name
-          ?.toLowerCase()
-          .includes(debouncedSearchName.toLowerCase());
-      }
-    );
+    const foundEmployee = Object.entries(seatMapping).find(([, employee]) => {
+      if (!employee) return false;
+      return employee.user?.full_name
+        ?.toLowerCase()
+        .includes(debouncedSearchName.toLowerCase());
+    });
 
     if (foundEmployee && foundEmployee.length) {
       const deskKey = foundEmployee[0];
@@ -80,6 +78,51 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
       }
     }
   }, [debouncedSearchName, seatMapping, zoomLevel]);
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) {
+      console.warn("Socket not connected");
+      return;
+    } else {
+      console.log("Socket connected successfully");
+    }
+    const handleStatusUpdate = (data: {
+      id: string;
+      new_status: boolean;
+      status: string;
+      display_name: string;
+      desk: string;
+    }) => {
+      setSeatMapping((prev) => {
+        // Find the desk key where desk.id matches data.desk
+        const targetKey = Object.keys(prev).find(
+          (key) => prev[key]?.desk?.id === data.desk
+        );
+        
+        if (!targetKey) {
+          console.warn("Desk not found in seatMapping for update");
+          return prev; // no change
+        }
+        return {
+          ...prev,
+          [targetKey]: {
+            ...prev[targetKey],
+            status: {
+              ...prev[targetKey]?.status,
+              status: data.status,
+              display_name: data.display_name,
+            },
+          },
+        };
+      });
+    };
+
+    socket.on("status_update", handleStatusUpdate);
+
+    return () => {
+      socket.off("status_update", handleStatusUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     scrollToEmployee();
@@ -101,23 +144,18 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
 
   // Swap function for drag-and-drop
 
-  const swapSeats = async (from:string, to:string) => {
-    console.log("before ", seatMapping);
+  const swapSeats = async (from: string, to: string) => {
     setSeatMapping((prev) => {
       const updated = { ...prev };
       [updated[from], updated[to]] = [updated[to], updated[from]];
-      console.log("update ", updated);
       return updated;
     });
-    // console.log(seatMapping[from].desk.id, " another", seatMapping[to].desk.id);
 
-    const payload : ISwapPayload = {
+    const payload: ISwapPayload = {
       current_desk_id: seatMapping[from]?.desk?.id,
       target_desk_id: seatMapping[to]?.desk?.id ?? null,
       target_desk_num: seatMapping[to]?.desk?.id ? undefined : to,
     };
-
-
 
     const response = await swap(payload);
 
@@ -146,7 +184,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
         </span>
       ),
     });
-    console.log(" Response from swap ", response);
     setTrigger((prev) => !prev);
   };
 
@@ -154,10 +191,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const [vacant, setVacant] = useState<number>(0);
 
   const [totalDesk, setTotalDesk] = useState<number>(0);
-  console.log("after ", seatMapping);
   useEffect(() => {
-    console.log("after re-render", seatMapping);
-    console.log("Use effect workarea");
     let temp: any;
 
     const fetchData = async () => {
@@ -168,16 +202,15 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
         setTotalDesk(temp[0].office.desks);
         setEmployee(temp);
       } catch (err) {
-      } finally {
+        console.error("Error fetching dashboard data:", err);
       }
 
-      let temp1 = Object.keys(seatMapping).reduce((acc, key) => {
+      const temp1 = Object.keys(seatMapping).reduce((acc, key) => {
         acc[key] = null;
         return acc;
       }, {} as Record<string, null>);
 
       temp?.forEach((item: any) => {
-        console.log("item = ", item.desk.desk_num);
         if (temp1.hasOwnProperty(item.desk.desk_num)) {
           temp1[item.desk.desk_num] = item;
         }
@@ -191,13 +224,6 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     setEditEmployee(employee);
     setEdit(true);
   };
-
-  useEffect(() => {
-    employee?.forEach((each) => {
-      if (localStorage.getItem("userId") === each.user.id) {
-      }
-    });
-  }, [employee]);
 
   return (
     <>
