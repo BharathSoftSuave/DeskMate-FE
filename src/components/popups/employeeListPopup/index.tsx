@@ -20,12 +20,14 @@ import ConfirmationPopup from "../../../common/popups/ConfirmationPopup";
 interface WorkAreaProps {
   closePopup: () => void;
   choosenDesk: any;
+  officeId :string
 }
 
 interface WorkAreaProps {
   closePopup: () => void;
 }
-const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
+//dfdsfds
+const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk, officeId }) => {
   const [choosenemp, setChoosenemp] = useState();
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [employees, setEmployees] = useState([]);
@@ -41,7 +43,7 @@ const EmployeeList: React.FC<WorkAreaProps> = ({ closePopup, choosenDesk }) => {
     const payload1 = {
       operation: "allocate",
       user_id: choosenemp,
-      office_id: "67dd364d7c1b361e5c24bf73",
+      office_id: officeId,
       desk_num: choosenDesk,
     };
     console.log("we go ", payload1);

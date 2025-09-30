@@ -409,7 +409,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
             />
           )}
           {isPopupOpen && (
-            <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} />
+            <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} officeId="67dd364d7c1b361e5c24bf73" />
           )}
         </div>
         <FallbackWrapper

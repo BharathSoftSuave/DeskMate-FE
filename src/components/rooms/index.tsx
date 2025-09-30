@@ -1,5 +1,5 @@
 interface RoomsProps {
-  image: string;
+  image?: string;
   roomName?: string;
   borderColor: string;
   alt?: string;
@@ -18,7 +18,7 @@ const Rooms: React.FC<RoomsProps> = ({
       style={{ borderColor: borderColor }}
     >
       <div className="flex flex-col gap-2 w-full justify-center items-center py-6 px-4">
-        <img src={image} alt={alt || "room"} className={imageClassName} />
+       {image && <img src={image} alt={alt || "room"} className={imageClassName} /> }
         {roomName && <p className="text-lg w-full text-center">{roomName}</p>}
       </div>
     </div>

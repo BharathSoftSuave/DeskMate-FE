@@ -18,3 +18,37 @@ export const navalurBetaSeatMappingData: Record<string, null | seatDetails>  = {
     O1: null, O2: null, O3: null, O4: null, O5: null, O6: null, O7: null, O8: null, O9: null
  };
  
+
+
+export const AlphaBlockMappingData: Record<string, null | seatDetails> = {
+    // Row A: Top row with 4 desks
+    A1: null, A2: null, A3: null, A4: null,
+    
+    // Row B: 11 desks
+    B1: null, B2: null, B3: null, B4: null, B5: null, B6: null, 
+    B7: null, B8: null, B9: null, B10: null, B11: null,
+    
+    // Row C: 11 desks
+    C1: null, C2: null, C3: null, C4: null, C5: null, C6: null,
+    C7: null, C8: null, C9: null, C10: null, C11: null,
+    
+    // Row D: 11 desks
+    D1: null, D2: null, D3: null, D4: null, D5: null, D6: null,
+    D7: null, D8: null, D9: null, D10: null, D11: null,
+    
+    // Row E: 11 desks
+    E1: null, E2: null, E3: null, E4: null, E5: null, E6: null,
+    E7: null, E8: null, E9: null, E10: null, E11: null,
+    
+    // Row F: 7 desks (starting from F5)
+    F5: null, F6: null, F7: null, F8: null, F9: null, F10: null, F11: null,
+    
+    // Row G: 7 desks (starting from G5)
+    G5: null, G6: null, G7: null, G8: null, G9: null, G10: null, G11: null,
+    
+    // Row H: 7 desks (starting from H5)
+    H5: null, H6: null, H7: null, H8: null, H9: null, H10: null, H11: null,
+    
+    // Row I: 6 desks (starting from I5)
+    I5: null, I6: null, I7: null, I8: null, I9: null, I10: null,
+};
