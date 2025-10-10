@@ -41,7 +41,9 @@ const Login: React.FC = () => {
     }
     try {
       await doLogin(data);
+      console.log("works fine", data);
       const myDetails = await getMe();
+      console.log("catched here ", myDetails);
       dispatch(setUserName(myDetails.full_name.split(" ")[0]));
       myDetails.roles.forEach((element: string) => {
         element == "admin" ? dispatch(setUserRole("admin")) : "";
