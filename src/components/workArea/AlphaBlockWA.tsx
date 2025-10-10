@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import DeskCard from "../desk";
-import server from "../../assets/Images/server.svg";
+// import server from "../../assets/Images/server.svg";
 import pantry from "../../assets/Images/pantry.svg";
 import meeting from "../../assets/Images/meeting.svg";
 import cabin from "../../assets/Images/cabin.svg";
-import conference from "../../assets/Images/conference.svg";
+// import conference from "../../assets/Images/conference.svg";
 import UnassignedDeskCard from "../unassigned";
 import EmployeeList from "../popups/employeeListPopup";
-import { getDashboard, swap } from "../../service/loginService";
-import { seatDetails } from "../../interface/dashboardInterface";
+import { getDashboard } from "../../service/loginService";
+// import { seatDetails } from "../../interface/dashboardInterface";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DeskAllocationPopup from "../popups/EditPopup/index";
@@ -28,11 +28,11 @@ interface SearchBarProps {
   searchName: string;
 }
 
-interface ISwapPayload {
-  current_desk_id: string | undefined;
-  target_desk_id?: string | null;
-  target_desk_num?: string | undefined;
-}
+// interface ISwapPayload {
+//   current_desk_id: string | undefined;
+//   target_desk_id?: string | null;
+//   target_desk_num?: string | undefined;
+// }
 
 const payload = {
   office_id: "68db981339cedcb7321db6fe",
@@ -41,7 +41,7 @@ const payload = {
 export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [choosenDesk1, setchoosenDesk] = useState<string>();
-  const [employee, setEmployee] = useState<seatDetails[]>();
+  // const [employee, setEmployee] = useState<seatDetails[]>();
   const [trigger, setTrigger] = useState<boolean>();
   const [editEmployee, setEditEmployee] = useState();
   const [edit, setEdit] = useState(false);
@@ -151,13 +151,13 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
       return updated;
     });
 
-    const payload: ISwapPayload = {
-      current_desk_id: seatMapping[from]?.desk?.id,
-      target_desk_id: seatMapping[to]?.desk?.id ?? null,
-      target_desk_num: seatMapping[to]?.desk?.id ? undefined : to,
-    };
+    // const payload: ISwapPayload = {
+    //   current_desk_id: seatMapping[from]?.desk?.id,
+    //   target_desk_id: seatMapping[to]?.desk?.id ?? null,
+    //   target_desk_num: seatMapping[to]?.desk?.id ? undefined : to,
+    // };
 
-    const response = await swap(payload);
+    // const response = await swap(payload);
 
     let message;
     if (seatMapping[from]?.user?.full_name && seatMapping[to]?.user?.full_name)
@@ -200,7 +200,7 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
         setOccupied(temp[0].office.occupied_desks);
         setVacant(temp[0].office.vacant_desks);
         setTotalDesk(temp[0].office.desks);
-        setEmployee(temp);
+        // setEmployee(temp);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
       }
