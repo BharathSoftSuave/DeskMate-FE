@@ -138,7 +138,7 @@ const Login: React.FC = () => {
                 type="submit"
                 className="w-full bg-[var(--weight)] p-2 rounded-lg font-medium text-lg"
               >
-                LoginTest
+                Login
               </button>
               <div className="flex flex-col items-center justify-center space-x-2 mt-2">
                 <Typography variant="body2">Don't have an account?</Typography>
