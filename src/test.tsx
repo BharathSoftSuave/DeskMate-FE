@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import WorkArea from "./components/workArea";
 
 const ZoomableScrollableDiv = () => {
@@ -88,7 +88,7 @@ const ZoomableScrollableDiv = () => {
           }}
         >
           <p className="text-3xl">Your Zoomable & Scrollable Content</p>
-          <WorkArea />
+          <WorkArea searchName="" />
         </div>
       </div>
     </div>

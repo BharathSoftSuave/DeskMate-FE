@@ -21,7 +21,6 @@ const PasswordReset: React.FC = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [error, setError] = useState("");
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     console.log("Hi this is ");
@@ -31,17 +30,12 @@ const PasswordReset: React.FC = () => {
       if (response) navigate("/otp");
       else {
         alert("Authentication in Invalid");
-        setError("Authentication in Invalid");
       }
     } catch (error) {
       console.error("Sign  12334w Error:", error);
-      setError("Authentication in Invalid");
     }
   };
 
-  function onForgotPassword(event: any): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div className="h-screen bg-[#1E1B3A] text-white flex flex-col">
