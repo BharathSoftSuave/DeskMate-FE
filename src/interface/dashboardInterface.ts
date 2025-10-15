@@ -39,4 +39,5 @@ export interface seatDetails {
   status: Status;
   desk: Desk;
   office: Office;
+  blockName: string
 }

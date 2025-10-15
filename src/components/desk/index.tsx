@@ -17,13 +17,15 @@ interface DeskCardProps {
   deskKey: any;
   openEdit: (employee: seatDetails) => void;
   searchName: any;
+  NameClass?: boolean;
+  isAlphaBlock?: boolean;
 }
 
 const ItemType = "SEAT";
 
 const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
   (
-    { deskKey, employee, triggerUseEffect, swapSeats, openEdit, searchName },
+    { deskKey, employee, triggerUseEffect, swapSeats, openEdit, searchName, NameClass, isAlphaBlock = false },
     ref
   ) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -155,23 +157,27 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
           }
         }}
         onClick={employeeInfoPopupHandler}
-        className="relative group select-none"
+        className={`relative group select-none`}
       >
         <div
           ref={(node) => {
             dragRef(dropRef(node));
           }}
-          className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border ${
-            employee?.user?.full_name
+          className={`Desk flex items-center gap-1 bg-[var(--secondary)] text-white p-2 border
+  ${isAlphaBlock ? "h-40" : ""}
+  ${employee?.user?.full_name
               ?.toLowerCase()
               .startsWith(searchName ? searchName : "$")
               ? "border-[orange]"
               : "border-[#49439B]"
-          } rounded-lg w-[9.3rem] shadow-md`}
+            }
+  ${NameClass && "w-fit"}
+  rounded-lg w-[9.3rem] shadow-md`}
+
         >
-          <div className="flex items-center gap-2 w-full">
-            <p className="cursor-move text-sm text-gray-400">⋮⋮</p>
-            <div className="relative">
+          <div className={`flex items-center gap-2 w-full ${NameClass ? "flex-col" : ""}`}>
+            <p className={`cursor-move text-sm text-gray-400 ${NameClass && "[writing-mode:vertical-rl]"}`}>⋮⋮</p>
+            <div className={`relative ${isAlphaBlock ? "transform rotate-90" : ""}`}>
               {/* <img src={profile} alt="User" className="w-6 h-6 rounded-full" /> */}
               <Avatar
                 alt={employee?.user?.full_name}
@@ -179,12 +185,11 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                 sx={{ width: 24, height: 24 }}
               />
               <span
-                className={`absolute top-0 right-0 w-2 h-2 rounded-full ${
-                  isOnBreak ? "bg-red-500" : "bg-green-500"
-                }`}
+                className={`absolute top-0 right-0 w-2 h-2 rounded-full ${isOnBreak ? "bg-red-500" : "bg-green-500"
+                  }`}
               />
             </div>
-            <span className="text-xs font-medium cursor-move select-none font-lato">
+            <span className={`text-xs font-medium cursor-move select-none font-lato ${NameClass && "[writing-mode:vertical-rl]"}`}>
               {getFirstName(employee?.user?.full_name, 10).firstName}
             </span>
           </div>
@@ -193,30 +198,25 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
         {isOpen && (
           <div
             ref={dropdownRef}
-            className={`info-desk absolute h-full w-fit p-1 shadow-lg z-40 ${
-              dropdownPosition === "left"
+            className={`info-desk absolute h-full w-fit p-1 shadow-lg z-40 ${dropdownPosition === "left"
                 ? "-left-2 -bottom-2 -translate-x-full translate-y-full"
                 : "-right-2 -bottom-2 translate-x-full translate-y-full"
-            }`}
+              }`}
           >
             <NavigationRoundedIcon
-              className={`text-[#b1b0b0] absolute -top-4 ${
-                dropdownPosition === "left"
+              className={`text-[#b1b0b0] absolute -top-4 ${dropdownPosition === "left"
                   ? "-right-4 rotate-45"
                   : "-left-4 -rotate-45"
-              }`}
+                }`}
             />
             <div
-              className={`flex bg-white relative py-4 flex-col gap-2 ${
-                dropdownPosition === "left" ? "rounded-l-xl" : "rounded-r-xl"
-              } rounded-b-xl border-b-[3px]${
-                isOnBreak ? "border-red-500" : "border-green-500"
-              } h-fit justify-center items-center w-[240px] z-10`}
+              className={`flex bg-white relative py-4 flex-col gap-2 ${dropdownPosition === "left" ? "rounded-l-xl" : "rounded-r-xl"
+                } rounded-b-xl border-b-[3px]${isOnBreak ? "border-red-500" : "border-green-500"
+                } h-fit justify-center items-center w-[240px] z-10`}
             >
               <span
-                className={`h-3 top-1 w-3 absolute rounded-full ${
-                  isOnBreak ? "bg-red-500" : "bg-green-500"
-                } ${dropdownPosition === "left" ? "right-1" : "left-1"}`}
+                className={`h-3 top-1 w-3 absolute rounded-full ${isOnBreak ? "bg-red-500" : "bg-green-500"
+                  } ${dropdownPosition === "left" ? "right-1" : "left-1"}`}
               />
               <div className="flex flex-col justify-center items-center w-full h-full">
                 <Avatar
@@ -225,13 +225,12 @@ const DeskCard = forwardRef<HTMLDivElement, DeskCardProps>(
                   sx={{ width: 80, height: 80 }}
                 />
                 <p
-                  className={`text-base ${
-                    employee?.user?.designation === "Senior Manager"
+                  className={`text-base ${employee?.user?.designation === "Senior Manager"
                       ? "text-purple-500"
                       : employee?.user?.designation === "Team lead"
-                      ? "text-green-500"
-                      : "text-black"
-                  } font-semibold mt-2`}
+                        ? "text-green-500"
+                        : "text-black"
+                    } font-semibold mt-2`}
                 >
                   {employee?.user?.full_name}
                 </p>

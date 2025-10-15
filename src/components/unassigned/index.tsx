@@ -7,6 +7,8 @@ interface UnassignedDeskCardProps {
   onClick: (deskKey: string) => void;
   swapSeats: any;
   employee: any;
+  NameClass?: boolean;
+  isAlphaBlock?: boolean;
 }
 const ItemType = "SEAT";
 
@@ -15,6 +17,8 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
   onClick,
   swapSeats,
   employee,
+  isAlphaBlock,
+  NameClass = false,
 }) => {
   const userRole = localStorage.getItem("userRole");
   const isAdmin = userRole === "admin";
@@ -43,19 +47,19 @@ const UnassignedDeskCard: React.FC<UnassignedDeskCardProps> = ({
         ref={(node) => {
           dragRef(dropRef(node));
         }}
-        className="Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.3rem] h-[42px] shadow-md"
+        className={`Desk flex items-center gap-1 bg-[#bb3434] select-none text-white p-2 rounded-lg w-[9.3rem] justify-center ${isAlphaBlock ? "h-40" : "h-[42px]"} shadow-md ${NameClass && "flex-col w-fit"}`}
         onClick={() => {
           if (isAdmin) onClick(deskKey);
         }}
       >
-        <p className="cursor-move text-sm text-white">⋮⋮</p>
-        <div className="relative">
+        <p className={`cursor-move text-sm text-white ${NameClass && "[writing-mode:vertical-rl]"}`}>⋮⋮</p>
+        <div className={`relative ${isAlphaBlock ? "transform rotate-90" : ""}`}>
           <div className="w-6 h-6 rounded-full flex justify-center items-center bg-[#E5E5E5]">
             <PersonIcon className="text-[#da3551] p-[2px]" />
           </div>
           <span className="absolute top-0 right-0 w-2 h-2 border-1 border-[var(--secondary)] rounded-full"></span>
         </div>
-        <span className="text-xs font-medium cursor-move font-lato select-none">
+        <span className={`text-xs font-medium cursor-move font-lato select-none ${NameClass && "[writing-mode:vertical-rl]"}`}>
           Unassigned
         </span>
       </div>
