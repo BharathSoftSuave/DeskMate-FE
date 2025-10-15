@@ -100,7 +100,7 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
   //       const targetKey = Object.keys(prev).find(
   //         (key) => prev[key]?.desk?.id === data.desk
   //       );
-        
+
   //       if (!targetKey) {
   //         console.warn("Desk not found in seatMapping for update");
   //         return prev;
@@ -157,7 +157,7 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
       target_desk_num: seatMapping[to]?.desk?.id ? undefined : to,
     };
 
-    const response = await swap(payload);
+    await swap(payload);
 
     let message;
     if (seatMapping[from]?.user?.full_name && seatMapping[to]?.user?.full_name)
@@ -230,6 +230,7 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
     const eachEmployee = seatMapping[key];
     return eachEmployee ? (
       <DeskCard
+        NameClass={true}
         key={key}
         deskKey={key}
         employee={eachEmployee}
@@ -242,12 +243,15 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
             seatRefs.current[key] = el;
           }
         }}
+        isAlphaBlock={true}
       />
     ) : (
       <UnassignedDeskCard
+        NameClass={true}
         key={key}
         deskKey={key}
         employee={eachEmployee}
+        isAlphaBlock={true}
         onClick={openPopup}
         swapSeats={swapSeats}
       />
@@ -257,185 +261,114 @@ export const AlphaBlockWA: React.FC<SearchBarProps> = ({ searchName }: SearchBar
   // Helper to render paired desks (2 desks in a group)
   const renderPairedDesks = (keys: string[]) => {
     return (
-      <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
+      <div className="border border-[#30306D] flex flex-col gap-2 p-2 rounded-lg h-fit">
         {keys.map((key) => renderDesk(key))}
       </div>
     );
   };
 
-// ... existing imports and code ...
+  // ... existing imports and code ...
 
-return (
-  <>
-    <WorkAreaHeader
-      occupied={occupied}
-      totalDesk={totalDesk}
-      vacant={vacant}
-    />
-    <DndProvider backend={HTML5Backend}>
-      <div
-        className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none"
-        ref={containerRef}
-        style={{ whiteSpace: "nowrap" }}
-      >
+  return (
+    <>
+      <WorkAreaHeader
+        occupied={occupied}
+        totalDesk={totalDesk}
+        vacant={vacant}
+      />
+      <DndProvider backend={HTML5Backend}>
         <div
-          className="flex flex-col select-none gap-8 w-full h-full"
-          style={{
-            transform: `scale(${zoomLevel})`,
-            transformOrigin: "top left",
-          }}
+          className="flex flex-col select-none gap-12 w-full h-full overflow-auto scrollbar-hide scrollbar-none"
+          ref={containerRef}
+          style={{ whiteSpace: "nowrap" }}
         >
-          {/* Top Section with Conference Room, Discussion Room and Top Row Desks */}
-          <div className="flex gap-4 w-fit">
-            {/* Left side - Conference Room */}
-            <Rooms
-              roomName="balcony"
-              borderColor="#9547d4"
-              alt="conference"
-              imageClassName="w-96 h-full py-6"
-            />
-            
-            {/* Middle - Balcony and Discussion Room */}
-            <div className="flex flex-col gap-2">
+          <div
+            className="flex flex-col select-none gap-8 w-full h-full"
+            style={{
+              transform: `scale(${zoomLevel})`,
+              transformOrigin: "top left",
+            }}
+          >
+            {/* Top Section with Conference Room, Discussion Room and Top Row Desks */}
+            <div className="flex gap-4 w-fit">
+              {/* Left side - Conference Room */}
               <Rooms
-                roomName="Balcony"
-                borderColor="#8b7355"
-                image={cabin}
-                alt="balcony"
-                imageClassName="w-32 h-24"
+                roomName="balcony"
+                borderColor="#9547d4"
+                alt="conference"
+                imageClassName="w-96 h-full py-6"
               />
-              <Rooms
-                roomName="Discussion Room"
-                borderColor="#4a90e2"
-                image={meeting}
-                alt="discussion"
-                imageClassName="w-32 h-full"
-              />
-              <Rooms
-                roomName="Pantry room"
-                borderColor="#4a90e2"
-                image={pantry}
-                alt="discussion"
-                imageClassName="w-32 h-full"
-              />
-            </div>
 
-            {/* Right side - Top desk sections */}
-            <div className="flex flex-col gap-6">
+              {/* Middle - Balcony and Discussion Room */}
+              <div className="flex flex-col gap-2">
+                <Rooms
+                  roomName="Discussion Room"
+                  borderColor="#4a90e2"
+                  image={meeting}
+                  alt="discussion"
+                  imageClassName="w-32 h-full"
+                />
+                <Rooms
+                  roomName="Pantry room"
+                  borderColor="#4a90e2"
+                  image={pantry}
+                  alt="discussion"
+                  imageClassName="w-32 h-full"
+                />
+              </div>
+
+              {/* Right side - Top desk sections */}
               {/* Row A: A1-A4 (2 pairs) */}
-              <div className="flex gap-4">
-                {renderPairedDesks(['A1', 'A2'])}
-                {renderPairedDesks(['A3', 'A4'])}
-              </div>
-
-              {/* Row B: B1-B11 (5 pairs + 1 single) */}
-              <div className="flex gap-4">
-                {renderPairedDesks(['B1', 'B2'])}
-                {renderPairedDesks(['B3', 'B4'])}
-                {renderPairedDesks(['B5', 'B6'])}
-                {renderPairedDesks(['B7', 'B8'])}
-                {renderPairedDesks(['B9', 'B10'])}
-                <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                  {renderDesk('B11')}
-                </div>
-              </div>
-
-              {/* Row C: C1-C11 (5 pairs + 1 single) */}
-              <div className="flex gap-4">
-                {renderPairedDesks(['C1', 'C2'])}
-                {renderPairedDesks(['C3', 'C4'])}
-                {renderPairedDesks(['C5', 'C6'])}
-                {renderPairedDesks(['C7', 'C8'])}
-                {renderPairedDesks(['C9', 'C10'])}
-                <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                  {renderDesk('C11')}
-                </div>
-              </div>
-
-              {/* Row D: D1-D11 (5 pairs + 1 single) */}
-              <div className="flex gap-4">
-                {renderPairedDesks(['D1', 'D2'])}
-                {renderPairedDesks(['D3', 'D4'])}
-                {renderPairedDesks(['D5', 'D6'])}
-                {renderPairedDesks(['D7', 'D8'])}
-                {renderPairedDesks(['D9', 'D10'])}
-                <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                  {renderDesk('D11')}
-                </div>
-              </div>
-
-              {/* Row E: E1-E11 (5 pairs + 1 single) */}
-              <div className="flex gap-4">
-                {renderPairedDesks(['E1', 'E2'])}
-                {renderPairedDesks(['E3', 'E4'])}
-                {renderPairedDesks(['E5', 'E6'])}
-                {renderPairedDesks(['E7', 'E8'])}
-                {renderPairedDesks(['E9', 'E10'])}
-                <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                  {renderDesk('E11')}
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 flex-1 ">
-                {/* <div className="w-100 h-100 border-white">Hisdfdsf</div> */}
-
-                <div className="flex justify-end gap-4 ml-[272px]">
-                  {renderPairedDesks(['F5', 'F6'])}
-                  {renderPairedDesks(['F7', 'F8'])}
-                  {renderPairedDesks(['F9', 'F10'])}
-                  <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                    {renderDesk('F11')}
+              <div className="flex flex-col gap-6">
+                <div className="flex gap-20">
+                  <div className="flex gap-10">
+                    {renderPairedDesks(['A1', 'B1', 'C1', 'D1', 'E1'])}
+                    {renderPairedDesks(['A2', 'B2', 'C2', 'D2', 'E2'])}
+                  </div>
+                  <div className="flex gap-10">
+                    {renderPairedDesks(['A3', 'B3', 'C3', 'D3', 'E3'])}
+                    {renderPairedDesks(['A4', 'B4', 'C4', 'D4', 'E4'])}
+                  </div>
+                  <div className="flex gap-10 py-40">
+                    {renderPairedDesks(['B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'H5', 'I5'])}
+                    {renderPairedDesks(['B6', 'C6', 'D6', 'E6', 'F6', 'G6', 'H6', 'I6'])}
+                  </div>
+                  <div className="flex gap-10 py-40">
+                    {renderPairedDesks(['B7', 'C7', 'D7', 'E7', 'F7', 'G7', 'H7', 'I7'])}
+                    {renderPairedDesks(['B8', 'C8', 'D8', 'E8', 'F8', 'G8', 'H8', 'I8'])}
+                  </div>
+                  <div className="flex gap-10 py-40">
+                    {renderPairedDesks(['B9', 'C9', 'D9', 'E9', 'F9', 'G9', 'H9', 'I9'])}
+                    {renderPairedDesks(['B10', 'C10', 'D10', 'E10', 'F10', 'G10', 'H10', 'I10'])}
+                  </div>
+                  <div className="flex gap-10 py-40">
+                    {renderPairedDesks(['B11', 'C11', 'D11', 'E11', 'F11', 'G11', 'H11', 'I11'])}
                   </div>
                 </div>
 
 
-                <div className="flex justify-end gap-4 ml-[272px]">
-                  {renderPairedDesks(['G5', 'G6'])}
-                  {renderPairedDesks(['G7', 'G8'])}
-                  {renderPairedDesks(['G9', 'G10'])}
-                  <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                    {renderDesk('G11')}
-                  </div>
-                </div>
-
-
-                <div className="flex justify-end gap-4 ml-[272px]">
-                  {renderPairedDesks(['H5', 'H6'])}
-                  {renderPairedDesks(['H7', 'H8'])}
-                  {renderPairedDesks(['H9', 'H10'])}
-                  <div className="border border-[#30306D] flex gap-2 p-2 rounded-lg">
-                    {renderDesk('H11')}
-                  </div>
-                </div>
-
-
-                <div className="flex justify-end gap-4 ml-[272px]" style={{paddingRight:"11.5rem"}}>
-                  {renderPairedDesks(['I5', 'I6'])}
-                  {renderPairedDesks(['I7', 'I8'])}
-                  {renderPairedDesks(['I9', 'I10'])}
-                </div>
               </div>
+
             </div>
-
           </div>
+          {edit && (
+            <DeskAllocationPopup
+              editClosePopup={editClosePopup}
+              employee={editEmployee}
+            />
+          )}
+          {isPopupOpen && (
+            <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} officeId="68db981339cedcb7321db6fe" />
+          )}
         </div>
-        {edit && (
-          <DeskAllocationPopup
-            editClosePopup={editClosePopup}
-            employee={editEmployee}
-          />
-        )}
-        {isPopupOpen && (
-          <EmployeeList closePopup={closePopup} choosenDesk={choosenDesk1} officeId="68db981339cedcb7321db6fe"/>
-        )}
-      </div>
-      <FallbackWrapper
-        fallback={<Loader />}
-        fn={() => containerRef && containerRef.current}
-      >
-        <ZoomPanel container={containerRef} setZoomLevel={setZoomLevel} />
-      </FallbackWrapper>
-    </DndProvider>
-  </>
-);
+        <FallbackWrapper
+          fallback={<Loader />}
+          fn={() => containerRef && containerRef.current}
+        >
+          <ZoomPanel container={containerRef} setZoomLevel={setZoomLevel} />
+        </FallbackWrapper>
+      </DndProvider>
+    </>
+  );
 };
 

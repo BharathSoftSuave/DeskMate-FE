@@ -4,21 +4,23 @@ import DashboardHeader from "../../components/DashboardHeader";
 import { AlphaBlockWA } from "../../components/workArea/AlphaBlockWA";
 const Dashboard: React.FC = () => {
   const [searchName, setSearchName] = useState("");
-  const [block, setBlock] = useState("Navalur Beta Block")
+  const [block, setBlock] = useState("Navalur Beta Block");
+  // const [isAlpha, setIsAlpha] = useState(false);
   const onSearch = useCallback((value: string): void => {
     setSearchName(value);
   }, [setSearchName])
 
   const switchBlockHandler = (block: string) => {
+    // setIsAlpha(true)
     setBlock(block);
   }
 
   const getBlockView = (block: string) => {
     switch (block) {
       case "Navalur Beta Block":
-        return <BetaBlockWorkArea searchName={searchName.toLowerCase()} />;     
+        return <BetaBlockWorkArea searchName={searchName.toLowerCase()} />;
       case "Navalur Alpha Block":
-        return <AlphaBlockWA searchName={searchName.toLowerCase()}/>;
+        return <AlphaBlockWA searchName={searchName.toLowerCase()} />;
       default:
         return <BetaBlockWorkArea searchName={searchName.toLowerCase()} />;
     }
@@ -30,7 +32,7 @@ const Dashboard: React.FC = () => {
       <div className="h-full w-full mx-auto flex flex-col px-4 lg:px-20 gap-10 py-10 overflow-y-auto">
         {
           getBlockView(block)
-        }   
+        }
       </div>
     </div>
   );

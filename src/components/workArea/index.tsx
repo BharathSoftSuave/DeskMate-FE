@@ -28,9 +28,9 @@ interface SearchBarProps {
 }
 
 interface ISwapPayload {
-  current_desk_id : string|undefined;
-  target_desk_id?: string|null;
-  target_desk_num?: string|undefined;
+  current_desk_id: string | undefined;
+  target_desk_id?: string | null;
+  target_desk_num?: string | undefined;
 }
 const payload = {
   office_id: "67dd364d7c1b361e5c24bf73",
@@ -101,7 +101,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
 
   // Swap function for drag-and-drop
 
-  const swapSeats = async (from:string, to:string) => {
+  const swapSeats = async (from: string, to: string) => {
     console.log("before ", seatMapping);
     setSeatMapping((prev) => {
       const updated = { ...prev };
@@ -111,7 +111,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
     });
     // console.log(seatMapping[from].desk.id, " another", seatMapping[to].desk.id);
 
-    const payload : ISwapPayload = {
+    const payload: ISwapPayload = {
       current_desk_id: seatMapping[from]?.desk?.id,
       target_desk_id: seatMapping[to]?.desk?.id ?? null,
       target_desk_num: seatMapping[to]?.desk?.id ? undefined : to,
@@ -232,6 +232,7 @@ const WorkArea: React.FC<SearchBarProps> = ({ searchName }: SearchBarProps) => {
                       swapSeats={swapSeats}
                       openEdit={openEdit}
                       searchName={searchName}
+                      // isAlphaBlock={false}
                       ref={(el) => {
                         if (el) {
                           seatRefs.current[key] = el;
